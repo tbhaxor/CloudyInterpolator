@@ -93,8 +93,7 @@ class InterpolateView(FormView):
                       (i)
 
             batch_id = int(counter // batch_size)
-            batches['ionization.b_{:06d}.h5'.format(batch_id)] = batch_id
-            # [str(batch_id)] = 'ionization.b_{:06d}.h5'.format(batch_id)
+            batches[batch_id] = FILE_NAME_TEMPLATE.format(batch_id)
 
         return batches
 
