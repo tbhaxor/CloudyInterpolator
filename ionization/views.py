@@ -30,7 +30,7 @@ with h5py.File(FIRST_FILE) as file:
 
 
 class InterpolateView(FormView):
-    template_name = 'interpolate.html'
+    template_name = 'ionization/interpolate.html'
     form_class = InterpolateForm
     inv_weight = 0
 
