@@ -1,0 +1,20 @@
+<html>
+    <title>Emission Data Download</title>
+<body>
+    <form method="post">
+        <blockquote><em>Scientific notation in the numeric fields are supported.</em></blockquote>
+        {%csrf_token%}
+        {{form.as_p}}
+        <button type="submit">Submit</button>
+    </form>
+
+    {%if batches%}
+        <h2>Batch files to download</h2>
+        <ul>
+        {%for id, file in batches.items%}
+            <li><a href="{%url 'emission:download' batch_id=id %}">{{file}}</a></li>
+        {%endfor%}
+        </ul>
+    {%endif%}
+</body>
+</html>
