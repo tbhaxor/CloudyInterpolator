@@ -1,0 +1,23 @@
+{
+    "editor.defaultFormatter": "ms-python.python",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
+    "python.formatting.autopep8Args": [
+        "--max-line-length",
+        "120",
+        "--experimental"
+    ],
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/__pycache__": true,
+        "**/.venv": true,
+        "**/.vscode": true
+    },
+    "python.analysis.typeCheckingMode": "basic"
+}
