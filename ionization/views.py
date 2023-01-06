@@ -65,7 +65,7 @@ class InterpolateView(FormView):
 
     def _get_batch_ids(self, i_vals: list, j_vals: list, k_vals: list, l_vals: list):
         """
-
+        Get the batch ids and file name from the nearest neighbour
         """
         batches = {}
 
