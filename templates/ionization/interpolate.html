@@ -11,7 +11,7 @@
     {%if batches%}
         <h2>Batch files to download</h2>
         <ul>
-        {%for file, id in batches.items%}
+        {%for id, file in batches.items%}
             <li><a href="{%url 'ionization:download' batch_id=id %}">{{file}}</a></li>
         {%endfor%}
         </ul>
