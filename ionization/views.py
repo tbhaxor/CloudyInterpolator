@@ -107,7 +107,7 @@ class InterpolateView(FormView):
 
         batches = self._get_batch_ids(i_vals, j_vals, k_vals, l_vals)
 
-        return render(self.request, 'interpolate.html', {
+        return render(self.request, self.template_name, {
             'form': form,
             'batches': batches
         })
