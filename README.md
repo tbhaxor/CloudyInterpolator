@@ -20,7 +20,8 @@ This repository is used to download the batch files for astro plasma datasets: E
 3. Upgrade pip and install dependencies
 
     ```sh
-
+    pip install -U pip
+    pip install -r requirements.txt
     ```
 
     > **Note** If you are maintaining or into development of this repository, please consider using [poetry](https://python-poetry.org/).
