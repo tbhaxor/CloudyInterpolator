@@ -20,7 +20,7 @@ jobs:
         with:
           registry: ghcr.io
           username: tbhaxor
-          password: ${{ secrets.CR_PASSWORD }}
+          password: ${{ github.token }}
       - name: Cache Docker layers
         uses: actions/cache@v3
         with:
