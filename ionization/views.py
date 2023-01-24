@@ -1,4 +1,5 @@
 import os
+import sys
 from itertools import product
 from pathlib import Path
 from wsgiref.util import FileWrapper
@@ -9,24 +10,28 @@ from django.http import StreamingHttpResponse
 from django.shortcuts import render
 from django.views.generic import FormView, View
 
+from astrodata.utils import is_server_running
+
 from .forms import InterpolateForm
 
-DATASET_DIR = Path(os.getenv('IONIZATION_DATASET_DIR', ''))
-CHUNK_SIZE = int(os.getenv('DOWNLOAD_CHUNK_SIZE', 1 << 12))
-FILE_NAME_TEMPLATE = 'ionization.b_{:06d}.h5'
+nH_data, T_data, Z_data, red_data, batch_size, total_size = None, None, None, None, None, None
+if is_server_running():
+    DATASET_DIR = Path(os.getenv('IONIZATION_DATASET_DIR', ''))
+    CHUNK_SIZE = int(os.getenv('DOWNLOAD_CHUNK_SIZE', 1 << 12))
+    FILE_NAME_TEMPLATE = 'ionization.b_{:06d}.h5'
 
-FIRST_FILE = DATASET_DIR / FILE_NAME_TEMPLATE.format(0)
-if not FIRST_FILE.exists():
-    raise FileNotFoundError(f'Batch file \'{FIRST_FILE}\' not found')
+    FIRST_FILE = DATASET_DIR / FILE_NAME_TEMPLATE.format(0)
+    if not FIRST_FILE.exists():
+        raise FileNotFoundError(f'Batch file \'{FIRST_FILE}\' not found')
 
-with h5py.File(FIRST_FILE) as file:
-    nH_data = np.array(file['params/nH'])
-    T_data = np.array(file['params/temperature'])
-    Z_data = np.array(file['params/metallicity'])
-    red_data = np.array(file['params/redshift'])
+    with h5py.File(FIRST_FILE) as file:
+        nH_data = np.array(file['params/nH'])
+        T_data = np.array(file['params/temperature'])
+        Z_data = np.array(file['params/metallicity'])
+        red_data = np.array(file['params/redshift'])
 
-    batch_size = np.prod(np.array(file['header/batch_dim']))
-    total_size = np.prod(np.array(file['header/total_size']))
+        batch_size = np.prod(np.array(file['header/batch_dim']))
+        total_size = np.prod(np.array(file['header/total_size']))
 
 
 class InterpolateView(FormView):

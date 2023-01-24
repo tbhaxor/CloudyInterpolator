@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import base64
+import os
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -23,14 +25,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
+# Generic python settings
+PY_ENV = os.getenv("PY_ENV", "prod").lower()
+IS_PROD = PY_ENV == "prod"
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1zk=urw+ew0tthsxewll##a-6fj4)yvqw5vdjyw2=+fk4e@lax'
+if IS_PROD:
+    RANDOM_KEY = base64.b64encode(os.getrandom(size=32))
+    SECRET_KEY = os.getenv("SECRET_KEY", RANDOM_KEY)
+else:
+    SECRET_KEY = 'django-insecure-1zk=urw+ew0tthsxewll##a-6fj4)yvqw5vdjyw2=+fk4e@lax'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = not IS_PROD
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 

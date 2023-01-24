@@ -19,5 +19,5 @@
         "**/.venv": true,
         "**/.vscode": true
     },
-    "python.analysis.typeCheckingMode": "basic"
+    "python.analysis.typeCheckingMode": "off"
 }

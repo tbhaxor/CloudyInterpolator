@@ -59,3 +59,36 @@ python manage.py runserver 127.0.0.1:<PORT>
 Replace the placeholder `<PORT>` with the port number of your choice.
 
 ![](https://i.imgur.com/wgYz36E.png)
+
+### Using Docker Container
+
+Get rid of all the hassle of [setup](#setup) and [getting started](#getting-started). You can use the following
+
+**Requirements** Docker runtime installed on your system
+
+1. Pull the image
+    ```sh
+    docker pull ghcr.io/tbhaxor/astro-data:latest
+    ```
+2. Run the docker container with appropriate container. This will iniitally create a container and start it
+    ```sh
+    docker run -d -p 5000:5000 \
+    -e EMISSION_DATASET_DIR=/data/emission-data -e IONIZATION_DATASET_DIR=/data/ionization-data \
+    -v /path/of/emission/batches:/data/emission-data:ro -v /path/of/ionization/batches:/data/ionization-data:ro \
+    --name astro-data ghcr.io/tbhaxor/astro-data:latest
+    ```
+
+    > **Note** Replace the /path/* placeholder with the actual path of emission and ionization data on your host system.
+    
+    This will start the server on the http://localhost:5000, you can open this url in the browser to interact with the server.
+
+3. Stop and restart the server
+    ```sh
+    # stop the container
+    docker stop astro-data
+
+    # restart the container
+    docker start astro-data
+    ```
+
+> **Note** On updates, all you need to do is follow [docker setup](#using-docker-container) from step 1. Make sure you delete the container (`docker rm -f astro-data`) before moving forward.
