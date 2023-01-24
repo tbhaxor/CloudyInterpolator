@@ -5,16 +5,16 @@ RUN apt-get update && \
     apt-get clean && \
     apt-get autoclean && \
     apt-get autoremove && \
-    pip install -U pip
-
-WORKDIR /tmp
-COPY requirements.txt ./
-RUN pip install -r requirements.txt
+    pip install -qU pip
 
 WORKDIR /home/astro-data
 RUN useradd -d /home/astro-data astro-data && \
     chown astro-data:astro-data -R /home/astro-data
 USER astro-data
+ENV PATH=/home/astro-data/.local/bin:${PATH}
+
+COPY --chown=astro-data:astro-data requirements.txt ./
+RUN pip install -qr requirements.txt && rm requirements.txt 
 
 COPY --chown=astro-data:astro-data astrodata/ ./astrodata
 COPY --chown=astro-data:astro-data emission/ ./emission
