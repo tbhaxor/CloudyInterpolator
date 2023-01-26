@@ -1,17 +1,17 @@
-<html>
-    <head>
-        <title>Select Task</title>
-    </head>
+{% extends "layouts/base.html" %}
 
-    <body>
-        <h3>Select Task</h3>
-        <ul style="list-style: none;">
-            <li>
-                <a href="{% url 'emission:interpolate' %}">Download Emission Batch</a>
-            </li>
-            <li>
-                <a href="{% url 'ionization:interpolate' %}">Download Ionization Batch</a>
-            </li>
-        </ul>
-    </body>
-</html>
+{% block title %}
+    Choose your task
+{% endblock %}
+
+{% block main %}
+<h1>What you want to do?</h1>
+<ul style="list-style: none;">
+    <li>
+        <a class="streched-link" href="{% url 'emission:get-download-batch' %}">Download Emission Batches</a>
+    </li>
+    <li>
+        <a class="streched-link" href="{% url 'ionization:get-download-batch' %}">Download Ionization Batches</a>
+    </li>
+</ul>
+{% endblock %}

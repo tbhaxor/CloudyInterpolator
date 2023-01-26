@@ -37,7 +37,7 @@ if is_server_running():
 
 class InterpolateView(FormView):
     form_class = InterpolateForm
-    template_name = 'emission/interpolate.html'
+    template_name = 'emission/download_batches.html'
 
     def _get_nearest_neighbours(self, nH, temperature, metallicity, redshift):
         i_vals, j_vals, k_vals, l_vals = None, None, None, None

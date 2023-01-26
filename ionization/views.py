@@ -35,7 +35,7 @@ if is_server_running():
 
 
 class InterpolateView(FormView):
-    template_name = 'ionization/interpolate.html'
+    template_name = 'ionization/download_batches.html'
     form_class = InterpolateForm
     inv_weight = 0
 
