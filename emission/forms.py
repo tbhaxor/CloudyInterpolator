@@ -8,11 +8,15 @@ MODE_TYPES = (
 
 
 class InterpolateForm(forms.Form):
-    nh = forms.FloatField(required=True, label='nH')
+    nh = forms.FloatField(required=True, label='Number of Hydrogen atoms',
+                          widget=forms.NumberInput(attrs={'class': 'form-control', 'autofocus': 'true'}))
     # mode = forms.ChoiceField(choices=MODE_TYPES, required=True, initial=MODE_TYPES[0])
-    temperature = forms.FloatField(required=True, help_text='Provide the template in Kelvins.')
-    metallicity = forms.FloatField(required=True)
-    redshift = forms.FloatField(required=True)
+    temperature = forms.FloatField(required=True, label='Temperature (in Kelvins)',
+                                   widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    metallicity = forms.FloatField(required=True, label='Metallicity',
+                                   widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    redshift = forms.FloatField(required=True, label='Redshift factor',
+                                widget=forms.NumberInput(attrs={'class': 'form-control'}))
     # element = forms.IntegerField(required=True, min_value=1, max_value=30,
     #                              help_text='Provide the atomic number of the element.')
     # ion = forms.IntegerField(required=True, min_value=1,

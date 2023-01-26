@@ -1,7 +1,10 @@
 {
-    "editor.defaultFormatter": "ms-python.python",
-    "editor.codeActionsOnSave": {
-        "source.organizeImports": true
+    "[python]": {
+        "editor.wordBasedSuggestions": false,
+        "editor.defaultFormatter": "ms-python.python",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        },
     },
     "python.formatting.autopep8Args": [
         "--max-line-length",
@@ -19,5 +22,10 @@
         "**/.venv": true,
         "**/.vscode": true
     },
+    "[html]": {
+        "editor.suggest.insertMode": "replace",
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "editor.formatOnSave": true,
     "python.analysis.typeCheckingMode": "off"
 }

@@ -12,7 +12,7 @@ from django.views.generic import FormView, View
 
 from astrodata.utils import is_server_running
 
-from .forms import InterpolateForm
+from .forms import DownloadBatchForm
 
 nH_data, T_data, Z_data, red_data, batch_size, total_size = None, None, None, None, None, None
 if is_server_running():
@@ -36,7 +36,7 @@ if is_server_running():
 
 class InterpolateView(FormView):
     template_name = 'ionization/download_batches.html'
-    form_class = InterpolateForm
+    form_class = DownloadBatchForm
     inv_weight = 0
 
     def _get_nearest_neihbours(self, nH, temperature, metallicity, redshift):
@@ -102,7 +102,7 @@ class InterpolateView(FormView):
 
         return batches
 
-    def form_valid(self, form: InterpolateForm):
+    def form_valid(self, form: DownloadBatchForm):
         data: dict = form.cleaned_data
         i_vals, j_vals, k_vals, l_vals = self._get_nearest_neihbours(
             data.get('nh'),
