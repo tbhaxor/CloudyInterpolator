@@ -1,9 +1,9 @@
 from django.urls import path
 
-from .views import DownloadFileView, InterpolateView
+from .views import DownloadFileView, Interpolation
 
 app_name = 'ionization'
 urlpatterns = [
-    path('download/', InterpolateView.as_view(), name='get-download-batch'),
+    path('interpolation/', Interpolation.as_view(), name='interpolation'),
     path('download/<int:batch_id>/', DownloadFileView.as_view(), name='download')
 ]

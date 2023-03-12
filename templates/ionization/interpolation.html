@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 
 {% block title %}
-Ionization Data Download
+Interpolate Ionization Information
 {% endblock %}
 
 {% block main %}
@@ -13,6 +13,20 @@ Ionization Data Download
                 {% csrf_token %}
                 <div class="row mb-3">
                     <div class="col">
+                        {{ form.element.label_tag }}
+                        {{ form.element }}
+                    </div>
+                    <div class="col">
+                        {{ form.ion.label_tag }}
+                        {{ form.ion }}
+                        {% if form.ion.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{form.ion.errors.0}}</small>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
                         {{ form.nh.label_tag }}
                         {{ form.nh }}
                     </div>
@@ -21,7 +35,6 @@ Ionization Data Download
                         {{ form.temperature }}
                     </div>
                 </div>
-
 
                 <div class="row mb-3">
                     <div class="col">
@@ -34,6 +47,16 @@ Ionization Data Download
                     </div>
                 </div>
 
+                <div class="row mb-3">
+                    <div class="col">
+                        {{ form.mode.label_tag }}
+                        {{ form.mode }}
+                    </div>
+                    <div class="col">
+                        {{ form.part_type.label_tag }}
+                        {{ form.part_type }}
+                    </div>
+                </div>
 
                 <div class="row mb-3">
                     <div class="col">
@@ -53,16 +76,10 @@ Ionization Data Download
     </div>
 </div>
 
-{%if batches%}
-<div class="mt-3 mr-6">
-    <h3>Batch files to download</h3>
-    <ol class="list-group list-group-numbered">
-        {%for id, file in batches.items%}
-        <li class="list-group-item">
-            <a href="{%url 'ionization:download' batch_id=id %}">{{file}}</a>
-        </li>
-        {%endfor%}
-    </ol>
-</div>
-{%endif%}
+{%if interpolation %}
+<h2 class="mt-3">Interpolation Output</h2>
+<p><strong>Ion Fraction: </strong> {{ interpolation.ion_frac }}</p>
+<p><strong>Mean Mass (µ): </strong> {{ interpolation.mu_mass }}</p>
+<p><strong>Number Density: </strong> {{ interpolation.number_density }}</p>
+{% endif %}
 {% endblock %}

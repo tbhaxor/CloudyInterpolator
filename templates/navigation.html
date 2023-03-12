@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 
 {% block title %}
-    Choose your task
+Choose your task
 {% endblock %}
 
 {% block main %}
@@ -11,7 +11,7 @@
         <a class="streched-link" href="{% url 'emission:get-download-batch' %}">Download Emission Batches</a>
     </li>
     <li>
-        <a class="streched-link" href="{% url 'ionization:get-download-batch' %}">Download Ionization Batches</a>
+        <a class="streched-link" href="{% url 'ionization:interpolation' %}">Interpolate Ionization Data</a>
     </li>
 </ul>
 {% endblock %}
