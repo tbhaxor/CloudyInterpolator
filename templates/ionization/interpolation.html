@@ -1,13 +1,12 @@
 {% extends "layouts/base.html" %}
 
-{% block title %}
-Interpolate Ionization Information
-{% endblock %}
+{% block title %}Interpolate Ionization Information{% endblock %}
 
 {% block main %}
 <div class="card mt-4">
     <div class="card-body">
-        <h3 class="card-title">Submit Medium Details</h3>
+        <h3 class="card-title text-center mb-3">Submit Medium Details</h3>
+        <hr class="mx-auto col-md-3" />
         <div class="card-text">
             <form method="post" class="needs-validation">
                 {% csrf_token %}
@@ -15,12 +14,15 @@ Interpolate Ionization Information
                     <div class="col">
                         {{ form.element.label_tag }}
                         {{ form.element }}
+                        {% if form.element.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.element.errors.0 }}</small>
+                        {% endif %}
                     </div>
                     <div class="col">
                         {{ form.ion.label_tag }}
                         {{ form.ion }}
                         {% if form.ion.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{form.ion.errors.0}}</small>
+                        <small class="text-danger"><strong>Error: </strong>{{ form.ion.errors.0 }}</small>
                         {% endif %}
                     </div>
                 </div>
@@ -29,10 +31,16 @@ Interpolate Ionization Information
                     <div class="col">
                         {{ form.nh.label_tag }}
                         {{ form.nh }}
+                        {% if form.nh.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.nh.errors.0 }}</small>
+                        {% endif %}
                     </div>
                     <div class="col">
                         {{ form.temperature.label_tag }}
                         {{ form.temperature }}
+                        {% if form.temperature.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.temperature.errors.0 }}</small>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -40,10 +48,16 @@ Interpolate Ionization Information
                     <div class="col">
                         {{ form.metallicity.label_tag }}
                         {{ form.metallicity }}
+                        {% if form.metallicity.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.metallicity.errors.0 }}</small>
+                        {% endif %}
                     </div>
                     <div class="col">
                         {{ form.redshift.label_tag }}
                         {{ form.redshift }}
+                        {% if form.redshift.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.redshift.errors.0 }}</small>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -51,17 +65,23 @@ Interpolate Ionization Information
                     <div class="col">
                         {{ form.mode.label_tag }}
                         {{ form.mode }}
+                        {% if form.mode.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.mode.errors.0 }}</small>
+                        {% endif %}
                     </div>
                     <div class="col">
-                        {{ form.part_type.label_tag }}
-                        {{ form.part_type }}
+                        {{ form.species_type.label_tag }}
+                        {{ form.species_type }}
+                        {% if form.species_type.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.species_type.errors.0 }}</small>
+                        {% endif %}
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col">
                         <div class="alert alert-info" role="alert">
-                            <em>Scientific notation in the numeric fields are supported.</em>
+                            <em><strong>Note: </strong> Scientific notation in the numeric fields are supported.</em>
                         </div>
                     </div>
                 </div>
@@ -77,9 +97,30 @@ Interpolate Ionization Information
 </div>
 
 {%if interpolation %}
-<h2 class="mt-3">Interpolation Output</h2>
-<p><strong>Ion Fraction: </strong> {{ interpolation.ion_frac }}</p>
-<p><strong>Mean Mass (µ): </strong> {{ interpolation.mu_mass }}</p>
-<p><strong>Number Density: </strong> {{ interpolation.number_density }}</p>
+<h2 class="mt-3 text-center">Interpolation Output</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-center">Property</th>
+            <th class="text-center">Value</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>Ion Fraction</td>
+            <td>{{ interpolation.ion_frac }}</td>
+        </tr>
+        <tr>
+            <td>Mean Mass (µ)</td>
+            <td>{{ interpolation.mu_mass }}</td>
+        </tr>
+        <tr>
+            <td>Number Density</td>
+            <td>{{ interpolation.number_density }}</td>
+        </tr>
+    </tbody>
+
+</table>
 {% endif %}
 {% endblock %}
