@@ -1,9 +1,10 @@
+import json
 import os
 from pathlib import Path
 from wsgiref.util import FileWrapper
 
 from astro_plasma import Ionization
-from django.http import StreamingHttpResponse
+from django.http import JsonResponse, StreamingHttpResponse
 from django.shortcuts import render
 from django.views.generic import FormView, View
 
@@ -27,8 +28,20 @@ class Interpolation(FormView):
     template_name = 'ionization/interpolation.html'
 
     def form_invalid(self, form: InterpolateForm):
-        print("Error")
-        print(form.errors.as_json())
+        if self.request.GET.get('format') == 'json':
+            errors = json.loads(form.errors.as_json())
+            errors = {'errors': errors}
+            return JsonResponse(data=errors, status=400)
+
+        is_autofocus = False
+        for name, field in form.fields.items():
+            if name in form.errors:
+                field.widget.attrs = {
+                    'class': f"{field.widget.attrs.get('class', '')} is-invalid".strip(),
+                    'autofocus': 'true' if is_autofocus else 'false'
+                }
+                is_autofocus = True
+
         return super().form_invalid(form)
 
     def form_valid(self, form: InterpolateForm):
@@ -51,13 +64,19 @@ class Interpolation(FormView):
                                              metallicity=form.cleaned_data['metallicity'],
                                              mode=form.cleaned_data['mode'],
                                              redshift=form.cleaned_data['redshift'],
-                                             part_type=form.cleaned_data['part_type']
-                                             )
+                                             part_type=form.cleaned_data['species_type'])
+
+        interpolation = {
+            'ion_frac': ion_frac,
+            'mu_mass': mu_mass,
+            'number_density': nrho
+        }
+
+        if self.request.GET.get('format') == 'json':
+            return JsonResponse(data={'data': interpolation, 'request': form.cleaned_data})
+
         context = {'form': form,
-                   'interpolation': {'ion_frac': ion_frac,
-                                     'mu_mass': mu_mass,
-                                     'number_density': nrho}
-                   }
+                   'interpolation': interpolation}
         return render(self.request, self.template_name, context)
 
 
