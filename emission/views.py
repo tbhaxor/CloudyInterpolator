@@ -1,11 +1,13 @@
 import os
-import sys
+from io import StringIO
 from itertools import product
 from pathlib import Path
 from wsgiref.util import FileWrapper
 
 import h5py
+import matplotlib.pyplot as plt
 import numpy as np
+from astro_plasma import EmissionSpectrum
 from django.http import StreamingHttpResponse
 from django.shortcuts import render
 from django.views.generic import FormView, View
@@ -13,6 +15,10 @@ from django.views.generic import FormView, View
 from astrodata.utils import is_server_running
 
 from .forms import InterpolateForm
+
+r = EmissionSpectrum(os.getenv("EMISSION_DATASET_DIR")).interpolate()
+plt.hist(r[:, 0],  bins=2)
+plt.savefig("file.png")
 
 nH_data, T_data, Z_data, red_data, batch_size, total_size = None, None, None, None, None, None
 if is_server_running():

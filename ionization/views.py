@@ -17,7 +17,6 @@ if is_server_running():
     if dir_path is None:
         raise ValueError('Ionization dataset directory is required')
     dataset_base_path = Path(dir_path)
-    ionization = Ionization(base_dir=dataset_base_path)
 
     CHUNK_SIZE = int(os.getenv('DOWNLOAD_CHUNK_SIZE', 1 << 12))
     FILE_NAME_TEMPLATE = 'ionization.b_{:06d}.h5'
@@ -45,6 +44,8 @@ class Interpolation(FormView):
         return super().form_invalid(form)
 
     def form_valid(self, form: InterpolateForm):
+        ionization = Ionization(dataset_base_path)
+
         ion_frac = ionization.interpolateIonFrac(nH=form.cleaned_data['nh'],
                                                  temperature=form.cleaned_data['temperature'],
                                                  metallicity=form.cleaned_data['metallicity'],
