@@ -1,13 +1,12 @@
 {% extends "layouts/base.html" %}
 
-{% block title %}
-Emission Data Download
-{% endblock %}
+{% block title %}Interpolate Emission Data{% endblock %}
 
 {% block main %}
 <div class="card mt-4">
     <div class="card-body">
-        <h3 class="card-title">Submit Medium Details</h3>
+        <h3 class="card-title text-center mb-3">Submit Medium Details</h3>
+        <hr class="mx-auto col-md-3" />
         <div class="card-text">
             <form method="post" class="needs-validation">
                 {% csrf_token %}
@@ -15,10 +14,16 @@ Emission Data Download
                     <div class="col">
                         {{ form.nh.label_tag }}
                         {{ form.nh }}
+                        {% if form.nh.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.nh.errors.0 }}</small>
+                        {% endif %}
                     </div>
                     <div class="col">
                         {{ form.temperature.label_tag }}
                         {{ form.temperature }}
+                        {% if form.temperature.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.temperature.errors.0 }}</small>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -27,10 +32,26 @@ Emission Data Download
                     <div class="col">
                         {{ form.metallicity.label_tag }}
                         {{ form.metallicity }}
+                        {% if form.metallicity.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.metallicity.errors.0 }}</small>
+                        {% endif %}
                     </div>
                     <div class="col">
                         {{ form.redshift.label_tag }}
                         {{ form.redshift }}
+                        {% if form.redshift.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.redshift.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        {{ form.mode.label_tag }}
+                        {{ form.mode }}
+                        {% if form.mode.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.mode.errors.0 }}</small>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -53,16 +74,7 @@ Emission Data Download
     </div>
 </div>
 
-{%if batches%}
-<div class="mt-3 mr-6">
-    <h3>Batch files to download</h3>
-    <ol class="list-group list-group-numbered">
-        {%for id, file in batches.items%}
-        <li class="list-group-item">
-            <a href="{%url 'emission:download' batch_id=id %}">{{file}}</a>
-        </li>
-        {%endfor%}
-    </ol>
-</div>
-{%endif%}
+{% if interpolation %}
+{{ interpolation.data }}
+{% endif %}
 {% endblock %}
