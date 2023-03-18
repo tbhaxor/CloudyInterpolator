@@ -1,30 +1,24 @@
-FROM python:3.10-slim-bullseye
+FROM python:3.10
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --no-install-suggests libhdf5-dev libhdf5-serial-dev && \
-    apt-get clean && \
-    apt-get autoclean && \
-    apt-get autoremove && \
-    pip install -qU pip
+RUN apt update && \
+    apt install -y openmpi-bin openmpi-common libopenmpi-dev mpich libhdf5-dev libhdf5-serial-dev && \
+    apt clean && \
+    apt autoclean && \
+    apt autoremove && \
+    pip install --root-user-action=ignore -qU pip poetry && \
+    poetry config virtualenvs.create false
+WORKDIR /app
+COPY poetry.lock pyproject.toml ./
+RUN poetry install
 
-WORKDIR /home/astro-data
-RUN useradd -d /home/astro-data astro-data && \
-    chown astro-data:astro-data -R /home/astro-data
-USER astro-data
-ENV PATH=/home/astro-data/.local/bin:${PATH}
-
-COPY --chown=astro-data:astro-data requirements.txt ./
-RUN pip install -qr requirements.txt && rm requirements.txt 
-
-COPY --chown=astro-data:astro-data astrodata/ ./astrodata
-COPY --chown=astro-data:astro-data emission/ ./emission
-COPY --chown=astro-data:astro-data ionization/ ./ionization
-COPY --chown=astro-data:astro-data templates/ ./templates
-COPY --chown=astro-data:astro-data manage.py ./
-
-RUN python manage.py migrate
+COPY astrodata/ ./astrodata
+COPY emission/ ./emission
+COPY ionization/ ./ionization
+COPY templates/ ./templates
 
 EXPOSE 5000
 
-ENTRYPOINT ["gunicorn", "astrodata.wsgi:application", "-b", "0.0.0.0:5000", \
-    "--error-logfile","-", "--access-logfile", "-", "--capture-output"]
+ENTRYPOINT ["gunicorn", "astrodata.wsgi:application", \
+    "-b", "0.0.0.0:5000", \
+    "--error-logfile","-", "--access-logfile", "-", \
+    "--capture-output"]
