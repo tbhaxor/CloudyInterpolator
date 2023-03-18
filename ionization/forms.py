@@ -3,6 +3,8 @@ from django.forms import FloatField, Form, IntegerField, TypedChoiceField
 from django.forms.widgets import NumberInput, Select
 from PyAstronomy.pyasl.asl.atomicNo import AtomicNo
 
+from astrodata.base.forms import InterpolateForm
+
 MODE_TYPES = (
     ('CIE', 'Collisional Ionisation Equilibrium (CIE)'),
     ('PIE', 'Photoionization Equilibrium (PIE)')
@@ -22,29 +24,7 @@ for atn in range(1, 31):
 TATVAS = tuple(TATVAS)
 
 
-class InterpolateForm(Form):
-    nh = FloatField(required=True,
-                    label='Number Density of Hydrogen',
-                    widget=NumberInput(attrs={'class': 'form-control'}))
-
-    mode = TypedChoiceField(choices=MODE_TYPES,
-                            required=True,
-                            initial=MODE_TYPES[0],
-                            label="Select Mode",
-                            widget=Select(attrs={'class': 'form-select'}))
-
-    temperature = FloatField(required=True,
-                             label='Temperature (in Kelvins)',
-                             widget=NumberInput(attrs={'class': 'form-control'}))
-
-    metallicity = FloatField(required=True,
-                             label='Metallicity',
-                             widget=NumberInput(attrs={'class': 'form-control'}))
-
-    redshift = FloatField(required=True,
-                          label='Redshift Factor',
-                          widget=NumberInput(attrs={'class': 'form-control'}))
-
+class InterpolateForm(InterpolateForm):
     element = TypedChoiceField(coerce=int, required=True,
                                label='Select Element',
                                choices=TATVAS,

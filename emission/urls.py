@@ -4,6 +4,6 @@ from .views import DownloadFileView, InterpolateView
 
 app_name = 'emission'
 urlpatterns = [
-    path('download/', InterpolateView.as_view(), name='get-download-batch'),
+    path('interpolation/', InterpolateView.as_view(), name='interpolation'),
     path('download/<int:batch_id>/', DownloadFileView.as_view(), name='download')
 ]
