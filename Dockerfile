@@ -10,6 +10,7 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt && \ 
     apk del git g++ gcc musl-dev gfortran build-base wget freetype-dev libpng-dev openblas-dev && \
     rm -rf /tmp/requirements.txt
+RUN ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 # create secure user
 RUN adduser -h /home/astrodata -D astrodata
