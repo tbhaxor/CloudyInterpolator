@@ -1,24 +1,31 @@
-FROM python:3.10
+FROM python:3.10-alpine
 
-RUN apt update && \
-    apt install -y openmpi-bin openmpi-common libopenmpi-dev mpich libhdf5-dev libhdf5-serial-dev && \
-    apt clean && \
-    apt autoclean && \
-    apt autoremove && \
-    pip install --root-user-action=ignore -qU pip poetry && \
-    poetry config virtualenvs.create false
-WORKDIR /app
-COPY poetry.lock pyproject.toml ./
-RUN poetry install
+# install build dependencies
+RUN apk add openmpi openmpi-dev hdf5-dev hdf5 git musl-dev gcc && \
+    pip install --root-user-action=ignore -qU pip
 
-COPY astrodata/ ./astrodata
-COPY emission/ ./emission
-COPY ionization/ ./ionization
-COPY templates/ ./templates
+# install pip packages
+WORKDIR /tmp
+COPY requirements.txt ./
+RUN pip install -r requirements.txt && \ 
+    apk del git gcc musl-dev && \
+    apk cache --purge && \
+    rm -rf /tmp/requirements.txt
+
+# create secure user
+RUN adduser -h /home/astrodata -D astrodata
+WORKDIR /home/astrodata
+USER astrodata
+
+# copy files into the new workdir
+COPY --chown=astrodata:astrodata astrodata/ ./astrodata
+COPY --chown=astrodata:astrodata emission/ ./emission
+COPY --chown=astrodata:astrodata ionization/ ./ionization
+COPY --chown=astrodata:astrodata templates/ ./templates
 
 EXPOSE 5000
 
 ENTRYPOINT ["gunicorn", "astrodata.wsgi:application", \
-    "-b", "0.0.0.0:5000", \
-    "--error-logfile","-", "--access-logfile", "-", \
-    "--capture-output"]
+    \\        "-b", "0.0.0.0:5000", \
+    \\        "--error-logfile","-", "--access-logfile", "-", \
+    \\        "--capture-output"]
