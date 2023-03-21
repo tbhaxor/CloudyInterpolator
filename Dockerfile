@@ -2,7 +2,6 @@ FROM python:3.10-alpine
 
 # install build dependencies
 RUN apk add --no-cache openmpi openmpi-dev hdf5-dev hdf5 git musl-dev gcc g++ build-base wget freetype-dev libpng-dev openblas-dev gfortran && \
-    rm -rf /var/cache/apk/* && \
     pip install --root-user-action=ignore -qU pip
 
 # install pip packages
