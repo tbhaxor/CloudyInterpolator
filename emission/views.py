@@ -1,8 +1,11 @@
 import json
 import os
+from io import StringIO
 from pathlib import Path
 from wsgiref.util import FileWrapper
 
+import numpy as np
+import plotly.graph_objs as pgo
 from astro_plasma import EmissionSpectrum
 from django.http import JsonResponse, StreamingHttpResponse
 from django.shortcuts import render
@@ -43,22 +46,38 @@ class InterpolateView(FormView):
         return super().form_invalid(form)
 
     def form_valid(self, form: InterpolateForm):
-        print("valid form")
         emission = EmissionSpectrum(dataset_base_path)
-        print(emission)
-        data = emission.interpolate(nH=form.cleaned_data['nh'],
-                                    metallicity=form.cleaned_data['metallicity'],
-                                    mode=form.cleaned_data['mode'],
-                                    redshift=form.cleaned_data['redshift'],
-                                    temperature=form.cleaned_data['temperature'])
-        interpolation = {
-            'data': data,
-        }
+        data_linear = emission.interpolate(nH=form.cleaned_data['nh'],
+                                           metallicity=form.cleaned_data['metallicity'],
+                                           mode=form.cleaned_data['mode'],
+                                           redshift=form.cleaned_data['redshift'],
+                                           temperature=form.cleaned_data['temperature'])
+        data_log10 = emission.interpolate(nH=form.cleaned_data['nh'],
+                                          metallicity=form.cleaned_data['metallicity'],
+                                          mode=form.cleaned_data['mode'],
+                                          redshift=form.cleaned_data['redshift'],
+                                          temperature=form.cleaned_data['temperature'],
+                                          scaling_func=np.log10)
+
+        # TODO: latex implementation
+        fig = pgo.Figure(data=[
+            pgo.Scatter(x=data_log10[:, 0], y=data_log10[:, 1], mode='lines', name="log10 scale"),
+            pgo.Scatter(x=data_linear[:, 0], y=data_linear[:, 1], mode='lines', name="linear scale")
+        ])
+        fig.update_xaxes(title_text=r'Energy (KeV)',  type='log')
+        fig.update_yaxes(title_text=r'Emissivity (erg cm^-3 s^-1)', type='log')
+        fig.update_layout(width=1200, height=800, legend={'x': 0, 'y': 1, 'bgcolor': 'rgba(0,0,0,0)'})
+
+        with StringIO() as file:
+            fig.write_html(file)
+
+            interpolation = {
+                'data': file.getvalue(),
+            }
 
         if self.request.GET.get('format') == 'json':
             return JsonResponse(data={'data': interpolation, 'request': form.cleaned_data})
 
-        print(interpolation)
         context = {'form': form,
                    'interpolation': interpolation}
         return render(self.request, self.template_name, context)
