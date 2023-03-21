@@ -9,7 +9,6 @@ WORKDIR /tmp
 COPY requirements.txt ./
 RUN pip install -r requirements.txt && \ 
     apk del git g++ gcc musl-dev gfortran build-base wget freetype-dev libpng-dev openblas-dev && \
-    apk cache --purge && \
     rm -rf /tmp/requirements.txt
 
 # create secure user
