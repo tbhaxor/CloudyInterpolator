@@ -13,10 +13,9 @@ h5py = "^3.7.0"
 numpy = "^1.24.1"
 gunicorn = "^20.1.0"
 requests = "^2.28.2"
-django-minify-html = "^1.5.0"
 pyastronomy = "^0.18.1"
-astro-plasma = {git = "https://github.com/tbhaxor/AstroPlasma", branch = "fix/abn-path"}
-scipy = {version = "^1.10.1", python = ">=3.10,<3.12"}
+astro-plasma = {git = "https://github.com/tbhaxor/AstroPlasma", branch = "improve/logscale"}
+plotly = "^5.13.1"
 
 
 [tool.poetry.group.dev.dependencies]
