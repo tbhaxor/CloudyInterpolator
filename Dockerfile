@@ -1,19 +1,21 @@
-FROM python:3.10-alpine
+FROM python:3.10-slim-bullseye
 
 # install build dependencies
-RUN apk add --no-cache openmpi openmpi-dev hdf5-dev hdf5 git musl-dev gcc g++ build-base wget freetype-dev libpng-dev openblas-dev gfortran && \
+RUN apt update && \
+    apt install -y --no-install-recommends libhdf5-dev libopenmpi-dev openmpi-bin git gcc g++ && \
     pip install --root-user-action=ignore -qU pip
 
 # install pip packages
 WORKDIR /tmp
 COPY requirements.txt ./
 RUN pip install -r requirements.txt && \ 
-    apk del git g++ gcc musl-dev gfortran build-base wget freetype-dev libpng-dev openblas-dev && \
+    apt remove -y git gcc g++ && \
+    apt autoremove -y && \
+    apt autoclean -y && \
     rm -rf /tmp/requirements.txt
-RUN ln -s /usr/include/locale.h /usr/include/xlocale.h
 
 # create secure user
-RUN adduser -h /home/astrodata -D astrodata
+RUN useradd -m -d /home/astrodata astrodata 
 WORKDIR /home/astrodata
 USER astrodata
 
@@ -26,6 +28,6 @@ COPY --chown=astrodata:astrodata templates/ ./templates
 EXPOSE 5000
 
 ENTRYPOINT ["gunicorn", "astrodata.wsgi:application", \
-    \\        "-b", "0.0.0.0:5000", \
-    \\        "--error-logfile","-", "--access-logfile", "-", \
-    \\        "--capture-output"]
+    "-b", "0.0.0.0:5000", \
+    "--error-logfile","-", "--access-logfile", "-", \
+    "--capture-output"]
