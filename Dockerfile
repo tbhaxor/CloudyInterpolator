@@ -1,14 +1,15 @@
 FROM python:3.10-alpine
 
 # install build dependencies
-RUN apk add openmpi openmpi-dev hdf5-dev hdf5 git musl-dev gcc && \
+RUN apk add --no-cache openmpi openmpi-dev hdf5-dev hdf5 git musl-dev gcc g++ && \
+    rm -rf /var/cache/apk/* && \
     pip install --root-user-action=ignore -qU pip
 
 # install pip packages
 WORKDIR /tmp
 COPY requirements.txt ./
 RUN pip install -r requirements.txt && \ 
-    apk del git gcc musl-dev && \
+    apk del git g++ gcc musl-dev && \
     apk cache --purge && \
     rm -rf /tmp/requirements.txt
 
