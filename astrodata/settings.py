@@ -51,9 +51,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # tools
-    'django_minify_html',
-
     # apps
     'emission',
     'ionization'
@@ -68,9 +65,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-if IS_PROD:
-    MIDDLEWARE.append('django_minify_html.middleware.MinifyHtmlMiddleware')
 
 ROOT_URLCONF = 'astrodata.urls'
 
