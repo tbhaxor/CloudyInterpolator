@@ -1,7 +1,7 @@
 FROM python:3.10-alpine
 
 # install build dependencies
-RUN apk add --no-cache openmpi openmpi-dev hdf5-dev hdf5 git musl-dev gcc g++ && \
+RUN apk add --no-cache openmpi openmpi-dev hdf5-dev hdf5 git musl-dev gcc g++ build-base wget freetype-dev libpng-dev openblas-dev gfortran && \
     rm -rf /var/cache/apk/* && \
     pip install --root-user-action=ignore -qU pip
 
@@ -9,7 +9,7 @@ RUN apk add --no-cache openmpi openmpi-dev hdf5-dev hdf5 git musl-dev gcc g++ &&
 WORKDIR /tmp
 COPY requirements.txt ./
 RUN pip install -r requirements.txt && \ 
-    apk del git g++ gcc musl-dev && \
+    apk del git g++ gcc musl-dev gfortran build-base wget freetype-dev libpng-dev openblas-dev && \
     apk cache --purge && \
     rm -rf /tmp/requirements.txt
 
