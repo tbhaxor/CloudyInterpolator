@@ -8,14 +8,14 @@ RUN apt update && \
 # install pip packages
 WORKDIR /tmp
 COPY requirements.txt ./
-RUN pip install -r requirements.txt && \ 
+RUN pip install -r requirements.txt && \
     apt remove -y git gcc g++ && \
     apt autoremove -y && \
     apt autoclean -y && \
     rm -rf /tmp/requirements.txt
 
 # create secure user
-RUN useradd -m -d /home/astrodata astrodata 
+RUN useradd -m -d /home/astrodata astrodata
 WORKDIR /home/astrodata
 USER astrodata
 
