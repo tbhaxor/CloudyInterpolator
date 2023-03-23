@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.forms import FloatField, Form, IntegerField, TypedChoiceField
+from django.forms import IntegerField, TypedChoiceField
 from django.forms.widgets import NumberInput, Select
 from PyAstronomy.pyasl.asl.atomicNo import AtomicNo
 

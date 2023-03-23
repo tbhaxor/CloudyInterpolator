@@ -5,7 +5,7 @@ This repository is used to download the batch files for astro plasma datasets: E
 ## Setup
 
 1. Clone the repository
-    
+
     ```sh
     git clone git@github.com:tbhaxor/CloudyPlasmaServer.git
     ```
@@ -27,7 +27,7 @@ This repository is used to download the batch files for astro plasma datasets: E
     > **Note** If you are maintaining or into development of this repository, please consider using [poetry](https://python-poetry.org/).
 
 4. Provide environment file
-    
+
     ```sh
     cat <<EOF > .env
     IONIZATION_DATASET_DIR='/path/to/directory/containing/ionization-batches'
@@ -79,7 +79,7 @@ Get rid of all the hassle of [setup](#setup) and [getting started](#getting-star
     ```
 
     > **Note** Replace the /path/* placeholder with the actual path of emission and ionization data on your host system.
-    
+
     This will start the server on the http://localhost:5000, you can open this url in the browser to interact with the server.
 
 3. Stop and restart the server

@@ -20,7 +20,13 @@ plotly = "^5.13.1"
 
 [tool.poetry.group.dev.dependencies]
 autopep8 = "^2.0.1"
+ruff = "^0.0.258"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+select = ["E", "F"]
+line-length = 160
+per-file-ignores = { "__init__.py"  = ["F401"] }
