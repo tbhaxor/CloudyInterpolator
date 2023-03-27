@@ -1,5 +1,11 @@
 # Cloudy Batch Downloader
 
+<p align="center">
+
+<img src="https://results.pre-commit.ci/badge/github/tbhaxor/CloudyPlasmaServer/main.svg" /> | <img src="https://github.com/tbhaxor/CloudyPlasmaServer/actions/workflows/ci.yml/badge.svg?branch=main" />
+
+</p>
+
 This repository is used to download the batch files for astro plasma datasets: Emission spectrum and Ionization.
 
 ## Setup
