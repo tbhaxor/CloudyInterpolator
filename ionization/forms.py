@@ -7,20 +7,20 @@ from astrodata.base.forms import InterpolateForm
 
 MODE_TYPES = (
     ('CIE', 'Collisional Ionisation Equilibrium (CIE)'),
-    ('PIE', 'Photoionization Equilibrium (PIE)')
+    ('PIE', 'Photoionization Equilibrium (PIE)'),
 )
 
 SPECIES_TYPES = (
     ('all', 'All'),
     ('electron', 'Electron'),
-    ('ion', 'ION')
+    ('ion', 'ION'),
 )
 
 parmanu = AtomicNo()
 
 TATVAS = []
 for atn in range(1, 31):
-    TATVAS.append((atn, f"{parmanu.getElementName(atn)} ({parmanu.getElSymbol(atn)})"))
+    TATVAS.append((atn, f'{parmanu.getElementName(atn)} ({parmanu.getElSymbol(atn)})'))
 TATVAS = tuple(TATVAS)
 
 
@@ -29,7 +29,7 @@ class InterpolateForm(InterpolateForm):
                                label='Select Element',
                                choices=TATVAS,
                                initial=TATVAS[0],
-                               widget=Select(attrs={'class': 'form-select', }))
+                               widget=Select(attrs={'class': 'form-select'}))
 
     ion = IntegerField(required=True, label='Ion Count',
                        min_value=1,
@@ -46,7 +46,7 @@ class InterpolateForm(InterpolateForm):
         element = self.cleaned_data.get('element')
 
         if element is None:
-            return
+            return None
 
         if ion > element+1:
             raise ValidationError(f'Cannot exceed the element+1 count (here, {element+1}).', code='gt_element')

@@ -39,7 +39,7 @@ class InterpolateView(FormView):
             if name in form.errors:
                 field.widget.attrs = {
                     'class': f"{field.widget.attrs.get('class', '')} is-invalid".strip(),
-                    'autofocus': 'true' if is_autofocus else 'false'
+                    'autofocus': 'true' if is_autofocus else 'false',
                 }
                 is_autofocus = True
 
@@ -61,8 +61,8 @@ class InterpolateView(FormView):
 
         # TODO: latex implementation
         fig = pgo.Figure(data=[
-            pgo.Scatter(x=data_log10[:, 0], y=data_log10[:, 1], mode='lines', name="log10 scale"),
-            pgo.Scatter(x=data_linear[:, 0], y=data_linear[:, 1], mode='lines', name="linear scale")
+            pgo.Scatter(x=data_log10[:, 0], y=data_log10[:, 1], mode='lines', name='log10 scale'),
+            pgo.Scatter(x=data_linear[:, 0], y=data_linear[:, 1], mode='lines', name='linear scale'),
         ])
         fig.update_xaxes(title_text=r'Energy (KeV)',  type='log')
         fig.update_yaxes(title_text=r'Emissivity (erg cm^-3 s^-1)', type='log')
@@ -89,5 +89,5 @@ class DownloadFileView(View):
         content = FileWrapper(open(target_file, 'rb'), CHUNK_SIZE)
         response = StreamingHttpResponse(content, content_type='application/x-hdf5')
         response['Content-Length'] = target_file.stat().st_size
-        response['Content-Disposition'] = f"attachment; filename={target_file.name}"
+        response['Content-Disposition'] = f'attachment; filename={target_file.name}'
         return response
