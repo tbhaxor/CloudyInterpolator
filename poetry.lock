@@ -39,9 +39,9 @@ urllib3 = "^1.26.14"
 
 [package.source]
 type = "git"
-url = "https://github.com/tbhaxor/AstroPlasma"
-reference = "improve/logscale"
-resolved_reference = "dd7725ad8a6b2a59f312a702dcd46807a2905fc7"
+url = "https://github.com/dutta-alankar/AstroPlasma.git"
+reference = "HEAD"
+resolved_reference = "012aac0bae7176a30f58f7744b668b261e455303"
 
 [[package]]
 name = "autopep8"
@@ -1019,4 +1019,4 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7c17ca3829cb7e3ce775b353c1ab153b57e5f472af2bc37d0423be8ba70c516f"
+content-hash = "bfd54dee976b74355835036c02fd0087b5a66bc2184f6fa45fd42698e857e2e3"
