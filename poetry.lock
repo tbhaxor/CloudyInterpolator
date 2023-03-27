@@ -40,7 +40,7 @@ urllib3 = "^1.26.14"
 [package.source]
 type = "git"
 url = "https://github.com/dutta-alankar/AstroPlasma.git"
-reference = "HEAD"
+reference = "main"
 resolved_reference = "012aac0bae7176a30f58f7744b668b261e455303"
 
 [[package]]
@@ -1019,4 +1019,4 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "bfd54dee976b74355835036c02fd0087b5a66bc2184f6fa45fd42698e857e2e3"
+content-hash = "f9f8599691425c3e8be7eef06917dda1ee908c18b3e1bad0c470c55bf2c6e118"
