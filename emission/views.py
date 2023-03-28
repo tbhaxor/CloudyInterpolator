@@ -12,9 +12,9 @@ from django.shortcuts import render
 from django.views.generic import FormView, View
 
 from astrodata.base.forms import InterpolateForm
-from astrodata.utils import is_server_running
+from astrodata.utils import is_server_running, is_test_running
 
-if is_server_running():
+if is_server_running() or is_test_running():
     dir_path = os.getenv('EMISSION_DATASET_DIR')
     if dir_path is None:
         raise ValueError('Emission dataset directory is required')
