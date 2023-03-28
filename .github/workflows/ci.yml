@@ -4,12 +4,13 @@ on:
   push:
     branches:
     - main
+  pull_request:
 
 jobs:
   build_and_push:
     name: Build and Push
     runs-on: ubuntu-latest
-
+    if: ${{ github.event_name == 'push' }}
     steps:
     - uses: actions/checkout@v3
       name: Checkout repository
@@ -39,3 +40,15 @@ jobs:
       run: |
         rm -rf /tmp/.buildx-cache
         mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+  test_application:
+    name: Run unit tests
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        mkdir /tmp/data/ionization
+        wget -O /tmp/data/ionization/ionization.b_000000.h5  "https://indianinstituteofscience-my.sharepoint.com/personal/alankardutta_iisc_ac_in/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Falankardutta_iisc_ac_in%2FDocuments%2Fserver-data%2Fionization%2Fionization.b_000000.h5"
+        mkdir /tmp/data/emission
+        wget -O /tmp/data/ionization/emission.b_000000.h5 "https://indianinstituteofscience-my.sharepoint.com/personal/alankardutta_iisc_ac_in/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Falankardutta_iisc_ac_in%2FDocuments%2Fserver-data%2Femission%2Femission.b_000000.h5"
+      name: Download initial batch file for testing
