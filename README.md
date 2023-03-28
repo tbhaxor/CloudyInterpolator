@@ -8,6 +8,20 @@
 
 This repository is used to download the batch files for astro plasma datasets: Emission spectrum and Ionization.
 
+## Screenshots
+
+### Home Page
+
+![](https://i.imgur.com/cjDgnfe.png)
+
+### Plasma Ionization Interpolation
+
+![](https://i.imgur.com/Q3TcxPZ.png)
+
+### Plasma Emission Spectrum
+
+![](https://i.imgur.com/tFIX3Y5.png)
+
 ## Setup
 
 1. Clone the repository
@@ -64,7 +78,6 @@ python manage.py runserver 127.0.0.1:<PORT>
 
 Replace the placeholder `<PORT>` with the port number of your choice.
 
-![](https://i.imgur.com/wgYz36E.png)
 
 ### Using Docker Container
 
