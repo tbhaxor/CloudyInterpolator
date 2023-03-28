@@ -24,6 +24,3 @@ jobs:
       name: Install dependencies
     - run: ./manage.py test
       name: Run unit test
-      # env:
-      #   IONIZATION_DATASET_DIR: .data/ionization
-      #   EMISSION_DATASET_DIR: .data/emission
