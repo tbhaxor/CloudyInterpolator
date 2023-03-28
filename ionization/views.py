@@ -1,7 +1,6 @@
 import json
 import math
 import os
-from pathlib import Path
 from wsgiref.util import FileWrapper
 
 from astro_plasma import Ionization
@@ -14,11 +13,7 @@ from astrodata.utils import is_server_running, is_test_running
 from .forms import InterpolateForm
 
 if is_server_running() or is_test_running():
-    dir_path = os.getenv('IONIZATION_DATASET_DIR')
-    if dir_path is None:
-        raise ValueError('Ionization dataset directory is required')
-    dataset_base_path = Path(dir_path)
-
+    dataset_base_path = os.getenv('IONIZATION_DATASET_DIR')
     CHUNK_SIZE = int(os.getenv('DOWNLOAD_CHUNK_SIZE', 1 << 12))
     FILE_NAME_TEMPLATE = 'ionization.b_{:06d}.h5'
 
