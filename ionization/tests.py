@@ -1,14 +1,9 @@
-import os
+from django.test import TestCase
 
-from astro_plasma import Ionization
-from django.test import Client, TestCase
-from django.urls import reverse
-
-from .forms import MODE_TYPES, SPECIES_TYPES, TATVAS, InterpolateForm
+from .forms import InterpolateForm
 
 
 class TestInterpolationForm(TestCase):
-
     def test_failure_on_empty_form(self):
         form = InterpolateForm(data={})
         assert not form.is_valid(), 'Empty form is valid'
@@ -102,6 +97,8 @@ class TestInterpolationForm(TestCase):
         assert error['code'] == 'invalid_choice', 'Invalid error code'
 
 
+"""
+TODO: implement this when server is live
 class TestInterpolateView(TestCase):
     def setUp(self) -> None:
         self.ionization = Ionization(base_dir=os.getenv('IONIZATION_DATASET_DIR'))
@@ -130,3 +127,4 @@ class TestInterpolateView(TestCase):
         for property, value in interpolation.items():
             assert type(value) == float, f'"{property}" has invalid type {type(value).__name__}'
             # pass
+"""

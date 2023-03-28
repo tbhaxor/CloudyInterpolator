@@ -1,0 +1,29 @@
+name: Unit Testing
+
+on:
+  pull_request:
+
+jobs:
+  test_application:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        sudo apt update
+        sudo apt install -y --no-install-recommends libhdf5-dev libopenmpi-dev openmpi-bin git gcc g++
+      name: Configure test environment
+    - uses: actions/checkout@v3
+      name: Checkout repository
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: pip
+    - run: |
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+      name: Install dependencies
+    - run: ./manage.py test
+      name: Run unit test
+      # env:
+      #   IONIZATION_DATASET_DIR: .data/ionization
+      #   EMISSION_DATASET_DIR: .data/emission
