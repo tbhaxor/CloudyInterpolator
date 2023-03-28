@@ -9,11 +9,11 @@ from django.http import JsonResponse, StreamingHttpResponse
 from django.shortcuts import render
 from django.views.generic import FormView, View
 
-from astrodata.utils import is_server_running
+from astrodata.utils import is_server_running, is_test_running
 
 from .forms import InterpolateForm
 
-if is_server_running():
+if is_server_running() or is_test_running():
     dir_path = os.getenv('IONIZATION_DATASET_DIR')
     if dir_path is None:
         raise ValueError('Ionization dataset directory is required')
@@ -54,7 +54,6 @@ class Interpolation(FormView):
                                                  ion=form.cleaned_data['ion'],
                                                  mode=form.cleaned_data['mode'],
                                                  redshift=form.cleaned_data['redshift'])
-
         mu_mass = ionization.interpolateMu(nH=form.cleaned_data['nh'],
                                            temperature=form.cleaned_data['temperature'],
                                            metallicity=form.cleaned_data['metallicity'],
@@ -70,8 +69,8 @@ class Interpolation(FormView):
 
         interpolation = {
             'ion_frac': math.exp(ion_frac),
-            'mu_mass': mu_mass,
-            'number_density': nrho,
+            'mu_mass': float(mu_mass),
+            'number_density': float(nrho),
         }
 
         if self.request.GET.get('format') == 'json':
