@@ -1,5 +1,4 @@
-"""
-WSGI config for astrodata project.
+"""WSGI config for astrodata project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

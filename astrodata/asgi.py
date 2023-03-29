@@ -1,5 +1,4 @@
-"""
-ASGI config for astrodata project.
+"""ASGI config for astrodata project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
