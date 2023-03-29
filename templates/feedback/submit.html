@@ -1,0 +1,54 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Submit Feedback {% endblock %}
+
+{% block main %}
+<div class="card mt-4">
+    <div class="card-body">
+        <h3 class="card-title text-center mb-3">Feedback Form</h3>
+        <h6 class="card-subtitle mb-2 text-muted text-center">Your feedback will help us improve the application.</h6>
+        <div class="card-text">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row mb-3">
+                    <div class="col">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.name.errors.0 }}</small>
+                        {% else %}
+                        <small class="text-muted"><strong>Note: </strong>{{ form.name.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    <div class="col">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.email.errors.0 }}</small>
+                        {% else %}
+                        <small class="text-muted"><strong>Note: </strong> {{ form.email.help_text }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        {{ form.message.label_tag }}
+                        {{ form.message }}
+                        {% if form.message.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.message.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col max-auto text-center">
+                        <button class="btn btn-block btn-primary" type="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

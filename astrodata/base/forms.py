@@ -3,7 +3,7 @@ from django.forms.widgets import NumberInput, Select
 
 MODE_TYPES = (
     ('CIE', 'Collisional Ionisation Equilibrium (CIE)'),
-    ('PIE', 'Photoionization Equilibrium (PIE)')
+    ('PIE', 'Photoionization Equilibrium (PIE)'),
 )
 
 
@@ -15,7 +15,7 @@ class InterpolateForm(Form):
     mode = TypedChoiceField(choices=MODE_TYPES,
                             required=True,
                             initial=MODE_TYPES[0],
-                            label="Select Mode",
+                            label='Select Mode',
                             widget=Select(attrs={'class': 'form-select'}))
 
     temperature = FloatField(required=True,

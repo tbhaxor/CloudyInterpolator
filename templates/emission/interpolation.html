@@ -82,6 +82,11 @@
 {% autoescape off %}
 {{ interpolation.data }}
 {% endautoescape %}
+
+<div class="text-center">
+    <a class="btn btn-primary" href="{% url 'feedback:submit' %}" role="button">Submit Feedback</a>
+</div>
+
 {% endif %}
 {% endblock %}
 
