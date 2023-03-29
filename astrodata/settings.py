@@ -53,7 +53,8 @@ INSTALLED_APPS = [
 
     # apps
     'emission',
-    'ionization'
+    'ionization',
+    'feedback',
 ]
 
 MIDDLEWARE = [
