@@ -42,25 +42,25 @@ class Interpolation(FormView):
     def form_valid(self, form: InterpolateForm):
         ionization = Ionization(dataset_base_path)
 
-        ion_frac = ionization.interpolateIonFrac(nH=form.cleaned_data['nh'],
-                                                 temperature=form.cleaned_data['temperature'],
-                                                 metallicity=form.cleaned_data['metallicity'],
-                                                 element=form.cleaned_data['element'],
-                                                 ion=form.cleaned_data['ion'],
-                                                 mode=form.cleaned_data['mode'],
-                                                 redshift=form.cleaned_data['redshift'])
-        mu_mass = ionization.interpolateMu(nH=form.cleaned_data['nh'],
-                                           temperature=form.cleaned_data['temperature'],
-                                           metallicity=form.cleaned_data['metallicity'],
-                                           mode=form.cleaned_data['mode'],
-                                           redshift=form.cleaned_data['redshift'],
-                                           )
-        nrho = ionization.interpolateNumDens(nH=form.cleaned_data['nh'],
-                                             temperature=form.cleaned_data['temperature'],
-                                             metallicity=form.cleaned_data['metallicity'],
-                                             mode=form.cleaned_data['mode'],
-                                             redshift=form.cleaned_data['redshift'],
-                                             part_type=form.cleaned_data['species_type'])
+        ion_frac = ionization.interpolate_ion_frac(nH=form.cleaned_data['nh'],
+                                                   temperature=form.cleaned_data['temperature'],
+                                                   metallicity=form.cleaned_data['metallicity'],
+                                                   element=form.cleaned_data['element'],
+                                                   ion=form.cleaned_data['ion'],
+                                                   mode=form.cleaned_data['mode'],
+                                                   redshift=form.cleaned_data['redshift'])
+        mu_mass = ionization.interpolate_mu(nH=form.cleaned_data['nh'],
+                                            temperature=form.cleaned_data['temperature'],
+                                            metallicity=form.cleaned_data['metallicity'],
+                                            mode=form.cleaned_data['mode'],
+                                            redshift=form.cleaned_data['redshift'],
+                                            )
+        nrho = ionization.interpolate_num_dens(nH=form.cleaned_data['nh'],
+                                               temperature=form.cleaned_data['temperature'],
+                                               metallicity=form.cleaned_data['metallicity'],
+                                               mode=form.cleaned_data['mode'],
+                                               redshift=form.cleaned_data['redshift'],
+                                               part_type=form.cleaned_data['species_type'])
 
         interpolation = {
             'ion_frac': 10 ** ion_frac,

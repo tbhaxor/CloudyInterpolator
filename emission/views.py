@@ -43,17 +43,17 @@ class InterpolateView(FormView):
 
     def form_valid(self, form: InterpolateForm):
         emission = EmissionSpectrum(dataset_base_path)
-        data_linear = emission.interpolate(nH=form.cleaned_data['nh'],
-                                           metallicity=form.cleaned_data['metallicity'],
-                                           mode=form.cleaned_data['mode'],
-                                           redshift=form.cleaned_data['redshift'],
-                                           temperature=form.cleaned_data['temperature'])
-        data_log10 = emission.interpolate(nH=form.cleaned_data['nh'],
-                                          metallicity=form.cleaned_data['metallicity'],
-                                          mode=form.cleaned_data['mode'],
-                                          redshift=form.cleaned_data['redshift'],
-                                          temperature=form.cleaned_data['temperature'],
-                                          scaling_func=np.log10)
+        data_linear = emission.interpolate_spectrum(nH=form.cleaned_data['nh'],
+                                                    metallicity=form.cleaned_data['metallicity'],
+                                                    mode=form.cleaned_data['mode'],
+                                                    redshift=form.cleaned_data['redshift'],
+                                                    temperature=form.cleaned_data['temperature'])
+        data_log10 = emission.interpolate_spectrum(nH=form.cleaned_data['nh'],
+                                                   metallicity=form.cleaned_data['metallicity'],
+                                                   mode=form.cleaned_data['mode'],
+                                                   redshift=form.cleaned_data['redshift'],
+                                                   temperature=form.cleaned_data['temperature'],
+                                                   scaling_func=np.log10)
 
         # TODO: latex implementation
         fig = pgo.Figure(data=[
