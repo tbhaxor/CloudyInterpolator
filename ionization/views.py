@@ -1,5 +1,4 @@
 import json
-import math
 import os
 from wsgiref.util import FileWrapper
 
@@ -64,7 +63,7 @@ class Interpolation(FormView):
                                              part_type=form.cleaned_data['species_type'])
 
         interpolation = {
-            'ion_frac': math.exp(ion_frac),
+            'ion_frac': 10 ** ion_frac,
             'mu_mass': float(mu_mass),
             'number_density': float(nrho),
         }
