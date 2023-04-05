@@ -9,7 +9,7 @@ class FeedbackModel(models.Model):
         blank=False,
         default=None,
         verbose_name='Email Address',
-        help_text='This will help us to reach you when we launch a new version of the application',
+        help_text='When we release a new edition of the program, this will make it easier for us to contact you.',
     )
 
     name = models.CharField(
@@ -17,7 +17,7 @@ class FeedbackModel(models.Model):
         null=False,
         default=None,
         verbose_name='Full Name',
-        help_text='This is how we will address you in the email',
+        help_text="We'll refer to you in the communication as such.",
     )
 
     message = models.TextField(
@@ -25,7 +25,7 @@ class FeedbackModel(models.Model):
         blank=False,
         default=None,
         verbose_name='Message',
-        help_text='Provide the feedback here',
+        help_text='Give your comments here.',
     )
 
     created_at = models.DateTimeField(
