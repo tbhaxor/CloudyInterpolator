@@ -17,12 +17,20 @@ jobs:
     - uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-        cache: pip
-    - name: Run image
-      uses: abatilo/actions-poetry@v2
+    - name: Install poetry
+      uses: snok/install-poetry@v1.0.0
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v2
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
     - run: poetry install
       name: Install dependencies
-    - run: ./manage.py test
+    - run: poetry run ./manage.py test
       name: Run unit test
       # env:
       #   IONIZATION_DATASET_DIR: .data/ionization
