@@ -71,7 +71,6 @@ class InterpolationView(TemplateView):
                 form.cleaned_data['part_type'] = form.cleaned_data['species_type']
                 del form.cleaned_data['species_type']
 
-                print(form.cleaned_data)
                 mean_mass = i.interpolate_mu(**form.cleaned_data)
                 number_density = i.interpolate_num_dens(**form.cleaned_data)
 
