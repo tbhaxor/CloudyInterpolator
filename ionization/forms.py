@@ -16,15 +16,15 @@ SPECIES_TYPES = (
     ('ion', 'ION'),
 )
 
-parmanu = AtomicNo()
+PARMANU = AtomicNo()
 
 TATVAS = []
 for atn in range(1, 31):
-    TATVAS.append((atn, f'{parmanu.getElementName(atn)} ({parmanu.getElSymbol(atn)})'))
+    TATVAS.append((atn, f'{PARMANU.getElementName(atn)} ({PARMANU.getElSymbol(atn)})'))
 TATVAS = tuple(TATVAS)
 
 
-class InterpolateForm(InterpolateForm):
+class InterpolateIonFractionForm(InterpolateForm):
     element = TypedChoiceField(coerce=int, required=True,
                                label='Select Element',
                                choices=TATVAS,
@@ -34,12 +34,6 @@ class InterpolateForm(InterpolateForm):
     ion = IntegerField(required=True, label='Ion Count',
                        min_value=1,
                        widget=NumberInput(attrs={'class': 'form-control'}))
-
-    species_type = TypedChoiceField(required=True,
-                                    choices=SPECIES_TYPES,
-                                    initial=SPECIES_TYPES[1],
-                                    label='Select Species Type',
-                                    widget=Select(attrs={'class': 'form-select'}))
 
     def clean_ion(self):
         ion = self.cleaned_data['ion']
@@ -52,3 +46,12 @@ class InterpolateForm(InterpolateForm):
             raise ValidationError(f'Cannot exceed the element+1 count (here, {element+1}).', code='gt_element')
 
         return ion
+
+
+class InterpolateMDForm(InterpolateForm):
+    species_type = TypedChoiceField(required=True,
+                                    choices=SPECIES_TYPES,
+                                    initial=SPECIES_TYPES[1],
+                                    label='Select Species Type',
+                                    widget=Select(attrs={'class': 'form-select'}))
+    pass

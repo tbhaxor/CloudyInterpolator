@@ -4,6 +4,10 @@
 <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css"> -->
 {% endblock %}
 
+{% block head_scripts %}
+<script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
+{% endblock %}
+
 {% block title %}Interpolate Emission Data{% endblock %}
 
 {% block main %}
@@ -16,10 +20,10 @@
                 {% csrf_token %}
                 <div class="row mb-3">
                     <div class="col">
-                        {{ form.nh.label_tag }}
-                        {{ form.nh }}
-                        {% if form.nh.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.nh.errors.0 }}</small>
+                        {{ form.nH.label_tag }}
+                        {{ form.nH }}
+                        {% if form.nH.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.nH.errors.0 }}</small>
                         {% endif %}
                     </div>
                     <div class="col">
@@ -78,19 +82,21 @@
     </div>
 </div>
 
-{% if interpolation %}
-{% autoescape off %}
-{{ interpolation.data }}
-{% endautoescape %}
 
-<div class="text-center">
+
+{% if interpolation %}
+<div id="emission-plot"></div>
+<div class="text-center mb-3">
     <a class="btn btn-primary" href="{% url 'feedback:submit' %}" role="button">Submit Feedback</a>
 </div>
-
 {% endif %}
 {% endblock %}
 
+
+
 {% block body_scripts %}
-<!-- <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script> -->
-<!-- <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script> -->
+<script>
+    let emissionData = {{ interpolation| safe }}
+    let plot = Plotly.newPlot('emission-plot', emissionData, { dislayModeBar: true });
+</script>
 {% endblock %}
