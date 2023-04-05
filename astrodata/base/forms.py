@@ -1,5 +1,6 @@
 from django.forms import FloatField, Form, TypedChoiceField
 from django.forms.widgets import NumberInput, Select
+from django.utils.html import format_html
 
 MODE_TYPES = (
     ('CIE', 'Collisional Ionisation Equilibrium (CIE)'),
@@ -8,8 +9,8 @@ MODE_TYPES = (
 
 
 class InterpolateForm(Form):
-    nh = FloatField(required=True,
-                    label='Number Density of Hydrogen',
+    nH = FloatField(required=True,
+                    label=format_html('Number Density of Hydrogen (cm<sup>-3</sup>)'),
                     widget=NumberInput(attrs={'class': 'form-control'}))
 
     mode = TypedChoiceField(choices=MODE_TYPES,

@@ -4,11 +4,20 @@
 
 {% block main %}
 <div class="card mt-4">
+    <h3 class="card-title text-center my-3">Submit Medium Details</h3>
+
+    <ul class="nav nav-tabs nav-justified">
+        <li class="nav-item" id="calc_ion_frac">
+            <a class="nav-link" href="?action=ion_frac">Calculate Ion Fraction</a>
+        </li>
+        <li class="nav-item" id="calc_mn_density">
+            <a class="nav-link" href="?action=mass_density">Calculate Mean Mass and Number Density</a>
+        </li>
+    </ul>
+
     <div class="card-body">
-        <h3 class="card-title text-center mb-3">Submit Medium Details</h3>
-        <hr class="mx-auto col-md-3" />
         <div class="card-text">
-            <form method="post" class="needs-validation">
+            <form method="post">
                 {% csrf_token %}
                 <div class="row mb-3">
                     <div class="col">
@@ -29,10 +38,10 @@
 
                 <div class="row mb-3">
                     <div class="col">
-                        {{ form.nh.label_tag }}
-                        {{ form.nh }}
-                        {% if form.nh.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.nh.errors.0 }}</small>
+                        {{ form.nH.label_tag }}
+                        {{ form.nH }}
+                        {% if form.nH.errors %}
+                        <small class="text-danger"><strong>Error: </strong>{{ form.nH.errors.0 }}</small>
                         {% endif %}
                     </div>
                     <div class="col">
@@ -69,6 +78,7 @@
                         <small class="text-danger"><strong>Error: </strong>{{ form.mode.errors.0 }}</small>
                         {% endif %}
                     </div>
+                    {% if form.species_type %}
                     <div class="col">
                         {{ form.species_type.label_tag }}
                         {{ form.species_type }}
@@ -76,19 +86,20 @@
                         <small class="text-danger"><strong>Error: </strong>{{ form.species_type.errors.0 }}</small>
                         {% endif %}
                     </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="alert alert-info" role="alert">
-                            <em><strong>Note: </strong> Scientific notation in the numeric fields are supported.</em>
-                        </div>
-                    </div>
+                    {% endif %}
                 </div>
 
                 <div class="card-link mt-3">
                     <div class="d-grid gap-3 col-3 mx-auto">
                         <button type="submit" class="btn card-link btn-primary">Submit</button>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col">
+                        <div class="alert alert-info" role="alert">
+                            <em><strong>Note: </strong> Scientific notation in the numeric fields are supported.</em>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -107,18 +118,21 @@
     </thead>
 
     <tbody>
+        {% if action == 'ion_frac' %}
         <tr>
-            <td>Ion Fraction</td>
+            <td>Ion Fraction ({{interpolation.ionized_symbol|safe}})</td>
             <td>{{ interpolation.ion_frac }}</td>
         </tr>
+        {% elif action == 'mass_density' %}
         <tr>
-            <td>Mean Mass (µ)</td>
-            <td>{{ interpolation.mu_mass }}</td>
+            <td>Mean Mass ({{interpolation.mean_mass_symbol|safe}})</td>
+            <td>{{ interpolation.mean_mass }}</td>
         </tr>
         <tr>
-            <td>Number Density</td>
+            <td>Number Density ({{interpolation.number_density_symbol|safe}})</td>
             <td>{{ interpolation.number_density }}</td>
         </tr>
+        {% endif %}
     </tbody>
 </table>
 
@@ -127,4 +141,23 @@
 </div>
 
 {% endif %}
+
+{% endblock %}
+
+{% block body_scripts %}
+<script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const qp = new URLSearchParams(window.location.search)
+        const action = qp.get("action")
+        // const activeForm = $("#active-form").text().trim().replace(/^"|"$/g, "") || "ion_frac_form"
+        switch (action) {
+            case "ion_frac":
+                $("#calc_ion_frac").children("a").addClass("active")
+                break;
+            case "mass_density":
+                $("#calc_mn_density").children("a").addClass("active")
+                break;
+        }
+    });
+</script>
 {% endblock %}
