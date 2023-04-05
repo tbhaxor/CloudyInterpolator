@@ -60,7 +60,7 @@ class InterpolateView(FormView):
             pgo.Scatter(x=data_log10[:, 0], y=data_log10[:, 1], mode='lines', name='log10 scale'),
             pgo.Scatter(x=data_linear[:, 0], y=data_linear[:, 1], mode='lines', name='linear scale'),
         ])
-        fig.update_xaxes(title_text=r'Energy (KeV)',  type='log')
+        fig.update_xaxes(title_text=r'Energy (keV)',  type='log')
         fig.update_yaxes(title_text=r'Emissivity (erg cm^-3 s^-1)', type='log')
         fig.update_layout(width=1200, height=800, legend={'x': 0, 'y': 1, 'bgcolor': 'rgba(0,0,0,0)'})
 
