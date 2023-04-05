@@ -48,7 +48,7 @@ class InterpolateIonFractionForm(InterpolateForm):
         return ion
 
 
-class InterpolateMassDensityForm(InterpolateForm):
+class InterpolateMDForm(InterpolateForm):
     species_type = TypedChoiceField(required=True,
                                     choices=SPECIES_TYPES,
                                     initial=SPECIES_TYPES[1],

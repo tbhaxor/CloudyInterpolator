@@ -9,7 +9,7 @@ from django.views.generic import TemplateView, View
 
 from astrodata.utils import is_server_running, is_test_running
 
-from .forms import PARMANU, InterpolateIonFractionForm, InterpolateMassDensityForm
+from .forms import PARMANU, InterpolateIonFractionForm, InterpolateMDForm
 
 if is_server_running() or is_test_running():
     dataset_base_path = os.getenv('IONIZATION_DATASET_DIR')
@@ -32,7 +32,7 @@ class InterpolationView(TemplateView):
             case 'ion_frac':
                 kwargs['form'] = InterpolateIonFractionForm()
             case 'mass_density':
-                kwargs['form'] = InterpolateMassDensityForm()
+                kwargs['form'] = InterpolateMDForm()
         return super().get_context_data(**kwargs)
 
     def post(self, request: HttpRequest):
@@ -41,7 +41,7 @@ class InterpolationView(TemplateView):
             case 'ion_frac':
                 form = InterpolateIonFractionForm(request.POST)
             case 'mass_density':
-                form = InterpolateMassDensityForm(request.POST)
+                form = InterpolateMDForm(request.POST)
             case _:
                 return redirect(request.path + '?action=ion_frac')
 

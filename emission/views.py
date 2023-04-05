@@ -1,14 +1,13 @@
 import json
 import os
-from io import StringIO
 from wsgiref.util import FileWrapper
 
 import numpy as np
-import plotly.graph_objs as pgo
 from astro_plasma import EmissionSpectrum
 from django.http import JsonResponse, StreamingHttpResponse
 from django.shortcuts import render
 from django.views.generic import FormView, View
+from plotly import graph_objs as pgo
 
 from astrodata.base.forms import InterpolateForm
 from astrodata.utils import is_server_running, is_test_running
@@ -43,17 +42,9 @@ class InterpolateView(FormView):
 
     def form_valid(self, form: InterpolateForm):
         emission = EmissionSpectrum(dataset_base_path)
-        data_linear = emission.interpolate_spectrum(nH=form.cleaned_data['nh'],
-                                                    metallicity=form.cleaned_data['metallicity'],
-                                                    mode=form.cleaned_data['mode'],
-                                                    redshift=form.cleaned_data['redshift'],
-                                                    temperature=form.cleaned_data['temperature'])
-        data_log10 = emission.interpolate_spectrum(nH=form.cleaned_data['nh'],
-                                                   metallicity=form.cleaned_data['metallicity'],
-                                                   mode=form.cleaned_data['mode'],
-                                                   redshift=form.cleaned_data['redshift'],
-                                                   temperature=form.cleaned_data['temperature'],
-                                                   scaling_func=np.log10)
+
+        data_linear = emission.interpolate_spectrum(**form.cleaned_data)
+        data_log10 = emission.interpolate_spectrum(**form.cleaned_data, scaling_func=np.log10)
 
         # TODO: latex implementation
         fig = pgo.Figure(data=[
@@ -62,20 +53,22 @@ class InterpolateView(FormView):
         ])
         fig.update_xaxes(title_text=r'Energy (keV)',  type='log')
         fig.update_yaxes(title_text=r'Emissivity (erg cm^-3 s^-1)', type='log')
-        fig.update_layout(width=1200, height=800, legend={'x': 0, 'y': 1, 'bgcolor': 'rgba(0,0,0,0)'})
 
-        with StringIO() as file:
-            fig.write_html(file)
+        fig.update_layout(width=1200,
+                          height=800,
+                          legend={'x': 0, 'y': 1, 'bgcolor': 'rgba(0,0,0,0)'})
 
-            interpolation = {
-                'data': file.getvalue(),
-            }
+        # with StringIO() as file:
 
         if self.request.GET.get('format') == 'json':
-            return JsonResponse(data={'data': interpolation, 'request': form.cleaned_data})
+            return JsonResponse(data={'data': {
+                'energy': data_linear[:, 0],
+                'emissivity_linear': data_linear[:, 1],
+                'emissivity_log10': data_log10[:, 1],
+            }, 'request': form.cleaned_data})
 
         context = {'form': form,
-                   'interpolation': interpolation}
+                   'interpolation':  fig.to_json()}
         return render(self.request, self.template_name, context)
 
 
