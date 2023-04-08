@@ -24,7 +24,7 @@ class InterpolateForm(Form):
                              widget=NumberInput(attrs={'class': 'form-control'}))
 
     metallicity = FloatField(required=True,
-                             label='Metallicity',
+                             label=format_html('Metallicity (Z<sub>solar</sub>)'),
                              widget=NumberInput(attrs={'class': 'form-control'}))
 
     redshift = FloatField(required=True,
