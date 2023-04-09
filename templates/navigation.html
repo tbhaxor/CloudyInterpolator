@@ -1,17 +1,15 @@
 {% extends "layouts/base.html" %}
 
-{% block title %}
-Choose your task - Cloudy Batch Downloader
-{% endblock %}
+{% block title %}Choose your Task{% endblock %}
 
 {% block main %}
 <div class="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 px-4 py-6 sm:py-12">
     <div
         class="relative bg-white px-6 pb-8 pt-10 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-lg rounded-lg sm:px-10">
         <div class="mx-auto max-w-md">
-            <h1 class="mb-2 text-2xl font-semibold text-black">Cloudy Batch Downloader</h1>
-            <p class="text-base font-normal text-gray-500">Download the batch files for astro plasma datasets:
-                Emission spectrum and Ionization.</p>
+            <h1 class="mb-2 text-2xl font-semibold text-black">Cloudy Interpolator</h1>
+            <p class="text-base font-normal text-gray-500">Interpolate the emission or ionization data from the
+                pre-computed cloudy dataset</p>
             <div class="divide-y divide-gray-300/50">
                 <div class="space-y-6 py-8 text-base leading-7 text-gray-600">
                     <p>What do you want to do?</p>
@@ -52,7 +50,9 @@ Choose your task - Cloudy Batch Downloader
                             </a>
                         </li>
                     </ul>
+                    {% comment %}
                     <p>Some more info here if something needs an explaination of some sort :P</p>
+                    {% endcomment %}
                 </div>
                 <div class="pt-8 text-base font-semibold leading-7">
                     <p class="text-gray-900">Want to contribute?</p>
