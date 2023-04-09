@@ -54,7 +54,7 @@ class InterpolateView(FormView):
         fig.update_xaxes(title_text=r'Energy (keV)',  type='log')
         fig.update_yaxes(title_text=r'Emissivity (erg cm^-3 s^-1)', type='log')
 
-        fig.update_layout(width=1200,
+        fig.update_layout(width=1150,
                           height=800,
                           legend={'x': 0, 'y': 1, 'bgcolor': 'rgba(0,0,0,0)'})
 
