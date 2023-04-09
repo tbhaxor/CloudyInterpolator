@@ -3,52 +3,44 @@
 {% block title %} Submit Feedback {% endblock %}
 
 {% block main %}
-<div class="card mt-4">
-    <div class="card-body">
-        <h3 class="card-title text-center mb-3">Feedback Form</h3>
-        <h6 class="card-subtitle mb-2 text-muted text-center">Your feedback will help us improve the application.</h6>
-        <div class="card-text">
-            <form method="post">
-                {% csrf_token %}
-                <div class="row mb-3">
-                    <div class="col">
-                        {{ form.name.label_tag }}
-                        {{ form.name }}
-                        {% if form.name.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.name.errors.0 }}</small>
-                        {% else %}
-                        <small class="text-muted"><strong>Note: </strong>{{ form.name.help_text }}</small>
-                        {% endif %}
-                    </div>
-                    <div class="col">
-                        {{ form.email.label_tag }}
-                        {{ form.email }}
-                        {% if form.email.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.email.errors.0 }}</small>
-                        {% else %}
-                        <small class="text-muted"><strong>Note: </strong> {{ form.email.help_text }}</small>
-                        {% endif %}
-                    </div>
-                </div>
+<h3 class="text-xl font-medium leading-6 text-gray-900 mb-5">Feedback Form</h3>
+<form method="post">
+    {% csrf_token %}
+    <div class="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+        <div>
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {% if form.name.errors %}
+            <small class="text-danger"><strong>Error: </strong>{{ form.name.errors.0 }}</small>
+            {% else %}
+            <small class="text-muted"><strong>Note: </strong>{{ form.name.help_text }}</small>
+            {% endif %}
+        </div>
 
-                <div class="row mb-3">
-                    <div class="col">
-                        {{ form.message.label_tag }}
-                        {{ form.message }}
-                        {% if form.message.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.message.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                </div>
+        <div>
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            {% if form.email.errors %}
+            <p class="mt-2 text-sm text-red-600" id="email-error"><b>Error: </b>{{ form.email.errors.0 }}</p>
+            {% else %}
+            <p class="mt-2 text-sm text-red-600" id="email-error"><b>Error: </b>{{ form.email.help_text }}</p>
+            {% endif %}
+        </div>
 
-                <div class="row mb-3">
-                    <div class="col max-auto text-center">
-                        <button class="btn btn-block btn-primary" type="submit">Submit</button>
-                    </div>
-                </div>
-            </form>
+        <div class="col-span-full">
+            {{ form.message.label_tag }}
+            {{ form.message }}
+            {% if form.message.errors %}
+            <p class="mt-2 text-sm text-red-600" id="email-error"><b>Error: </b>{{ form.message.errors.0 }}</p>
+            {% endif %}
         </div>
     </div>
-</div>
+
+    <div class="mt-6 flex items-streach justify-center gap-x-6">
+        <button type="submit"
+            class="rounded-md bg-sky-500 px-8 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 transition-colors">Submit</button>
+    </div>
+
+</form>
 
 {% endblock %}

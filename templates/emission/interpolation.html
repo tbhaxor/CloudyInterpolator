@@ -11,88 +11,98 @@
 {% block title %}Interpolate Emission Data{% endblock %}
 
 {% block main %}
-<div class="card mt-4">
-    <div class="card-body">
-        <h3 class="card-title text-center mb-3">Submit Medium Details</h3>
-        <hr class="mx-auto col-md-3" />
-        <div class="card-text">
-            <form method="post" class="needs-validation">
-                {% csrf_token %}
-                <div class="row mb-3">
-                    <div class="col">
-                        {{ form.nH.label_tag }}
-                        {{ form.nH }}
-                        {% if form.nH.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.nH.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                    <div class="col">
-                        {{ form.temperature.label_tag }}
-                        {{ form.temperature }}
-                        {% if form.temperature.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.temperature.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                </div>
+<h3 class="text-xl font-medium leading-6 text-gray-900 mb-5">Interpolate Emission Data</h3>
 
+<form method="post" class="needs-validation">
+    {% csrf_token %}
+    <div class="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+        <div>
+            {{ form.nH.label_tag }}
+            {{ form.nH }}
+            {% if form.nH.errors %}
+            <p class="mt-2 text-sm text-red-600" id="email-error"><b>Error: </b>{{ form.nH.errors.0 }}</p>
+            {% endif %}
+        </div>
+        <div>
+            {{ form.temperature.label_tag }}
+            {{ form.temperature }}
+            {% if form.temperature.errors %}
+            <p class="mt-2 text-sm text-red-600" id="email-error"><b>Error: </b>{{ form.temperature.errors.0
+                }}</p>
+            {% endif %}
+        </div>
 
-                <div class="row mb-3">
-                    <div class="col">
-                        {{ form.metallicity.label_tag }}
-                        {{ form.metallicity }}
-                        {% if form.metallicity.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.metallicity.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                    <div class="col">
-                        {{ form.redshift.label_tag }}
-                        {{ form.redshift }}
-                        {% if form.redshift.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.redshift.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                </div>
+        <div>
+            {{ form.metallicity.label_tag }}
+            {{ form.metallicity }}
+            {% if form.metallicity.errors %}
+            <p class="mt-2 text-sm text-red-600" id="email-error"><b>Error: </b>{{ form.metallicity.errors.0
+                }}</p>
+            {% endif %}
+        </div>
+        <div>
+            {{ form.redshift.label_tag }}
+            {{ form.redshift }}
+            {% if form.redshift.errors %}
+            <p class="mt-2 text-sm text-red-600" id="email-error"><b>Error: </b>{{ form.redshift.errors.0 }}
+            </p>
+            {% endif %}
+        </div>
 
-                <div class="row mb-3">
-                    <div class="col">
-                        {{ form.mode.label_tag }}
-                        {{ form.mode }}
-                        {% if form.mode.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.mode.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                </div>
-
-
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="alert alert-info" role="alert">
-                            <em>Scientific notation in the numeric fields are supported.</em>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-link mt-3">
-                    <div class="d-grid gap-3 col-3 mx-auto">
-                        <button type="submit" class="btn card-link btn-primary">Submit</button>
-                    </div>
-                </div>
-            </form>
+        <div>
+            {{ form.mode.label_tag }}
+            {{ form.mode }}
+            {% if form.mode.errors %}
+            <p class="mt-2 text-sm text-red-600" id="email-error"><b>Error: </b>{{ form.mode.errors.0 }}</p>
+            {% endif %}
         </div>
     </div>
-</div>
 
 
+    <div class="border-l-4 border-yellow-400 bg-yellow-50 p-4 mt-10">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                        d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm text-yellow-700">
+                    <strong>Note: </strong> Scientific notation in the numeric fields are
+                    supported.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-6 flex items-streach justify-center gap-x-6">
+        <button type="submit"
+            class="rounded-md bg-sky-500 px-8 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 transition-colors">Calculate</button>
+    </div>
+
+</form>
 
 {% if interpolation %}
-<div id="emission-plot"></div>
-<div class="text-center mb-3">
-    <a class="btn btn-primary" href="{% url 'feedback:submit' %}" role="button">Submit Feedback</a>
+<div class="overflow-hidden bg-white shadow border border-gray-200 sm:rounded-lg mt-12">
+    <div class="px-4 py-5 sm:px-6 flex flex-col sm:flex-row items-center gap-4 justify-between">
+        <h3 class="text-lg font-semibold leading-6 text-gray-900">Interpolation output</h3>
+        <a href="{% url 'feedback:submit' %}"
+            class="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-xs font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+            <svg class="-ml-0.5 mr-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
+                <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
+            </svg>
+            <span>Submit Feedback</span>
+        </a>
+    </div>
+    <div class="border-t border-gray-200 p-5">
+        <div id="emission-plot" class="w-full"></div>
+    </div>
 </div>
 {% endif %}
 {% endblock %}
-
-
 
 {% block body_scripts %}
 <script>
