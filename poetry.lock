@@ -41,7 +41,7 @@ urllib3 = "^1.26.14"
 type = "git"
 url = "https://github.com/dutta-alankar/AstroPlasma.git"
 reference = "main"
-resolved_reference = "60ef4d833e1b0f145b6f638e9313c15ed2dfcd0a"
+resolved_reference = "9177b84913517adfb1ebc37d7052d21012b74801"
 
 [[package]]
 name = "autopep8"
