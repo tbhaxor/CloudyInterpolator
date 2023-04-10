@@ -1,15 +1,268 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "./tailwind.css";
 
-.base-form-input {
-    @apply block w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300;
+body {
+  @apply bg-gray-50;
 }
 
-.form-control {
-    @apply base-form-input placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6
+header {
+  @apply bg-white shadow;
+
+  .inner {
+    @apply box-container lg:divide-y lg:divide-gray-100 lg:px-8;
+  }
+
+  .main-nav {
+    @apply relative flex h-16 justify-between;
+
+    .logo-container {
+      @apply relative z-10 flex px-2 lg:px-0;
+    }
+
+    .logo {
+      @apply flex flex-shrink-0 items-center;
+
+      a {
+        @apply text-lg font-semibold text-black hover:text-gray-600;
+      }
+    }
+
+    .link-icons {
+      @apply relative z-10 ml-4 flex items-center;
+
+      a {
+        @apply flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+      }
+
+      svg {
+        @apply h-6 w-6 fill-slate-500 hover:fill-slate-950;
+      }
+    }
+  }
+
+  nav {
+    @apply flex space-x-2 py-2 sm:space-x-5;
+
+    a {
+      @apply inline-flex items-center rounded-md px-2 py-2 text-xs font-medium text-gray-900 transition-colors hover:bg-sky-50 hover:text-sky-600 sm:px-4 sm:text-sm;
+
+      &.active {
+        @apply bg-sky-100 text-sky-600;
+      }
+    }
+  }
 }
 
-.form-select {
-    @apply base-form-input focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6;
+.fullpage {
+  @apply relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 px-4 py-6 sm:py-12;
+}
+
+.homepage {
+  @apply relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 px-4 py-6 sm:py-12;
+
+  .main-info-card {
+    @apply relative bg-white px-6 pb-8 pt-10 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-lg rounded-lg sm:px-10;
+
+    h1 {
+      @apply mb-2 text-2xl font-semibold text-black;
+    }
+    p {
+      @apply text-base font-normal text-gray-500;
+    }
+  }
+
+  .nav-list {
+    @apply space-y-6 py-8 text-base leading-7 text-gray-600;
+
+    .nav-qs {
+      @apply text-gray-900;
+    }
+
+    ul {
+      @apply space-y-4;
+
+      li {
+        a {
+          @apply flex flex-col items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sky-500 transition-colors hover:border-sky-400 sm:flex-row sm:gap-0 sm:px-3 sm:py-2.5;
+
+          svg {
+            @apply flex-none fill-sky-100 stroke-sky-500 stroke-2;
+          }
+        }
+      }
+    }
+  }
+
+  .more-info {
+    @apply pt-8 text-base font-semibold leading-7;
+
+    p {
+      @apply text-gray-900;
+    }
+  }
+}
+
+.sec-title {
+  @apply text-xl font-medium leading-6 text-gray-900;
+}
+
+.btn-filled {
+  @apply rounded-md bg-sky-500 px-8 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 transition-colors;
+}
+
+.btn-light {
+  @apply relative inline-flex items-center rounded-md bg-white px-3 py-2 text-xs font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50;
+}
+
+.shadowed-card {
+  @apply overflow-hidden bg-white shadow border border-gray-200 sm:rounded-lg;
+
+  .card-header {
+    @apply px-4 py-5 sm:px-6 flex flex-col sm:flex-row items-center gap-4 justify-between;
+  }
+}
+
+.main-page {
+  @apply relative h-full bg-gray-50 px-4 py-8 sm:py-12;
+
+  .main-inner-container {
+    @apply w-full bg-white rounded-md px-8 py-6 border border-gray-100;
+  }
+}
+
+.alert {
+  @apply border-l-4 border-blue-400 bg-blue-50 p-4;
+
+  .icon {
+    @apply flex-shrink-0;
+  }
+
+  .info {
+    @apply ml-3;
+  }
+
+  svg {
+    @apply h-5 w-5 text-blue-400;
+  }
+  p {
+    @apply text-sm;
+  }
+
+  &.warning {
+    @apply border-yellow-400 bg-yellow-50;
+
+    svg {
+      @apply text-yellow-400;
+    }
+
+    p {
+      @apply text-yellow-700;
+    }
+  }
+
+  &.error {
+    @apply border-red-400 bg-red-50;
+
+    svg {
+      @apply text-red-400;
+    }
+
+    p {
+      @apply text-red-700;
+    }
+  }
+
+  &.success {
+    @apply border-green-400 bg-green-50;
+
+    svg {
+      @apply text-green-400;
+    }
+
+    p {
+      @apply text-green-700;
+    }
+  }
+}
+.form-grid {
+  @apply mt-10 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2;
+
+  .form-item {
+    @apply w-full;
+
+    label {
+      @apply inline-block mb-2 text-gray-700;
+    }
+
+    input,
+    textarea {
+      @apply block w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6;
+
+      &.error {
+        @apply ring-red-400;
+      }
+    }
+
+    select {
+      @apply block w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6;
+      &.error {
+        @apply ring-red-400;
+      }
+    }
+  }
+
+  .error-msg {
+    @apply mt-2 text-sm text-red-600;
+
+    b {
+      @apply font-semibold;
+    }
+  }
+
+  .info-msg {
+    @apply mt-2 text-sm text-slate-700;
+
+    b {
+      @apply font-semibold;
+    }
+  }
+}
+
+.lined-tabs {
+  @apply border-b border-gray-200;
+
+  nav {
+    @apply -mb-px flex space-x-8;
+
+    a {
+      @apply transition-colors border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium;
+
+      &.active {
+        @apply border-sky-500 text-sky-600 hover:border-sky-400 hover:text-sky-600;
+      }
+    }
+  }
+}
+.data-list {
+  .data-list-row {
+    @apply px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6;
+
+    dt {
+      @apply text-sm font-medium text-gray-500;
+    }
+    dd {
+      @apply mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0;
+    }
+  }
+}
+
+.thankyou-card {
+  @apply relative bg-white px-6 pb-8 pt-10 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-lg rounded-lg sm:px-10;
+
+  h1 {
+    @apply mb-2 text-2xl font-semibold text-black;
+  }
+
+  p {
+    @apply text-base font-normal text-gray-500;
+  }
 }

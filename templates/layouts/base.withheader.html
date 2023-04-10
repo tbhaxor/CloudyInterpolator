@@ -8,7 +8,6 @@
     <title>{% block title %} {% endblock %}</title>
     {% load static %}
     <link href="{% static 'css/main.min.css' %}" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
     {% block extra_styles %}
     {% endblock %}
     {% block head_scripts %}
@@ -16,19 +15,17 @@
 </head>
 
 <body>
-    <header class="bg-white shadow">
-        <div class="mx-auto max-w-7xl px-2 sm:px-4 lg:divide-y lg:divide-gray-100 lg:px-8">
-            <div class="relative flex h-16 justify-between">
-                <div class="relative z-10 flex px-2 lg:px-0">
-                    <div class="flex flex-shrink-0 items-center">
-                        <a href="#" class="text-lg font-semibold text-black hover:text-gray-600">Cloudy Batch
-                            Downloader</a>
+    <header>
+        <div class="inner">
+            <div class="main-nav">
+                <div class="logo-container">
+                    <div class="logo">
+                        <a href="/">Cloudy Batch Downloader</a>
                     </div>
                 </div>
-                <div class="relative z-10 ml-4 flex items-center">
-                    <a href="#"
-                        class="flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" class="h-6 w-6 fill-slate-500 hover:fill-slate-950">
+                <div class="link-icons">
+                    <a href="https://github.com/tbhaxor/CloudyPlasmaServer" target="_blank">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
                             <path fill-rule="evenodd" clip-rule="evenodd"
                                 d="M12 2C6.477 2 2 6.463 2 11.97c0 4.404 2.865 8.14 6.839 9.458.5.092.682-.216.682-.48 0-.236-.008-.864-.013-1.695-2.782.602-3.369-1.337-3.369-1.337-.454-1.151-1.11-1.458-1.11-1.458-.908-.618.069-.606.069-.606 1.003.07 1.531 1.027 1.531 1.027.892 1.524 2.341 1.084 2.91.828.092-.643.35-1.083.636-1.332-2.22-.251-4.555-1.107-4.555-4.927 0-1.088.39-1.979 1.029-2.675-.103-.252-.446-1.266.098-2.638 0 0 .84-.268 2.75 1.022A9.607 9.607 0 0 1 12 6.82c.85.004 1.705.114 2.504.336 1.909-1.29 2.747-1.022 2.747-1.022.546 1.372.202 2.386.1 2.638.64.696 1.028 1.587 1.028 2.675 0 3.83-2.339 4.673-4.566 4.92.359.307.678.915.678 1.846 0 1.332-.012 2.407-.012 2.734 0 .267.18.577.688.48 3.97-1.32 6.833-5.054 6.833-9.458C22 6.463 17.522 2 12 2Z">
                             </path>
@@ -36,29 +33,31 @@
                     </a>
                 </div>
             </div>
-            <nav class="flex space-x-2 py-2 sm:space-x-5">
-                <a href="{% url 'emission:interpolation' %}"
-                    class="inline-flex items-center rounded-md bg-sky-100 px-2 py-2 text-xs font-medium text-sky-600 transition-colors sm:px-4 sm:text-sm"
-                    aria-current="page">Emission Data</a>
-
-                <a href="{% url 'ionization:interpolation' %}"
-                    class="inline-flex items-center rounded-md px-2 py-2 text-xs font-medium text-gray-900 transition-colors hover:bg-sky-50 hover:text-sky-600 sm:px-4 sm:text-sm">Ionization
-                    Data</a>
-
-                <a href="{% url 'feedback:submit' %}"
-                    class="inline-flex items-center rounded-md px-2 py-2 text-xs font-medium text-gray-900 transition-colors hover:bg-sky-50 hover:text-sky-600 sm:px-4 sm:text-sm">Feedback</a>
+            <nav>
+                <a href="{% url 'emission:interpolation' %}">Emission Data</a>
+                <a href="{% url 'ionization:interpolation' %}">Ionization Data</a>
+                <a href="{% url 'feedback:submit' %}">Feedback</a>
             </nav>
         </div>
     </header>
-    <main class="relative h-full bg-gray-50 px-4 py-8 sm:py-12">
-        <div class="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
-            <div class="w-full bg-white rounded-md p-5 border border-gray-100">
+    <main class="main-page">
+        <div class="box-container">
+            <div class="main-inner-container">
                 {% block main %}
                 {% endblock %}
             </div>
         </div>
     </main>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" defer></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            $(function () {
+                const urlPath = location.pathname;
+                $('header nav a').removeClass('active');
+                $(`header nav a[href*="${urlPath}"]`).addClass('active');
+            })
+        })
+    </script>
     {% block body_scripts %}
     {% endblock %}
 </body>

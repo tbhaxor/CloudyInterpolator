@@ -29,11 +29,11 @@ class InterpolateIonFractionForm(InterpolateForm):
                                label='Select Element',
                                choices=TATVAS,
                                initial=TATVAS[0],
-                               widget=Select(attrs={'class': 'form-select'}))
+                               widget=Select())
 
     ion = IntegerField(required=True, label='Ion Count',
                        min_value=1,
-                       widget=NumberInput(attrs={'class': 'form-control'}))
+                       widget=NumberInput())
 
     def clean_ion(self):
         ion = self.cleaned_data['ion']
@@ -53,5 +53,5 @@ class InterpolateMDForm(InterpolateForm):
                                     choices=SPECIES_TYPES,
                                     initial=SPECIES_TYPES[1],
                                     label='Select Species Type',
-                                    widget=Select(attrs={'class': 'form-select'}))
+                                    widget=Select())
     pass

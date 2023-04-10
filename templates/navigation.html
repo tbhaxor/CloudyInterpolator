@@ -1,26 +1,25 @@
+{% extends "layouts/base.html" %}
+
 {% block title %}
 Choose your task - Cloudy Batch Downloader
 {% endblock %}
 
 {% block main %}
-<div class="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 px-4 py-6 sm:py-12">
-    <div
-        class="relative bg-white px-6 pb-8 pt-10 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-lg rounded-lg sm:px-10">
+<div class="homepage">
+    <div class="main-info-card">
         <div class="mx-auto max-w-md">
-            <h1 class="mb-2 text-2xl font-semibold text-black">Cloudy Batch Downloader</h1>
-            <p class="text-base font-normal text-gray-500">Download the batch files for astro plasma datasets:
+            <h1>Cloudy Batch Downloader</h1>
+            <p>Download the batch files for astro plasma datasets:
                 Emission spectrum and Ionization.</p>
             <div class="divide-y divide-gray-300/50">
-                <div class="space-y-6 py-8 text-base leading-7 text-gray-600">
-                    <p>What do you want to do?</p>
-                    <ul class="space-y-4">
+                <div class="nav-list">
+                    <p class="nav-qs">What do you want to do?</p>
+                    <ul>
                         <li>
-                            <a href="{% url 'emission:interpolation' %}"
-                                class="flex flex-col items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sky-500 transition-colors hover:border-sky-400 sm:flex-row sm:gap-0 sm:px-3 sm:py-2.5">
-                                <svg class="h-6 w-6 flex-none fill-sky-100 stroke-sky-500 stroke-2"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
+                            <a href="{% url 'emission:interpolation' %}">
+                                <svg class="h-6 w-6 " xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
                                     <path d="M8 19v1"></path>
                                     <path d="M8 14v1"></path>
@@ -33,12 +32,10 @@ Choose your task - Cloudy Batch Downloader
                             </a>
                         </li>
                         <li>
-                            <a href="{% url 'ionization:interpolation' %}"
-                                class="flex flex-col items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sky-500 transition-colors hover:border-sky-400 sm:flex-row sm:gap-0 sm:px-3 sm:py-2.5">
-                                <svg class="h-5 w-5 flex-none fill-sky-100 stroke-sky-500 stroke-2"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
+                            <a href="{% url 'ionization:interpolation' %}">
+                                <svg class="h-5 w-5 " xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M6 3v12"></path>
                                     <path d="M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
                                     <path d="M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
@@ -52,8 +49,8 @@ Choose your task - Cloudy Batch Downloader
                     </ul>
                     <p>Some more info here if something needs an explaination of some sort :P</p>
                 </div>
-                <div class="pt-8 text-base font-semibold leading-7">
-                    <p class="text-gray-900">Want to contribute?</p>
+                <div class="more-info">
+                    <p>Want to contribute?</p>
                     <p>
                         <a href="https://github.com/tbhaxor/CloudyPlasmaServer" target="_blank"
                             class="text-sky-500 hover:text-sky-600">Fork on Github &rarr;</a>

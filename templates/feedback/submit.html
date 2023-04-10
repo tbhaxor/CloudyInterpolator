@@ -3,42 +3,41 @@
 {% block title %} Submit Feedback {% endblock %}
 
 {% block main %}
-<h3 class="text-xl font-medium leading-6 text-gray-900 mb-5">Feedback Form</h3>
+<h3 class="sec-title mb-5">Feedback Form</h3>
 <form method="post">
     {% csrf_token %}
-    <div class="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-        <div>
+    <div class="form-grid">
+        <div class="form-item">
             {{ form.name.label_tag }}
             {{ form.name }}
             {% if form.name.errors %}
-            <small class="text-danger"><strong>Error: </strong>{{ form.name.errors.0 }}</small>
+            <p class="error-msg"><b>Error: </b>{{ form.name.errors.0 }}</p>
             {% else %}
-            <small class="text-muted"><strong>Note: </strong>{{ form.name.help_text }}</small>
+            <p class="info-msg"><b>Note: </b>{{ form.name.help_text }}</p>
             {% endif %}
         </div>
 
-        <div>
+        <div class="form-item">
             {{ form.email.label_tag }}
             {{ form.email }}
             {% if form.email.errors %}
-            <p class="mt-2 text-sm text-red-600" id="email-error"><b>Error: </b>{{ form.email.errors.0 }}</p>
+            <p class="error-msg" id="email-error"><b>Error: </b>{{ form.email.errors.0 }}</p>
             {% else %}
-            <p class="mt-2 text-sm text-red-600" id="email-error"><b>Error: </b>{{ form.email.help_text }}</p>
+            <p class="error-msg" id="email-error"><b>Error: </b>{{ form.email.help_text }}</p>
             {% endif %}
         </div>
 
-        <div class="col-span-full">
+        <div class="form-item col-span-full">
             {{ form.message.label_tag }}
             {{ form.message }}
             {% if form.message.errors %}
-            <p class="mt-2 text-sm text-red-600" id="email-error"><b>Error: </b>{{ form.message.errors.0 }}</p>
+            <p class="error-msg" id="email-error"><b>Error: </b>{{ form.message.errors.0 }}</p>
             {% endif %}
         </div>
     </div>
 
     <div class="mt-6 flex items-streach justify-center gap-x-6">
-        <button type="submit"
-            class="rounded-md bg-sky-500 px-8 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 transition-colors">Submit</button>
+        <button type="submit" class="btn-filled">Submit</button>
     </div>
 
 </form>
