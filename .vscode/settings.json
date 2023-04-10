@@ -27,5 +27,6 @@
         "editor.defaultFormatter": "vscode.html-language-features"
     },
     "editor.formatOnSave": true,
-    "python.analysis.typeCheckingMode": "off"
+    "python.analysis.typeCheckingMode": "off",
+    "css.lint.unknownAtRules": "ignore"
 }
