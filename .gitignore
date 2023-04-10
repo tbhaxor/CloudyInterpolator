@@ -14,6 +14,8 @@
 *.tax2010
 *.vcf
 *.xml
+*.h5
+*.DS_Store
 
 ### Database ###
 *.accdb
