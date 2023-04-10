@@ -6,10 +6,9 @@ on:
     - main
 
 jobs:
-  build_and_push:
-    name: Build and Push
+  build_app:
+    name: Build Django App
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' }}
     steps:
     - uses: actions/checkout@v3
       name: Checkout repository
@@ -32,7 +31,58 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: ghcr.io/tbhaxor/astro-data:latest
+        context: .
+        file: deployment/django.dockerfile
+        tags: ghcr.io/tbhaxor/astro-data:webapp
+        cache-from: type=local,src=/tmp/.buildx-cache
+        cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+    - name: Replace proper cache file
+      run: |
+        rm -rf /tmp/.buildx-cache
+        mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+  build_nginx:
+    name: Build Nginx
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      name: Checkout repository
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: tbhaxor
+        password: ${{ github.token }}
+    - name: Cache Docker layers
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 19
+        cache: yarn
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: pip
+    - run: yarn install --silent --no-progress --frozen-lockfile
+      name: Install yarn packages
+    - run: pip install -r requirements.txt
+      name: Install pip packages
+    - run: ./manage.py collectstatic -c --no-input
+      name: Collect static
+    - name: Build image and push
+      uses: docker/build-push-action@v3
+      with:
+        push: true
+        context: .
+        file: deployment/nginx.dockerfile
+        tags: ghcr.io/tbhaxor/astro-data:nginx
         cache-from: type=local,src=/tmp/.buildx-cache
         cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
     - name: Replace proper cache file
