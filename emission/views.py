@@ -2,7 +2,6 @@ import json
 import os
 from wsgiref.util import FileWrapper
 
-import numpy as np
 from astro_plasma import EmissionSpectrum
 from django.http import JsonResponse, StreamingHttpResponse
 from django.shortcuts import render
@@ -42,17 +41,13 @@ class InterpolateView(FormView):
 
     def form_valid(self, form: InterpolateForm):
         emission = EmissionSpectrum(dataset_base_path)
-
         data_linear = emission.interpolate_spectrum(**form.cleaned_data)
-        data_log10 = emission.interpolate_spectrum(**form.cleaned_data, scaling_func=np.log10)
 
-        # TODO: latex implementation
         fig = pgo.Figure(data=[
-            pgo.Scatter(x=data_log10[:, 0], y=data_log10[:, 1], mode='lines', name='log10 scale'),
-            pgo.Scatter(x=data_linear[:, 0], y=data_linear[:, 1], mode='lines', name='linear scale'),
+            pgo.Scatter(x=data_linear[:, 0], y=data_linear[:, 1], mode='lines'),
         ])
-        fig.update_xaxes(title_text=r'Energy (keV)',  type='log')
-        fig.update_yaxes(title_text=r'Emissivity (erg cm^-3 s^-1)', type='log')
+        fig.update_xaxes(title_text=r'$\text{Energy (keV)}$',  type='log')
+        fig.update_yaxes(title_text=r'$\text{Emissivity } (\frac{erg}{cm^3 s})$', type='log')
 
         fig.update_layout(width=1200,
                           height=800,
@@ -64,7 +59,6 @@ class InterpolateView(FormView):
             return JsonResponse(data={'data': {
                 'energy': data_linear[:, 0],
                 'emissivity_linear': data_linear[:, 1],
-                'emissivity_log10': data_log10[:, 1],
             }, 'request': form.cleaned_data})
 
         context = {'form': form,
