@@ -109,15 +109,10 @@
             title: 'Download Plot Data',
             icon: Plotly.Icons.disk,
             click: function (gd) {
-                let data = `Energy,Emissivity (log10),Emissivity (linear)\n`
-                console.log(gd.data)
-                const log10Data = gd.data.find(v => v.name == "log10 scale")
-                const linearData = gd.data.find(v => v.name == "linear scale")
-
-                for (let i = 0; i < linearData.x.length; i++) {
-                    data += `${linearData.x[i]},${log10Data.y[i]},${linearData.y[i]}\n`
+                let data = `Energy,Emissivity\n`
+                for (let i = 0; i < gd.data[0].x.length; i++) {
+                    data += `${gd.data[0].x[i]},${gd.data[0].y[i]}\n`
                 }
-
                 let blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
                 let link = document.createElement("a");
                 let url = URL.createObjectURL(blob);
