@@ -67,6 +67,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'astrodata.urls'
+APPEND_SLASH = False
 
 TEMPLATES = [
     {
