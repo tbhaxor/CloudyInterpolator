@@ -98,8 +98,7 @@
 
 {% block body_scripts %}
 <script>
-    let emissionData = {{ interpolation| safe }}
-
+    const emissionData = JSON.parse('{{ interpolation| safe }}')
     const config = {
         displayModeBar: true,
         modeBarButtonsToRemove: ['toImage'],
