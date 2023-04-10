@@ -46,8 +46,8 @@ class InterpolateView(FormView):
         fig = pgo.Figure(data=[
             pgo.Scatter(x=data_linear[:, 0], y=data_linear[:, 1], mode='lines'),
         ])
-        fig.update_xaxes(title_text=r'$\text{Energy (keV)}$',  type='log')
-        fig.update_yaxes(title_text=r'$\text{Emissivity } (\frac{erg}{cm^3 s})$', type='log')
+        fig.update_xaxes(title_text=r'Energy (keV)',  type='log')
+        fig.update_yaxes(title_text=r'Emissivity (erg cm<sup>-3</sup> s<sup>-1</sup>)', type='log')
 
         fig.update_layout(width=1200,
                           height=800,
