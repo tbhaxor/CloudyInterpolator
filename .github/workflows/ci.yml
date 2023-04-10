@@ -45,6 +45,10 @@ jobs:
     name: Build Nginx
     runs-on: ubuntu-latest
     steps:
+    - run: |
+        sudo apt update
+        sudo apt install -y --no-install-recommends libhdf5-dev libopenmpi-dev openmpi-bin git gcc g++
+      name: Configure environment
     - uses: actions/checkout@v3
       name: Checkout repository
     - name: Set up Docker Buildx
