@@ -2,4 +2,4 @@ services:
   nginx:
     image: ghcr.io/tbhaxor/astro-data:nginx
     ports:
-      - 8000:80
+    - 8000:80
