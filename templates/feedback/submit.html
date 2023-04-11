@@ -6,7 +6,7 @@
 <h3 class="sec-title mb-5">Feedback Form</h3>
 <form method="post">
     {% csrf_token %}
-    <div class="form-grid">
+    <div class="form-grid form-grid-two-col">
         <div class="form-item">
             {{ form.name.label_tag }}
             {{ form.name }}
@@ -23,7 +23,7 @@
             {% if form.email.errors %}
             <p class="error-msg" id="email-error"><b>Error: </b>{{ form.email.errors.0 }}</p>
             {% else %}
-            <p class="error-msg" id="email-error"><b>Error: </b>{{ form.email.help_text }}</p>
+            <p class="info-msg"><b>Note: </b>{{ form.email.help_text }}</p>
             {% endif %}
         </div>
 

@@ -184,7 +184,11 @@ header {
   }
 }
 .form-grid {
-  @apply mt-10 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2;
+  @apply mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl;
+
+  &.form-grid-two-col {
+    @apply lg:grid-cols-2
+  }
 
   .form-item {
     @apply w-full;
@@ -221,7 +225,7 @@ header {
   }
 
   .info-msg {
-    @apply mt-2 text-sm text-slate-700;
+    @apply mt-2 text-sm text-slate-500;
 
     b {
       @apply font-semibold;
@@ -244,6 +248,7 @@ header {
     }
   }
 }
+
 .data-list {
   .data-list-row {
     @apply px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6;
@@ -267,4 +272,22 @@ header {
   p {
     @apply text-base font-normal text-gray-500;
   }
+}
+
+.modebar-group {
+    display: flex !important;
+}
+
+.svg-container {
+    @apply max-w-full;
+}
+
+.modebar-container {
+    @apply flex items-center justify-center;
+}
+
+.js-plotly-plot .plotly .modebar {
+    position: relative !important;
+    top: 25px !important;
+    right: 2px;
 }
