@@ -27,8 +27,6 @@ class FeedbackSubmitView(CreateView):
         self.success_url += f"?name={form.cleaned_data.get('name')}"
         return super().form_valid(form)
 
-    pass
-
 
 class FeedbackThankYouView(TemplateView):
     template_name = "feedback/thank-you.html"

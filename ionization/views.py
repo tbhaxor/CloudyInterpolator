@@ -64,7 +64,7 @@ class InterpolationView(TemplateView):
                 interpolation_data['ion_frac'] = 10**i.interpolate_ion_frac(**form.cleaned_data)
                 symbol = PARMANU.getElSymbol(form.cleaned_data['element'])
                 roman_ion = roman.toRoman(form.cleaned_data['ion'])
-                interpolation_data['ionized_symbol'] = f'{symbol}<sup>{roman_ion}</sup>'
+                interpolation_data['ionized_symbol'] = f'{symbol}{roman_ion}'
             case 'mass_density':
                 i = Ionization(dataset_base_path)
 
@@ -89,60 +89,6 @@ class InterpolationView(TemplateView):
 
         return render(request, self.template_name,
                       {'form': form, 'action': action, 'interpolation': interpolation_data})
-    """
-    # def form_invalid(self, form: InterpolateForm):
-    #     if self.request.GET.get('format') == 'json':
-    #         errors = json.loads(form.errors.as_json())
-    #         errors = {'errors': errors}
-    #         return JsonResponse(data=errors, status=400)
-
-    #     is_autofocus = False
-    #     for name, field in form.fields.items():
-    #         if name in form.errors:
-    #             field.widget.attrs = {
-    #                 'class': f"{field.widget.attrs.get('class', '')} is-invalid".strip(),
-    #                 'autofocus': 'true' if is_autofocus else 'false',
-    #             }
-    #             is_autofocus = True
-
-    #     return super().form_invalid(form)
-
-    # def form_valid(self, form: InterpolateForm):
-    #     ionization = Ionization(dataset_base_path)
-
-    #     ion_frac = ionization.interpolate_ion_frac(nH=form.cleaned_data['nh'],
-    #                                                temperature=form.cleaned_data['temperature'],
-    #                                                metallicity=form.cleaned_data['metallicity'],
-    #                                                redshift=form.cleaned_data['redshift'],
-    #                                                mode=form.cleaned_data['mode'],
-    #                                                element=form.cleaned_data['element'],
-    #                                                ion=form.cleaned_data['ion'])
-    #     mu_mass = ionization.interpolate_mu(nH=form.cleaned_data['nh'],
-    #                                         temperature=form.cleaned_data['temperature'],
-    #                                         metallicity=form.cleaned_data['metallicity'],
-    #                                         redshift=form.cleaned_data['redshift'],
-    #                                         mode=form.cleaned_data['mode'],
-    #                                         part_type=form.cleaned_data['species_type'])
-    #     nrho = ionization.interpolate_num_dens(nH=form.cleaned_data['nh'],
-    #                                            temperature=form.cleaned_data['temperature'],
-    #                                            metallicity=form.cleaned_data['metallicity'],
-    #                                            mode=form.cleaned_data['mode'],
-    #                                            redshift=form.cleaned_data['redshift'],
-    #                                            part_type=form.cleaned_data['species_type'])
-
-    #     interpolation = {
-    #         'ion_frac': 10 ** ion_frac,
-    #         'mu_mass': float(mu_mass),
-    #         'number_density': float(nrho),
-    #     }
-
-    #     if self.request.GET.get('format') == 'json':
-    #         return JsonResponse(data={'data': interpolation, 'request': form.cleaned_data})
-
-    #     context = {'form': form,
-    #                'interpolation': interpolation}
-    #     return render(self.request, self.template_name, context)
-"""
 
 
 class DownloadFileView(View):

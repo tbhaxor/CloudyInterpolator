@@ -42,4 +42,3 @@ class TestInterpolateMDForm(TestCase):
 
         error, *_sink = form.errors.get_json_data().get('species_type')
         assert error['code'] == 'invalid_choice', 'Invalid error code'
-    pass

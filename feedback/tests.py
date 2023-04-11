@@ -105,7 +105,6 @@ class TestSubmissionFormView(TestCase):
             assert response.status_code == 200, "Response code should be 200"
             assert response.get("location") is None, "Redirect location should be None"
             assert "form" in response.context, 'Context should have "form" with errors'
-        pass
 
     def test_redirect_on_success(self):
         response = self.client.post(
@@ -133,8 +132,6 @@ class TestSubmissionFormView(TestCase):
             parsed_qs["name"][0] == "hello world"
         ), '"name" should be same as submission'
 
-    pass
-
 
 class TestThankyouView(TestCase):
     def test_redirect_if_no_name(self):
@@ -157,5 +154,3 @@ class TestThankyouView(TestCase):
             assert (
                 response.context["name"] == "some name"
             ), "Invalid name is rendered, it should be unescaped"
-
-    pass

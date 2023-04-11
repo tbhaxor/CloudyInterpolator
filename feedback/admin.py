@@ -7,4 +7,3 @@ from .models import FeedbackModel
 @admin.register(FeedbackModel)
 class FeedbackSiteAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'created_at')
-    pass

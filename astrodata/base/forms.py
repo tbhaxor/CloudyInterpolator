@@ -1,5 +1,4 @@
 from django.forms import FloatField, Form, TypedChoiceField
-from django.forms.widgets import NumberInput, Select
 from django.utils.html import format_html
 
 MODE_TYPES = (
@@ -9,16 +8,29 @@ MODE_TYPES = (
 
 
 class InterpolateForm(Form):
-    nH = FloatField(required=True, label=format_html('Number Density of Hydrogen (cm<sup>-3</sup>)'),
-                    widget=NumberInput())
+    nH = FloatField(
+        required=True,
+        label=format_html('Number Density of Hydrogen (cm<sup>-3</sup>)'),
+    )
 
-    mode = TypedChoiceField(choices=MODE_TYPES, required=True, initial=MODE_TYPES[0],
-                            label='Select Mode', widget=Select())
+    mode = TypedChoiceField(
+        required=True,
+        choices=MODE_TYPES,
+        initial=MODE_TYPES[0],
+        label='Select Mode',
+    )
 
-    temperature = FloatField(required=True, label='Temperature (in Kelvins)',
-                             widget=NumberInput())
+    temperature = FloatField(
+        required=True,
+        label='Temperature (in Kelvins)',
+    )
 
-    metallicity = FloatField(required=True, label='Metallicity (Z<sub>&#8857;</sub>',
-                             widget=NumberInput())
+    metallicity = FloatField(
+        required=True,
+        label=format_html('Metallicity (Z<sub>&#8857;</sub>)'),
+    )
 
-    redshift = FloatField(required=True, label='Cosmic Redshift', widget=NumberInput())
+    redshift = FloatField(
+        required=True,
+        label='Cosmical Redshift',
+    )
