@@ -50,7 +50,7 @@ class InterpolateView(FormView):
         fig.update_yaxes(title_text=r'Emissivity (erg cm<sup>-3</sup> s<sup>-1</sup>)', type='log')
 
         fig.update_layout(width=1200,
-                          height=800,
+                          height=900,
                           legend={'x': 0, 'y': 1, 'bgcolor': 'rgba(0,0,0,0)'})
 
         # with StringIO() as file:
