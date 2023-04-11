@@ -3,11 +3,17 @@
 {% block title %} Thank You {% endblock %}
 
 {% block main %}
-<div class="card mt-4">
-    <div class="card-body">
-        <h3 class="card-title text-center mb-3">Thank You!</h3>
-        <div class="card-body">
-            Thank you {{ name }} for you time. We will address your feedback shortly.
+
+<div class="fullpage">
+    <div class="thankyou-card">
+        <div class="mx-auto max-w-md">
+            <h1>Thank You!</h1>
+            <p>Thank you {{ name }} for you time. We will address your feedback shortly.</p>
+            <div class="mt-10 flex items-center justify-start gap-x-6">
+                <a href="#" class="btn-filled">Go back home</a>
+                <a href="https://github.com/tbhaxor/CloudyPlasmaServer" target="_blank"
+                    class="text-sm font-semibold text-gray-900">Want to Contribute?</a>
+            </div>
         </div>
     </div>
 </div>

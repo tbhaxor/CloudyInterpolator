@@ -1,163 +1,156 @@
-{% extends "layouts/base.html" %}
+{% extends "layouts/base.withheader.html" %}
 
 {% block title %}Interpolate Ionization Information{% endblock %}
 
 {% block main %}
-<div class="card mt-4">
-    <h3 class="card-title text-center my-3">Submit Medium Details</h3>
+<h3 class="sec-title mb-5">Interpolate Emission Data</h3>
+<div class="lined-tabs">
+    <nav aria-label="Tabs">
+        <a href="?action=ion_frac">Calculate Ion Fraction</a>
+        <a href="?action=mass_density">Calculate Mean Mass and Number Density</a>
+    </nav>
+</div>
 
-    <ul class="nav nav-tabs nav-justified">
-        <li class="nav-item" id="calc_ion_frac">
-            <a class="nav-link" href="?action=ion_frac">Calculate Ion Fraction</a>
-        </li>
-        <li class="nav-item" id="calc_mn_density">
-            <a class="nav-link" href="?action=mass_density">Calculate Mean Mass and Number Density</a>
-        </li>
-    </ul>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-grid">
+        {% if form.element %}
+        <div class="form-item">
+            {{ form.element.label_tag }}
+            {{ form.element }}
+            {% if form.element.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.element.errors.0 }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
 
-    <div class="card-body">
-        <div class="card-text">
-            <form method="post">
-                {% csrf_token %}
-                <div class="row mb-3">
-                    <div class="col">
-                        {{ form.element.label_tag }}
-                        {{ form.element }}
-                        {% if form.element.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.element.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                    <div class="col">
-                        {{ form.ion.label_tag }}
-                        {{ form.ion }}
-                        {% if form.ion.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.ion.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                </div>
+        {% if form.ion %}
+        <div class="form-item">
+            {{ form.ion.label_tag }}
+            {{ form.ion }}
+            {% if form.ion.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.ion.errors.0 }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
 
-                <div class="row mb-3">
-                    <div class="col">
-                        {{ form.nH.label_tag }}
-                        {{ form.nH }}
-                        {% if form.nH.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.nH.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                    <div class="col">
-                        {{ form.temperature.label_tag }}
-                        {{ form.temperature }}
-                        {% if form.temperature.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.temperature.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                </div>
+        <div class="form-item">
+            {{ form.nH.label_tag }}
+            {{ form.nH }}
+            {% if form.nH.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.nH.errors.0 }}</p>l>
+            {% endif %}
+        </div>
 
-                <div class="row mb-3">
-                    <div class="col">
-                        {{ form.metallicity.label_tag }}
-                        {{ form.metallicity }}
-                        {% if form.metallicity.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.metallicity.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                    <div class="col">
-                        {{ form.redshift.label_tag }}
-                        {{ form.redshift }}
-                        {% if form.redshift.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.redshift.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                </div>
+        <div class="form-item">
+            {{ form.temperature.label_tag }}
+            {{ form.temperature }}
+            {% if form.temperature.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.temperature.errors.0 }}</p>
+            {% endif %}
+        </div>
 
-                <div class="row mb-3">
-                    <div class="col">
-                        {{ form.mode.label_tag }}
-                        {{ form.mode }}
-                        {% if form.mode.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.mode.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                    {% if form.species_type %}
-                    <div class="col">
-                        {{ form.species_type.label_tag }}
-                        {{ form.species_type }}
-                        {% if form.species_type.errors %}
-                        <small class="text-danger"><strong>Error: </strong>{{ form.species_type.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-                </div>
+        <div class="form-item">
+            {{ form.metallicity.label_tag }}
+            {{ form.metallicity }}
+            {% if form.metallicity.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.metallicity.errors.0 }}</p>
+            {% endif %}
+        </div>
 
-                <div class="card-link mt-3">
-                    <div class="d-grid gap-3 col-3 mx-auto">
-                        <button type="submit" class="btn card-link btn-primary">Submit</button>
-                    </div>
-                </div>
+        <div class="form-item">
+            {{ form.redshift.label_tag }}
+            {{ form.redshift }}
+            {% if form.redshift.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.redshift.errors.0 }}</p>
+            {% endif %}
+        </div>
 
-                <div class="row mt-3">
-                    <div class="col">
-                        <div class="alert alert-info" role="alert">
-                            <em><strong>Note: </strong> Scientific notation in the numeric fields are supported.</em>
-                        </div>
-                    </div>
-                </div>
-            </form>
+        <div class="form-item">
+            {{ form.mode.label_tag }}
+            {{ form.mode }}
+            {% if form.mode.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.mode.errors.0 }}</p>
+            {% endif %}
+        </div>
+        {% if form.species_type %}
+        <div class="form-item">
+            {{ form.species_type.label_tag }}
+            {{ form.species_type }}
+            {% if form.species_type.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.species_type.errors.0 }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="alert mt-10">
+        <div class="flex">
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                </svg>
+            </div>
+            <div class="info">
+                <p>
+                    <strong>Note: </strong> Scientific notation in the numeric fields are
+                    supported.
+                </p>
+            </div>
         </div>
     </div>
-</div>
+
+    <div class="mt-6 flex items-streach justify-center gap-x-6">
+        <button type="submit" class="btn-filled">Calculate</button>
+    </div>
+
+</form>
 
 {%if interpolation %}
-<h2 class="mt-3 text-center">Interpolation Output</h2>
-<table id="result" class="table table-bordered">
-    <thead>
-        <tr>
-            <th class="text-center">Property</th>
-            <th class="text-center">Value</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        {% if action == 'ion_frac' %}
-        <tr>
-            <td>Ion Fraction ({{interpolation.ionized_symbol|safe}})</td>
-            <td>{{ interpolation.ion_frac }}</td>
-        </tr>
-        {% elif action == 'mass_density' %}
-        <tr>
-            <td>Mean Mass ({{interpolation.mean_mass_symbol|safe}})</td>
-            <td>{{ interpolation.mean_mass }}</td>
-        </tr>
-        <tr>
-            <td>Number Density ({{interpolation.number_density_symbol|safe}})</td>
-            <td>{{ interpolation.number_density }}</td>
-        </tr>
-        {% endif %}
-    </tbody>
-</table>
-
-<div class="text-center">
-    <a class="btn btn-primary" href="{% url 'feedback:submit' %}" role="button">Submit Feedback</a>
+<div class="shadowed-card mt-12">
+    <div class="card-header">
+        <h3 class="sec-title">Interpolation output</h3>
+        <a href="{% url 'feedback:submit' %}" class="ml-3 btn-light">
+            <svg class="-ml-0.5 mr-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
+                <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
+            </svg>
+            <span>Submit Feedback</span>
+        </a>
+    </div>
+    <div class="border-t border-gray-200">
+        <dl class="data-list">
+            {% if action == 'ion_frac' %}
+            <div class="bg-gray-50 data-list-row">
+                <dt>Ion Fraction ({{interpolation.ionized_symbol|safe}})</dt>
+                <dd>{{ interpolation.ion_frac }}</dd>
+            </div>
+            {% elif action == 'mass_density' %}
+            <div class="bg-gray-white data-list-row">
+                <dt>Mean Mass ({{interpolation.mean_mass_symbol|safe}})</dt>
+                <dd>{{ interpolation.mean_mass }}</dd>
+            </div>
+            <div class="bg-gray-50 data-list-row">
+                <dt>Number Density ({{interpolation.number_density_symbol|safe}})</dt>
+                <dd>{{ interpolation.number_density }}</dd>
+            </div>
+            {% endif %}
+        </dl>
+    </div>
 </div>
-
 {% endif %}
-
 {% endblock %}
 
 {% block body_scripts %}
 <script>
-    window.addEventListener("DOMContentLoaded", () => {
-        const qp = new URLSearchParams(window.location.search)
-        const action = qp.get("action")
-        // const activeForm = $("#active-form").text().trim().replace(/^"|"$/g, "") || "ion_frac_form"
-        switch (action) {
-            case "ion_frac":
-                $("#calc_ion_frac").children("a").addClass("active")
-                break;
-            case "mass_density":
-                $("#calc_mn_density").children("a").addClass("active")
-                break;
-        }
-    });
+    window.addEventListener('DOMContentLoaded', () => {
+        $(function () {
+            const qParams = location.search;
+            $('.lined-tabs nav a').removeClass('active');
+            $(`.lined-tabs nav a[href*="${qParams}"]`).addClass('active');
+        })
+    })
 </script>
 {% endblock %}

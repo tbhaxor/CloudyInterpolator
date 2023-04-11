@@ -14,6 +14,8 @@
 *.tax2010
 *.vcf
 *.xml
+*.h5
+*.DS_Store
 
 ### Database ###
 *.accdb
@@ -34,6 +36,7 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media
+templates-html
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.

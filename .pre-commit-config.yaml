@@ -11,8 +11,6 @@ repos:
   - id: trailing-whitespace
   - id: end-of-file-fixer
     exclude: ^(templates|static)/.*|\S+\.js$
-  - id: check-shebang-scripts-are-executable
-  - id: check-executables-have-shebangs
   - id: check-toml
 
 - repo: https://github.com/charliermarsh/ruff-pre-commit

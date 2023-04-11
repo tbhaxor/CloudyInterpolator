@@ -43,5 +43,3 @@ class FeedbackModel(models.Model):
         get_latest_by = '-created_at'
         verbose_name = 'Feedback Submission'
         verbose_name_plural = f'{verbose_name}s'
-
-    pass
