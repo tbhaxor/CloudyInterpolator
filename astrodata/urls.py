@@ -21,7 +21,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='navigation.html')),
-    path('admin/', admin.site.urls),
+    path('admin', admin.site.urls),
     path('ionization/', include('ionization.urls')),
     path('emission/', include('emission.urls')),
     path('feedback/', include('feedback.urls')),
