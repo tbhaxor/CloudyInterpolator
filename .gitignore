@@ -290,7 +290,6 @@ cython_debug/
 # Poetry local configuration file - https://python-poetry.org/docs/configuration/#local-configuration
 poetry.toml
 
-
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
@@ -309,5 +308,9 @@ poetry.toml
 # Ignore all local history of files
 .history
 .ionide
+
+## Docker configs
+docker-compose.yml
+docker-compose.yaml
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,database,django,python,data
