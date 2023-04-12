@@ -2,7 +2,7 @@ import os
 from wsgiref.util import FileWrapper
 
 import roman
-from astro_plasma import Ionization
+from astro_plasma.core.ionization import Ionization
 from django.http import HttpRequest, StreamingHttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, View

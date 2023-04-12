@@ -2,7 +2,7 @@ import json
 import os
 from wsgiref.util import FileWrapper
 
-from astro_plasma import EmissionSpectrum
+from astro_plasma.core.spectrum import EmissionSpectrum
 from django.http import JsonResponse, StreamingHttpResponse
 from django.shortcuts import render
 from django.views.generic import FormView, View
