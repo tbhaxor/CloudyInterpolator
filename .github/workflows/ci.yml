@@ -99,8 +99,8 @@ jobs:
       with:
         push: true
         context: .
-        file: deployment/nginx.dockerfile
-        tags: ghcr.io/tbhaxor/astro-data:nginx
+        file: deployment/httpd.dockerfile
+        tags: ghcr.io/tbhaxor/astro-data:static-serve
         cache-from: type=local,src=/tmp/.buildx-cache
         cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
     - name: Replace proper cache file
