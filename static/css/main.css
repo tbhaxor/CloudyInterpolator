@@ -186,8 +186,8 @@ header {
 .form-grid {
   @apply mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl;
 
-  &.form-grid-two-col {
-    @apply lg:grid-cols-2
+  &.form-grid-two {
+    @apply sm:grid-cols-1 lg:grid-cols-2 md:grid-cols-2;
   }
 
   .form-item {
