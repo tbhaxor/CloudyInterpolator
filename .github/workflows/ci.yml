@@ -92,8 +92,9 @@ jobs:
       name: Build production assets
     - run: |
         poetry run ./manage.py collectstatic -c --no-input
-        find astrodata/staticfiles/ -type f -not -path '*/admin/*' -not -name '*.min.*' -exec rm -v "{}" \;
       name: Collect static files
+      env:
+        PY_ENV: dev
     - name: Build image and push
       uses: docker/build-push-action@v3
       with:
