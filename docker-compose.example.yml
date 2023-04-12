@@ -6,8 +6,8 @@ services:
   web_app:
     image: ghcr.io/tbhaxor/astro-data:webapp
     volumes:
-    - /mnt/Dump/AstroData:/opt/data/ionization:ro
-    - /mnt/Dump/AstroData:/opt/data/emission:ro
+    - SOURCE_IONIZATION_DIR:/opt/data/ionization:ro
+    - SOURCE_EMISSION_DIR:/opt/data/emission:ro
     - db:/opt/data/database
     environment:
       PY_ENV: prod
