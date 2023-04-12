@@ -1,6 +1,6 @@
 services:
   static_serve:
-    image: ghcr.io/tbhaxor/astro-data:static-serve
+    image: ghcr.io/tbhaxor/astro-data:static-server
     stop_signal: sigkill
 
   web_app:
