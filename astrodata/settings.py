@@ -54,6 +54,9 @@ INSTALLED_APPS = [
     'emission',
     'ionization',
     'feedback',
+
+    # deployment related stuff
+    'deployment'
 ]
 
 MIDDLEWARE = [
