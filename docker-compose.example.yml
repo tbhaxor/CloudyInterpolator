@@ -1,0 +1,28 @@
+services:
+  static_serve:
+    image: ghcr.io/tbhaxor/astro-data:static-serve
+    stop_signal: sigkill
+
+  web_app:
+    image: ghcr.io/tbhaxor/astro-data:webapp
+    volumes:
+    - /mnt/Dump/AstroData:/opt/data/ionization:ro
+    - /mnt/Dump/AstroData:/opt/data/emission:ro
+    - db:/opt/data/database
+    environment:
+      PY_ENV: prod
+      IONIZATION_DATASET_DIR: /opt/data/ionization
+      EMISSION_DATASET_DIR: /opt/data/emission
+    stop_signal: sigkill
+
+  nginx_proxy:
+    image: nginx:alpine
+    volumes:
+    - ./deployment/nginx-proxy.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+    - 127.0.0.1:8000:80
+    depends_on:
+    - web_app
+    - static_serve
+volumes:
+  db:
