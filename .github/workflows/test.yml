@@ -30,10 +30,11 @@ jobs:
         key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
     - run: poetry install
       name: Install dependencies
+    - run: sudo mount -t nfs ${{ secrets.NAS_HOST }}:/volume1/AstroPlasma --mkdir /mnt/AstroData
+      name: Mount NAS share
     - run: poetry run ./manage.py test
       name: Run unit test
       env:
         PY_ENV: testing
-      # env:
-      #   IONIZATION_DATASET_DIR: .data/ionization
-      #   EMISSION_DATASET_DIR: .data/emission
+        IONIZATION_DATASET_DIR: /mnt/AstroData/ionization
+        EMISSION_DATASET_DIR: /mnt/AstroData/emission
