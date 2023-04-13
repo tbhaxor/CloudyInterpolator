@@ -61,7 +61,7 @@ class InterpolationView(TemplateView):
             case 'ion_frac':
                 i = Ionization(dataset_base_path)
 
-                interpolation_data['ion_frac'] = 10**i.interpolate_ion_frac(**form.cleaned_data)
+                interpolation_data['ion_frac'] = "{:.4e}".format(10**i.interpolate_ion_frac(**form.cleaned_data))
                 symbol = PARMANU.getElSymbol(form.cleaned_data['element'])
                 roman_ion = roman.toRoman(form.cleaned_data['ion'])
                 interpolation_data['ionized_symbol'] = f'{symbol}{roman_ion}'
@@ -74,8 +74,8 @@ class InterpolationView(TemplateView):
                 mean_mass = i.interpolate_mu(**form.cleaned_data)
                 number_density = i.interpolate_num_dens(**form.cleaned_data)
 
-                interpolation_data['mean_mass'] = mean_mass
-                interpolation_data['number_density'] = number_density
+                interpolation_data['mean_mass'] = "{:.4e}".format(mean_mass)
+                interpolation_data['number_density'] = "{:.4e}".format(number_density)
 
                 interpolation_data['mean_mass_symbol'] = '&mu;'
                 interpolation_data['number_density_symbol'] = 'n'
