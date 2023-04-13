@@ -10,7 +10,7 @@ jobs:
     steps:
     - run: |
         sudo apt update
-        sudo apt install -y --no-install-recommends libhdf5-dev libopenmpi-dev openmpi-bin git gcc g++
+        sudo apt install -y --no-install-recommends libhdf5-dev libopenmpi-dev openmpi-bin git gcc g++ nfs-common
       name: Configure test environment
     - uses: actions/checkout@v3
       name: Checkout repository
@@ -30,8 +30,13 @@ jobs:
         key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
     - run: poetry install
       name: Install dependencies
+    - run: |
+        sudo mkdir -p /mnt/AstroData
+        sudo mount -t nfs ${{ secrets.NAS_HOST }}:/volume1/AstroPlasma /mnt/AstroData
+      name: Mount NAS share
     - run: poetry run ./manage.py test
       name: Run unit test
-      # env:
-      #   IONIZATION_DATASET_DIR: .data/ionization
-      #   EMISSION_DATASET_DIR: .data/emission
+      env:
+        PY_ENV: testing
+        IONIZATION_DATASET_DIR: /mnt/AstroData/ionization
+        EMISSION_DATASET_DIR: /mnt/AstroData/emission
