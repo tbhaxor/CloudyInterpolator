@@ -32,6 +32,8 @@ jobs:
       name: Install dependencies
     - run: poetry run ./manage.py test
       name: Run unit test
+      env:
+        PY_ENV: testing
       # env:
       #   IONIZATION_DATASET_DIR: .data/ionization
       #   EMISSION_DATASET_DIR: .data/emission
