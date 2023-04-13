@@ -38,10 +38,17 @@ else:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = not IS_PROD
 
-ALLOWED_HOSTS = ['*']
+# Host configuration for origin and CSRF
+if not DEBUG:
+    ALLOWED_HOSTS = ['*']
+    CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS")
+    if CSRF_TRUSTED_ORIGINS is None:
+        raise ValueError('CSRF_TRUSTED_ORIGINS configuration is required.')
+    CSRF_TRUSTED_ORIGINS = list(map(lambda x: x.strip(), CSRF_TRUSTED_ORIGINS.split(",")))
+else:
+    ALLOWED_HOSTS = []
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
