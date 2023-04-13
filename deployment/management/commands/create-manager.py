@@ -12,7 +12,7 @@ class Command(BaseCommand):
         parser.add_argument(
             '--username',
             help='Username to use for login (default: tbhaxor)',
-            default='tbhaxor')
+            default='astrodata')
         parser.add_argument(
             '--password',
             help='Password for the admin account to use. If not passed, it will generate and print on stdout')
