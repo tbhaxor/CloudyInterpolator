@@ -7,6 +7,6 @@ app_name = "feedback"
 urlpatterns = [
     path("", RedirectView.as_view(url=reverse_lazy("feedback:submit"))),
     path("submit/", FeedbackSubmitView.as_view(), name="submit"),
-    path("submit/thank-you/", FeedbackThankYouView.as_view(), name="thank-you"),
+    path("thank-you/", FeedbackThankYouView.as_view(), name="thank-you"),
     re_path(r".*", RedirectView.as_view(url=reverse_lazy("feedback:submit"))),
 ]
