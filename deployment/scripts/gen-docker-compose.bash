@@ -18,6 +18,17 @@ while [[ $# -gt 0 ]]; do
         shift
         emission_dir="${1%/}"
         ;;
+    -s)
+        shift
+        source_config=$(realpath -m "$1")
+        if [[ ! -f "$source_config" ]]; then
+            echo "[x] Source config file does not exist" >&2
+        fi
+        ;;
+    -d)
+        shift
+        dest_config=$(realpath -m "$1")
+        ;;
     *)
         echo "usage: $0 -i DIR -e DIR [-s FILE] [-d FILE]"
         echo "Arguments"
