@@ -10,7 +10,6 @@ services:
     - SOURCE_EMISSION_DIR:/opt/data/emission:ro
     - db:/opt/data/database
     environment:
-      ADMIN_USERNAME: astrodata
       PY_ENV: prod
       IONIZATION_DATASET_DIR: /opt/data/ionization
       EMISSION_DATASET_DIR: /opt/data/emission
