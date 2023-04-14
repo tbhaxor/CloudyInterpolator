@@ -155,7 +155,7 @@
         if (ion > element + 1) {
             $("#ion_element").addClass("ion-element-error")
             $("#ion_element").removeClass("ion-element-success")
-            $("#ion_element").text("Render Error: Ion count can not exceed the 'element+1' count (here, 2)")
+            $("#ion_element").text(`Render Error: Ion count can not exceed the '${element + 1}' (here, ${element})`)
             return
         }
 
