@@ -203,7 +203,6 @@
         const config = {
             displayModeBar: true,
             modeBarButtonsToRemove: ['toImage'],
-
             modeBarButtonsToAdd: [{
                 name: 'plot-data',
                 title: 'Download Plot Data',
@@ -226,7 +225,6 @@
         }
 
         Plotly.newPlot('ion-frac-plt', plotData.data, plotData.layout, config);
-        console.log(plotData)
     }
 
 </script>
@@ -287,6 +285,9 @@
             default:
                 break;
         }
+
+
+        $(".modebar-group:nth-last-child(1)").remove()
     })
 </script>
 {% endblock %}
