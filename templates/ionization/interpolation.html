@@ -2,11 +2,11 @@
 
 {% block title %}Interpolate Ionization Information{% endblock %}
 
-{% if action == 'plot_ion_frac' %}
 {% block head_scripts %}
-<script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
+{% load static %}
+<script src="{% static 'js/utils.js' %}"></script>
+<script src="{% static 'js/plotly.js' %}"></script>
 {% endblock %}
-{% endif %}
 
 {% block main %}
 <h3 class="sec-title mb-5">Interpolate Emission Data</h3>
@@ -194,9 +194,6 @@
     const action = '{{ action }}'
 </script>
 
-{% load static %}
-<script src="{% static 'js/utils.js' %}"></script>
-
 {% if interpolation %}
 
 <script>
@@ -249,7 +246,20 @@
         $("#ion_element").text(`${element}${ion}`)
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    $(document).ready(function () {
+        // scroll to plotly
+        if ($(".modebar").length) {
+            $(".modebar-group:nth-last-child(1)").remove()
+            $("html, body").animate({
+                scrollTop: $("#ion-frac-plt").offset().top
+            }, 1500);
+        }
+
+        if ($("dl").length) {
+            $("html, body").animate({
+                scrollTop: $("dl").offset().top
+            }, 1500);
+        }
 
         // configure active tab
         const qParams = location.search;
@@ -285,7 +295,6 @@
         }
 
 
-        $(".modebar-group:nth-last-child(1)").remove()
     })
 </script>
 {% endblock %}
