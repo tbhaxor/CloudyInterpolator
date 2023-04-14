@@ -73,6 +73,7 @@
             <p class="error-msg"><b>Error: </b>{{ form.mode.errors.0 }}</p>
             {% endif %}
         </div>
+
         {% if form.species_type %}
         <div class="form-item">
             {{ form.species_type.label_tag }}
@@ -81,7 +82,10 @@
             <p class="error-msg"><b>Error: </b>{{ form.species_type.errors.0 }}</p>
             {% endif %}
         </div>
+        {% else %}
+        <div id="ion_element" class="ion-element-success"></div>
         {% endif %}
+
     </div>
 
     <div class="alert mt-10">
@@ -144,12 +148,54 @@
 {% endblock %}
 
 {% block body_scripts %}
+{% load static %}
+<script src="{% static 'js/utils.js' %}"></script>
 <script>
+    function updateIonElement(element, ion) {
+        if (ion > element + 1) {
+            $("#ion_element").addClass("ion-element-error")
+            $("#ion_element").removeClass("ion-element-success")
+            $("#ion_element").text("Render Error: Ion count can not exceed the 'element+1' count (here, 2)")
+            return
+        }
+
+        if ($("#ion_element").hasClass("ion-element-error")) {
+            $("#ion_element").removeClass("ion-element-error")
+            $("#ion_element").addClass("ion-element-success")
+        }
+
+        ion = intToRoman(ion)
+        element = getElementFromAtm(element)
+        $("#ion_element").text(`${element}${ion}`)
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
         $(function () {
+            // configure active tab
             const qParams = location.search;
             $('.lined-tabs nav a').removeClass('active');
             $(`.lined-tabs nav a[href*="${qParams}"]`).addClass('active');
+
+            // configure max value in ion
+            const element = parseInt($("#id_element").val())
+            if (!Number.isNaN(element)) {
+                $("#id_ion").attr("max", element + 1)
+                updateIonElement(element, parseInt($("#id_ion").val()))
+            }
+
+        })
+
+        $("#id_element").change(function () {
+            const element = parseInt($(this).val())
+            const ion = parseInt($("#id_ion").val())
+            $("#id_ion").attr("max", element + 1)
+            updateIonElement(element, ion)
+        })
+
+        $("#id_ion").on("input", function () {
+            const element = parseInt($("#id_element").val())
+            const ion = parseInt($(this).val())
+            updateIonElement(element, ion)
         })
     })
 </script>
