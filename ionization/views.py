@@ -1,6 +1,9 @@
 import os
+from copy import deepcopy
 from wsgiref.util import FileWrapper
 
+import numpy as np
+import plotly.graph_objects as pgo
 import roman
 from astro_plasma.core.ionization import Ionization
 from django.http import HttpRequest, StreamingHttpResponse
@@ -9,7 +12,7 @@ from django.views.generic import TemplateView, View
 
 from astrodata.utils import is_server_running, is_test_running
 
-from .forms import PARMANU, InterpolateIonFractionForm, InterpolateMDForm
+from .forms import PARMANU, InterpolateIonFracTemperatureForm, InterpolateIonFractionForm, InterpolateMDForm
 
 if is_server_running() or is_test_running():
     dataset_base_path = os.getenv('IONIZATION_DATASET_DIR')
@@ -31,6 +34,8 @@ class InterpolationView(TemplateView):
         match kwargs.get('action'):
             case 'ion_frac':
                 kwargs['form'] = InterpolateIonFractionForm()
+            case 'plot_ion_frac':
+                kwargs['form'] = InterpolateIonFracTemperatureForm()
             case 'mass_density':
                 kwargs['form'] = InterpolateMDForm()
         return super().get_context_data(**kwargs)
@@ -40,6 +45,8 @@ class InterpolationView(TemplateView):
         match action:
             case 'ion_frac':
                 form = InterpolateIonFractionForm(request.POST)
+            case 'plot_ion_frac':
+                form = InterpolateIonFracTemperatureForm(request.POST)
             case 'mass_density':
                 form = InterpolateMDForm(request.POST)
             case _:
@@ -57,17 +64,49 @@ class InterpolationView(TemplateView):
             return render(request, self.template_name, {'form': form, 'action': action})
 
         interpolation_data = {}
+        i = Ionization(dataset_base_path)
         match action:
             case 'ion_frac':
-                i = Ionization(dataset_base_path)
-
+                i.interpolate_ion_frac()
                 interpolation_data['ion_frac'] = "{:.4e}".format(10**i.interpolate_ion_frac(**form.cleaned_data))
                 symbol = PARMANU.getElSymbol(form.cleaned_data['element'])
                 roman_ion = roman.toRoman(form.cleaned_data['ion'])
                 interpolation_data['ionized_symbol'] = f'{symbol}{roman_ion}'
-            case 'mass_density':
-                i = Ionization(dataset_base_path)
+            case 'plot_ion_frac':
+                temp_range = form.cleaned_data['temperature_stop'] - form.cleaned_data['temperature_start']
+                space_num = int(temp_range / form.cleaned_data['temperature_step'] + 1)
 
+                temp_array = np.linspace(
+                    form.cleaned_data['temperature_start'],
+                    form.cleaned_data['temperature_stop'],
+                    int(space_num))
+
+                fIon_input = deepcopy(form.cleaned_data)
+                del fIon_input['temperature_start']
+                del fIon_input['temperature_stop']
+                del fIon_input['temperature_step']
+
+                fIon_output = []
+                for temp in temp_array:
+                    fIon_input['temperature'] = temp
+                    fIon_output.append(10**i.interpolate_ion_frac(**fIon_input))
+
+                fig = pgo.Figure(data=[
+                    pgo.Scatter(x=temp_array, y=fIon_output, mode='lines'),
+                ])
+
+                symbol = PARMANU.getElSymbol(form.cleaned_data['element'])
+                roman_ion = roman.toRoman(form.cleaned_data['ion'])
+
+                fig.update_xaxes(title_text='Temperature (Kelvin)',  type='log')
+                fig.update_yaxes(title_text=f'Ion Fraction ({symbol}{roman_ion})', type='log')
+
+                fig.update_layout(width=1200,
+                                  height=900,
+                                  legend={'x': 0, 'y': 1, 'bgcolor': 'rgba(0,0,0,0)'})
+                interpolation_data = fig.to_json()
+
+            case 'mass_density':
                 form.cleaned_data['part_type'] = form.cleaned_data['species_type']
                 del form.cleaned_data['species_type']
 
