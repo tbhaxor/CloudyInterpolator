@@ -93,8 +93,6 @@ jobs:
     - run: |
         poetry run ./manage.py collectstatic -c --no-input
       name: Collect static files
-      env:
-        PY_ENV: dev
     - name: Build image and push
       uses: docker/build-push-action@v3
       with:
