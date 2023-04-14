@@ -9,9 +9,9 @@ from django.views.generic import FormView, View
 from plotly import graph_objs as pgo
 
 from astrodata.base.forms import InterpolateForm
-from astrodata.utils import is_server_running, is_test_running
+from astrodata.utils import is_test_or_server_running
 
-if is_server_running() or is_test_running():
+if is_test_or_server_running:
     dataset_base_path = os.getenv('EMISSION_DATASET_DIR')
 
     CHUNK_SIZE = int(os.getenv('DOWNLOAD_CHUNK_SIZE', 1 << 12))
