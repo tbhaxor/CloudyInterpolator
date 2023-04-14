@@ -70,13 +70,6 @@ class InterpolateIonFracTemperatureForm(Form):
         label=format_html('Number Density of Hydrogen (cm<sup>-3</sup>)'),
     )
 
-    mode = TypedChoiceField(
-        required=True,
-        choices=MODE_TYPES,
-        initial=MODE_TYPES[0],
-        label='Select Mode',
-    )
-
     temperature_start = FloatField(
         required=True,
         label=format_html('log<sub>10</sub>(Temperature Start Range) (in Kelvins)'),

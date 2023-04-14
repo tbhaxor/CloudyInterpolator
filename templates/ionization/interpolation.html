@@ -99,6 +99,7 @@
             {% endif %}
         </div>
 
+        {% if form.mode %}
         <div class="form-item">
             {{ form.mode.label_tag }}
             {{ form.mode }}
@@ -106,6 +107,7 @@
             <p class="error-msg"><b>Error: </b>{{ form.mode.errors.0 }}</p>
             {% endif %}
         </div>
+        {% endif %}
 
         {% if form.species_type %}
         <div class="form-item">
@@ -210,9 +212,9 @@
                 click: function (gd) {
                     const element = parseInt($("#id_element").val())
                     const ion = parseInt($("#id_ion").val())
-                    let data = `Temperature,Ion Frac (${getElementFromAtm(element)}${intToRoman(ion)})\n`
+                    let data = `Temperature,Ion Frac (${getElementFromAtm(element)}${intToRoman(ion)}) CIE,Ion Frac (${getElementFromAtm(element)}${intToRoman(ion)}) PIE\n`
                     for (let i = 0; i < gd.data[0].x.length; i++) {
-                        data += `${gd.data[0].x[i]},${gd.data[0].y[i]}\n`
+                        data += `${gd.data[0].x[i]},${gd.data[0].y[i]},${gd.data[1].y[i]}\n`
                     }
                     let blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
                     let link = document.createElement("a");
@@ -234,7 +236,7 @@
         if (ion > element + 1) {
             $("#ion_element").addClass("ion-element-error")
             $("#ion_element").removeClass("ion-element-success")
-            $("#ion_element").text(`Render Error: Ion count can not exceed the '${element + 1}' (here, ${element})`)
+            $("#ion_element").text(`Render Error: Ion count can not exceed the '${element + 1}'`)
             return
         }
 
@@ -278,9 +280,6 @@
         switch (action) {
             case "ion_frac":
                 $("#ion_element").parent().addClass("span-two")
-                break;
-            case "plot_ion_frac":
-                $("#ion_element").parent().addClass("span-full")
                 break;
             default:
                 break;
