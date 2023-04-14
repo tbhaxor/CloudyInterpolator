@@ -10,10 +10,20 @@ services:
     - SOURCE_EMISSION_DIR:/opt/data/emission:ro
     - db:/opt/data/database
     environment:
+      DB_URI: postgres://astrodata:astrodata@db/astrodata
       PY_ENV: prod
       IONIZATION_DATASET_DIR: /opt/data/ionization
       EMISSION_DATASET_DIR: /opt/data/emission
     stop_signal: sigkill
+
+  db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_PASSWORD: astrodata
+      POSTGRES_USER: astrodata
+      POSTGRES_DB: astrodata
+    volumes:
+    - db:/var/lib/postgresql/data
 
   nginx_proxy:
     image: nginx:alpine
