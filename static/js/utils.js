@@ -32,8 +32,6 @@ const elements = [
   ];
 
 function getElementFromAtm(i) {
-    console.log(i, elements[i])
-    console.log(i-1, elements[i-1])
     if (typeof elements[i-1] === "undefined") {
         throw new Error("Not a valid element")
     }

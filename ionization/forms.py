@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
-from django.forms import IntegerField, TypedChoiceField
+from django.forms import FloatField, Form, IntegerField, TypedChoiceField
+from django.utils.html import format_html
 from PyAstronomy.pyasl.asl.atomicNo import AtomicNo
 
 from astrodata.base.forms import InterpolateForm
@@ -46,6 +47,70 @@ class InterpolateIonFractionForm(InterpolateForm):
             raise ValidationError(f'Cannot exceed the element+1 count (here, {element+1}).', code='gt_element')
 
         return ion
+
+
+class InterpolateIonFracTemperatureForm(Form):
+    element = TypedChoiceField(
+        required=True,
+        coerce=int,
+        label='Select Element',
+        choices=TATVAS,
+        initial=TATVAS[0],
+    )
+
+    ion = IntegerField(
+        required=True,
+        label='Ion Count',
+        min_value=1,
+        initial=1
+    )
+
+    nH = FloatField(
+        required=True,
+        label=format_html('Number Density of Hydrogen (cm<sup>-3</sup>)'),
+    )
+
+    mode = TypedChoiceField(
+        required=True,
+        choices=MODE_TYPES,
+        initial=MODE_TYPES[0],
+        label='Select Mode',
+    )
+
+    temperature_start = FloatField(
+        required=True,
+        label='Temperature Start Range (in Kelvins)',
+    )
+
+    temperature_stop = FloatField(
+        required=True,
+        label='Temperature End Range (in Kelvins)',
+    )
+
+    temperature_step = FloatField(
+        required=True,
+        label='Temperature Range Step Size (in Kelvins)',
+    )
+
+    metallicity = FloatField(
+        required=True,
+        label=format_html('Metallicity (Z<sub>&#8857;</sub>)'),
+    )
+
+    redshift = FloatField(
+        required=True,
+        label='Cosmical Redshift',
+    )
+
+    def clean_ion(self):
+        ion = self.cleaned_data['ion']
+        element = self.cleaned_data.get('element')
+
+        if ion > element+1:
+            raise ValidationError(f'Cannot exceed the element+1 count (here, {element+1}).', code='gt_element')
+
+        return ion
+    pass
 
 
 class InterpolateMDForm(InterpolateForm):

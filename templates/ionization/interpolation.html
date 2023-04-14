@@ -2,11 +2,18 @@
 
 {% block title %}Interpolate Ionization Information{% endblock %}
 
+{% if action == 'plot_ion_frac' %}
+{% block head_scripts %}
+<script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
+{% endblock %}
+{% endif %}
+
 {% block main %}
 <h3 class="sec-title mb-5">Interpolate Emission Data</h3>
 <div class="lined-tabs">
     <nav aria-label="Tabs">
         <a href="?action=ion_frac">Calculate Ion Fraction</a>
+        <a href="?action=plot_ion_frac">Plot Ion Fraction</a>
         <a href="?action=mass_density">Calculate Mean Mass and Number Density</a>
     </nav>
 </div>
@@ -43,10 +50,26 @@
         </div>
 
         <div class="form-item">
-            {{ form.temperature.label_tag }}
-            {{ form.temperature }}
-            {% if form.temperature.errors %}
-            <p class="error-msg"><b>Error: </b>{{ form.temperature.errors.0 }}</p>
+            {{ form.temperature_start.label_tag }}
+            {{ form.temperature_start }}
+            {% if form.temperature_start.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.temperature_start.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <div class="form-item">
+            {{ form.temperature_stop.label_tag }}
+            {{ form.temperature_stop }}
+            {% if form.temperature_stop.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.temperature_stop.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <div class="form-item">
+            {{ form.temperature_step.label_tag }}
+            {{ form.temperature_step }}
+            {% if form.temperature_step.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.temperature_step.errors.0 }}</p>
             {% endif %}
         </div>
 
@@ -131,6 +154,12 @@
                 <dt>Ion Fraction ({{interpolation.ionized_symbol|safe}})</dt>
                 <dd>{{ interpolation.ion_frac }}</dd>
             </div>
+            {% elif action == 'plot_ion_frac' %}
+            <div class="bg-gray-50 data-list-row">
+                <div class="border-t border-gray-200 p-5">
+                    <div id="ion-frac-plt" class="w-full"></div>
+                </div>
+            </div>
             {% elif action == 'mass_density' %}
             <div class="bg-gray-white data-list-row">
                 <dt>Mean Mass ({{interpolation.mean_mass_symbol|safe}})</dt>
@@ -151,6 +180,8 @@
 {% load static %}
 <script src="{% static 'js/utils.js' %}"></script>
 <script>
+    const action = '{{ action }}'
+
     function updateIonElement(element, ion) {
         if (ion > element + 1) {
             $("#ion_element").addClass("ion-element-error")
@@ -167,6 +198,35 @@
         ion = intToRoman(ion)
         element = getElementFromAtm(element)
         $("#ion_element").text(`${element}${ion}`)
+    }
+
+    if (action == 'plot_ion_frac') {
+        const plotData = JSON.parse('{{ interpolation| safe }}')
+        const config = {
+            displayModeBar: true,
+            modeBarButtonsToRemove: ['toImage'],
+
+            modeBarButtonsToAdd: [{
+                name: 'plot-data',
+                title: 'Download Plot Data',
+                icon: Plotly.Icons.disk,
+                click: function (gd) {
+                    let data = `Temperature,Ion Frac\n`
+                    for (let i = 0; i < gd.data[0].x.length; i++) {
+                        data += `${gd.data[0].x[i]},${gd.data[0].y[i]}\n`
+                    }
+                    let blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
+                    let link = document.createElement("a");
+                    let url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", "data.csv");
+                    link.click();
+                }
+            }]
+        }
+
+        Plotly.newPlot('ion-frac-plt', plotData.data, plotData.layout, config);
+        console.log(plotData)
     }
 
     window.addEventListener('DOMContentLoaded', () => {
