@@ -35,6 +35,7 @@ class InterpolateIonFractionForm(InterpolateForm):
         required=True,
         label='Ion Count',
         min_value=1,
+        initial=1
     )
 
     def clean_ion(self):
