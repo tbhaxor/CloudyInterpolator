@@ -7,13 +7,15 @@ RUN apt update && \
     poetry config virtualenvs.create false
 
 # install pip packages
-WORKDIR /home/astrodata
-COPY --chown=astrodata:astrodata pyproject.toml poetry.lock ./
+WORKDIR /tmp
+COPY pyproject.toml poetry.lock ./
 RUN poetry install && \
     apt remove -y git gcc g++ && \
     apt autoremove -y && \
     apt autoclean -y && \
-    pip uninstall poetry -y
+    pip uninstall poetry -y && \
+    rm -rf pyproject.toml poetry.lock && \
+    chown -R astrodata:astrodata "/usr/local/lib/python3.10/site-packages/astro_plama/data"
 
 # create secure user
 RUN useradd -m -d /home/astrodata astrodata && \
