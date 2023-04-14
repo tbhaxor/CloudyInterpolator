@@ -74,12 +74,12 @@ class InterpolationView(TemplateView):
                 interpolation_data['ionized_symbol'] = f'{symbol}{roman_ion}'
             case 'plot_ion_frac':
                 temp_range = form.cleaned_data['temperature_stop'] - form.cleaned_data['temperature_start']
-                space_num = int(temp_range / form.cleaned_data['temperature_step'] + 1)
+                space_num = round(temp_range / form.cleaned_data['temperature_step'] + 1)
 
-                temp_array = np.linspace(
+                temp_array = np.logspace(
                     form.cleaned_data['temperature_start'],
                     form.cleaned_data['temperature_stop'],
-                    int(space_num))
+                    space_num)
 
                 fIon_input = deepcopy(form.cleaned_data)
                 del fIon_input['temperature_start']

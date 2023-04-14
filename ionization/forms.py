@@ -79,17 +79,17 @@ class InterpolateIonFracTemperatureForm(Form):
 
     temperature_start = FloatField(
         required=True,
-        label='Temperature Start Range (in Kelvins)',
+        label=format_html('log<sub>10</sub>(Temperature Start Range) (in Kelvins)'),
     )
 
     temperature_stop = FloatField(
         required=True,
-        label='Temperature End Range (in Kelvins)',
+        label=format_html('log<sub>10</sub>(Temperature Start Range) (in Kelvins)'),
     )
 
     temperature_step = FloatField(
         required=True,
-        label='Temperature Range Step Size (in Kelvins)',
+        label='Temperature Range Step Sizes',
     )
 
     metallicity = FloatField(

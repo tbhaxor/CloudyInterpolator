@@ -160,19 +160,17 @@
         </a>
     </div>
     <div class="border-t border-gray-200">
+        {% if action == 'ion_frac' %}
         <dl class="data-list">
-            {% if action == 'ion_frac' %}
             <div class="bg-gray-50 data-list-row">
                 <dt>Ion Fraction ({{interpolation.ionized_symbol|safe}})</dt>
                 <dd>{{ interpolation.ion_frac }}</dd>
             </div>
-            {% elif action == 'plot_ion_frac' %}
-            <div class="bg-gray-50 data-list-row">
-                <div class="border-t border-gray-200 p-5">
-                    <div id="ion-frac-plt" class="w-full"></div>
-                </div>
-            </div>
-            {% elif action == 'mass_density' %}
+        </dl>
+        {% elif action == 'plot_ion_frac' %}
+        <div id="ion-frac-plt" class="w-full"></div>
+        {% elif action == 'mass_density' %}
+        <dl class="data-list">
             <div class="bg-gray-white data-list-row">
                 <dt>Mean Mass ({{interpolation.mean_mass_symbol|safe}})</dt>
                 <dd>{{ interpolation.mean_mass }}</dd>
@@ -181,8 +179,9 @@
                 <dt>Number Density ({{interpolation.number_density_symbol|safe}})</dt>
                 <dd>{{ interpolation.number_density }}</dd>
             </div>
-            {% endif %}
         </dl>
+
+        {% endif %}
     </div>
 </div>
 {% endif %}
@@ -204,13 +203,14 @@
         const config = {
             displayModeBar: true,
             modeBarButtonsToRemove: ['toImage'],
-
             modeBarButtonsToAdd: [{
                 name: 'plot-data',
                 title: 'Download Plot Data',
                 icon: Plotly.Icons.disk,
                 click: function (gd) {
-                    let data = `Temperature,Ion Frac\n`
+                    const element = parseInt($("#id_element").val())
+                    const ion = parseInt($("#id_ion").val())
+                    let data = `Temperature,Ion Frac (${getElementFromAtm(element)}${intToRoman(ion)})\n`
                     for (let i = 0; i < gd.data[0].x.length; i++) {
                         data += `${gd.data[0].x[i]},${gd.data[0].y[i]}\n`
                     }
@@ -225,7 +225,6 @@
         }
 
         Plotly.newPlot('ion-frac-plt', plotData.data, plotData.layout, config);
-        console.log(plotData)
     }
 
 </script>
@@ -286,6 +285,9 @@
             default:
                 break;
         }
+
+
+        $(".modebar-group:nth-last-child(1)").remove()
     })
 </script>
 {% endblock %}
