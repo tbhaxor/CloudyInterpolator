@@ -1,27 +1,28 @@
 FROM python:3.10-slim-bullseye
 
 # install build dependencies
-RUN apt update && \
-    apt install -y --no-install-recommends libhdf5-dev libopenmpi-dev openmpi-bin git gcc g++ && \
-    pip install --root-user-action=ignore -qU pip poetry && \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --no-install-suggests libpq-dev postgresql-client postgresql libhdf5-dev libopenmpi-dev openmpi-bin git gcc g++ && \
+    pip install --no-cache-dir --root-user-action=ignore -qU pip poetry && \
     poetry config virtualenvs.create false
+
+# create secure user
+RUN useradd -m -d /home/astrodata astrodata
 
 # install pip packages
 WORKDIR /tmp
 COPY pyproject.toml poetry.lock ./
-RUN poetry install && \
-    apt remove -y git gcc g++ && \
-    apt autoremove -y && \
-    apt autoclean -y && \
+RUN poetry install --only main && \
+    apt-get remove -y git gcc g++ && \
+    apt-get autoremove -y && \
+    apt-get autoclean -y && \
+    rm -rf /var/lib/apt/lists/* && \
     pip uninstall poetry -y && \
     rm -rf pyproject.toml poetry.lock && \
-    chown -R astrodata:astrodata "/usr/local/lib/python3.10/site-packages/astro_plama/data"
+    chown -R astrodata:astrodata "/usr/local/lib/python3.10/site-packages/astro_plasma/data"
 
-# create secure user
-RUN useradd -m -d /home/astrodata astrodata && \
-    chown astrodata:astrodata /home/astrodata -R && \
-    mkdir -p /opt/data/database && \
-    chown astrodata:astrodata /opt/data/database -R
+# switch to secure user
+WORKDIR /home/astrodata
 USER astrodata
 
 # copy files into the new workdir
@@ -36,5 +37,4 @@ COPY --chown=astrodata:astrodata deployment/scripts/ ./scripts
 COPY --chown=astrodata:astrodata manage.py ./
 
 EXPOSE 5000
-
 ENTRYPOINT [ "bash", "scripts/django-init.bash" ]
