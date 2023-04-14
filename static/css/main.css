@@ -291,3 +291,11 @@ header {
     top: 25px !important;
     right: 2px;
 }
+
+.ion-element-success {
+  @apply flex font-bold items-center justify-center h-full w-full text-center text-slate-500 text-3xl;
+}
+
+.ion-element-error {
+  @apply flex items-center justify-center h-full w-full text-center text-red-500 text-xs;
+}
