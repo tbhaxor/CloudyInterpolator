@@ -117,7 +117,7 @@
         </div>
         {% endif %}
         {% if action != 'mass_density' %}
-        <div class="form-item label-spaced centered span-two">
+        <div class="form-item label-spaced centered">
             <div id="ion_element" class="ion-element-success"></div>
         </div>
         {% endif %}
@@ -189,10 +189,15 @@
 {% endblock %}
 
 {% block body_scripts %}
+<script>
+    const action = '{{ action }}'
+</script>
+
 {% load static %}
 <script src="{% static 'js/utils.js' %}"></script>
 
 {% if interpolation %}
+
 <script>
     if ('{{ action }}' == 'plot_ion_frac') {
         const plotData = JSON.parse('{{ interpolation| safe }}')
@@ -220,11 +225,11 @@
         }
 
         Plotly.newPlot('ion-frac-plt', plotData.data, plotData.layout, config);
+        console.log(plotData)
     }
 
 </script>
 {% endif %}
-
 <script>
     function updateIonElement(element, ion) {
         if (ion > element + 1) {
@@ -245,6 +250,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+
         // configure active tab
         const qParams = location.search;
         $('.lined-tabs nav a').removeClass('active');
@@ -269,6 +275,17 @@
             const ion = parseInt($(this).val())
             updateIonElement(element, ion)
         })
+
+        switch (action) {
+            case "ion_frac":
+                $("#ion_element").parent().addClass("span-two")
+                break;
+            case "plot_ion_frac":
+                $("#ion_element").parent().addClass("span-full")
+                break;
+            default:
+                break;
+        }
     })
 </script>
 {% endblock %}

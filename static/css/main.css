@@ -331,5 +331,5 @@ header {
 }
 
 .ion-element-error {
-  @apply flex items-center justify-center h-full w-full text-center text-red-500 text-xs;
+  @apply flex items-center justify-center h-full w-full text-center text-red-500;
 }
