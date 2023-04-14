@@ -1,11 +1,8 @@
 {% extends "layouts/interpolate.html" %}
 
-{% block head_styles %}
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css"> -->
-{% endblock %}
-
 {% block head_scripts %}
-<script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
+{% load static %}
+<script src="{% static 'js/plotly.js' %}"></script>
 {% endblock %}
 
 {% block title %}Interpolate Emission Data{% endblock %}
@@ -100,7 +97,9 @@
 {% endif %}
 {% endblock %}
 
+
 {% block body_scripts %}
+{% if interpolation %}
 <script>
     const emissionData = JSON.parse('{{ interpolation| safe }}')
     const config = {
@@ -125,8 +124,14 @@
     }
     Plotly.newPlot('emission-plot', emissionData.data, emissionData.layout, config);
 
-    window.addEventListener('DOMContentLoaded', () => {
-        $(".modebar-group:nth-last-child(1)").remove()
+    $(document).ready(function () {
+        if ($(".modebar").length) {
+            $(".modebar-group:nth-last-child(1)").remove()
+            $("html, body").animate({
+                scrollTop: $("#emission-plot").offset().top
+            }, 1500);
+        }
     })
 </script>
+{% endif %}
 {% endblock %}
