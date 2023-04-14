@@ -7,11 +7,11 @@ from django.http import HttpRequest, StreamingHttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, View
 
-from astrodata.utils import is_test_or_server_running
+from astrodata.utils import is_server_running, is_test_running
 
 from .forms import PARMANU, InterpolateIonFractionForm, InterpolateMDForm
 
-if is_test_or_server_running():
+if is_server_running() or is_test_running():
     dataset_base_path = os.getenv('IONIZATION_DATASET_DIR')
 
     CHUNK_SIZE = int(os.getenv('DOWNLOAD_CHUNK_SIZE', 1 << 12))
