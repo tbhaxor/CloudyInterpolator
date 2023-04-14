@@ -9,3 +9,7 @@ def is_server_running() -> bool:
 
 def is_test_running() -> bool:
     return sys.argv[0].endswith('manage.py') and sys.argv[1] == 'test'
+
+
+def is_test_or_server_running() -> bool:
+    return is_test_running() or is_server_running()
