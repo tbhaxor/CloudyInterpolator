@@ -12,7 +12,7 @@ from django.views.generic import TemplateView, View
 
 from astrodata.utils import is_server_running, is_test_running
 
-from .forms import PARMANU, InterpolateIonFracTemperatureForm, InterpolateIonFractionForm, InterpolateMDForm
+from .forms import MODE_TYPES, PARMANU, InterpolateIonFracTemperatureForm, InterpolateIonFractionForm, InterpolateMDForm
 
 if is_server_running() or is_test_running():
     dataset_base_path = os.getenv('IONIZATION_DATASET_DIR')
@@ -86,13 +86,22 @@ class InterpolationView(TemplateView):
                 del fIon_input['temperature_stop']
                 del fIon_input['temperature_step']
 
-                fIon_output = []
+                fIon_input_PIE = deepcopy({**fIon_input, 'mode': 'PIE'})
+                fIon_input_CIE = deepcopy({**fIon_input, 'mode': 'CIE'})
+
+                fIon_output_PIE = []
+                fIon_output_CIE = []
+
                 for temp in temp_array:
-                    fIon_input['temperature'] = temp
-                    fIon_output.append(10**i.interpolate_ion_frac(**fIon_input))
+                    fIon_input_PIE['temperature'] = temp
+                    fIon_input_CIE['temperature'] = temp
+
+                    fIon_output_PIE.append(10**i.interpolate_ion_frac(**fIon_input_PIE))
+                    fIon_output_CIE.append(10**i.interpolate_ion_frac(**fIon_input_CIE))
 
                 fig = pgo.Figure(data=[
-                    pgo.Scatter(x=temp_array, y=fIon_output, mode='lines'),
+                    pgo.Scatter(x=temp_array, y=fIon_output_CIE, mode='lines', name=MODE_TYPES[0][1]),
+                    pgo.Scatter(x=temp_array, y=fIon_output_PIE, mode='lines', name=MODE_TYPES[1][1]),
                 ])
 
                 symbol = PARMANU.getElSymbol(form.cleaned_data['element'])
