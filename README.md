@@ -1,5 +1,8 @@
 # Cloudy Batch Downloader
 
+![GitHub repo size](https://img.shields.io/github/repo-size/tbhaxor/CloudyPlasmaServer) | 
+![GitHub repo file count](https://img.shields.io/github/directory-file-count/tbhaxor/CloudyPlasmaServer)
+
 <p align="center">
 
 <img src="https://results.pre-commit.ci/badge/github/tbhaxor/CloudyPlasmaServer/main.svg" /> | <img src="https://github.com/tbhaxor/CloudyPlasmaServer/actions/workflows/ci.yml/badge.svg?branch=main" />
