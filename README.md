@@ -1,6 +1,6 @@
 # Cloudy Batch Downloader
 
-![GitHub repo size](https://img.shields.io/github/repo-size/tbhaxor/CloudyPlasmaServer) | 
+![GitHub repo size](https://img.shields.io/github/repo-size/tbhaxor/CloudyPlasmaServer) |
 ![GitHub repo file count](https://img.shields.io/github/directory-file-count/tbhaxor/CloudyPlasmaServer)
 
 <p align="center">
