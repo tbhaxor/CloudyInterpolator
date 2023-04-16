@@ -1,12 +1,12 @@
 # Cloudy Batch Downloader
 
-<p align="center">
+<div align="center">
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/tbhaxor/CloudyPlasmaServer) | ![GitHub repo file count](https://img.shields.io/github/directory-file-count/tbhaxor/CloudyPlasmaServer) | ![Lines of code](https://img.shields.io/tokei/lines/github.com/tbhaxor/CloudyPlasmaServer#.vscode)
 
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/tbhaxor/CloudyPlasmaServer/main) | ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/tbhaxor/CloudyPlasmaServer) | <img src="https://results.pre-commit.ci/badge/github/tbhaxor/CloudyPlasmaServer/main.svg" /> | <img src="https://github.com/tbhaxor/CloudyPlasmaServer/actions/workflows/ci.yml/badge.svg?branch=main" />
 
-</p>
+</div>
 
 This repository is used to download the batch files for astro plasma datasets: Emission spectrum and Ionization.
 
