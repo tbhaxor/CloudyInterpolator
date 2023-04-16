@@ -106,7 +106,7 @@ class InterpolationView(TemplateView):
                 symbol = PARMANU.getElSymbol(form.cleaned_data['element'])
                 roman_ion = roman.toRoman(form.cleaned_data['ion'])
 
-                fig.update_xaxes(title_text='Temperature (Kelvin)',  type='log')
+                fig.update_xaxes(title_text='Temperature (Kelvin)', type='log')
                 fig.update_yaxes(title_text=f'Ion Fraction ({symbol}{roman_ion})', type='log')
 
                 fig.update_layout(width=1200,

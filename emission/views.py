@@ -46,7 +46,7 @@ class InterpolateView(FormView):
         fig = pgo.Figure(data=[
             pgo.Scatter(x=data_linear[:, 0], y=data_linear[:, 1], mode='lines'),
         ])
-        fig.update_xaxes(title_text=r'Energy (keV)',  type='log')
+        fig.update_xaxes(title_text=r'Energy (keV)', type='log')
         fig.update_yaxes(title_text=r'Emissivity (erg cm<sup>-3</sup> s<sup>-1</sup>)', type='log')
 
         fig.update_layout(width=1200,
@@ -62,7 +62,7 @@ class InterpolateView(FormView):
             }, 'request': form.cleaned_data})
 
         context = {'form': form,
-                   'interpolation':  fig.to_json()}
+                   'interpolation': fig.to_json()}
         return render(self.request, self.template_name, context)
 
 

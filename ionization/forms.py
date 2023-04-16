@@ -43,7 +43,7 @@ class InterpolateIonFractionForm(InterpolateForm):
         ion = self.cleaned_data['ion']
         element = self.cleaned_data.get('element')
 
-        if ion > element+1:
+        if ion > element + 1:
             raise ValidationError(f'Cannot exceed the element+1 count (here, {element+1}).', code='gt_element')
 
         return ion
@@ -99,7 +99,7 @@ class InterpolateIonFracTemperatureForm(Form):
         ion = self.cleaned_data['ion']
         element = self.cleaned_data.get('element')
 
-        if ion > element+1:
+        if ion > element + 1:
             raise ValidationError(f'Cannot exceed the element+1 count (here, {element+1}).', code='gt_element')
 
         return ion
