@@ -1,20 +1,20 @@
 import json
 import os
-from wsgiref.util import FileWrapper
+from pathlib import Path
 
 from astro_plasma.core.spectrum import EmissionSpectrum
-from django.http import JsonResponse, StreamingHttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import FormView, View
 from plotly import graph_objs as pgo
 
 from astrodata.base.forms import InterpolateForm
+from astrodata.base.responses import download_file_response
 from astrodata.utils import is_server_running, is_test_running
 
 if is_server_running() or is_test_running():
-    dataset_base_path = os.getenv('EMISSION_DATASET_DIR')
+    dataset_base_path = Path(os.getenv('EMISSION_DATASET_DIR'))
 
-    CHUNK_SIZE = int(os.getenv('DOWNLOAD_CHUNK_SIZE', 1 << 12))
     FILE_NAME_TEMPLATE = 'ionization.b_{:06d}.h5'
 
 
@@ -69,8 +69,4 @@ class InterpolateView(FormView):
 class DownloadFileView(View):
     def get(self, request, batch_id: int):
         target_file = dataset_base_path / FILE_NAME_TEMPLATE.format(batch_id)
-        content = FileWrapper(open(target_file, 'rb'), CHUNK_SIZE)
-        response = StreamingHttpResponse(content, content_type='application/x-hdf5')
-        response['Content-Length'] = target_file.stat().st_size
-        response['Content-Disposition'] = f'attachment; filename={target_file.name}'
-        return response
+        return download_file_response(target_file)
