@@ -184,14 +184,48 @@ header {
   }
 }
 .form-grid {
-  @apply mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl;
+  @apply mt-10 flex flex-col md:grid gap-x-8 gap-y-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl;
 
-  &.form-grid-two {
-    @apply sm:grid-cols-1 lg:grid-cols-2 md:grid-cols-2;
+  &.form-grid-two,
+  &.two-cols {
+    @apply grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 md:grid-cols-2;
+  }
+
+  &.single-col {
+    @apply md:grid-cols-1 lg:grid-cols-1;
+    .form-item {
+      &.label-spaced {
+        @apply md:pt-0;
+      }
+      &.span-two,
+      &.span-three {
+        @apply col-span-full;
+      }
+    }
   }
 
   .form-item {
     @apply w-full;
+
+    &.span-two {
+      @apply col-span-2;
+    }
+
+    &.span-three {
+      @apply col-span-3;
+    }
+
+    &.span-full {
+      @apply col-span-full;
+    }
+
+    &.label-spaced {
+      @apply md:pt-8;
+    }
+
+    &.centered {
+      @apply flex items-center justify-center;
+    }
 
     label {
       @apply inline-block mb-2 text-gray-700;
@@ -275,19 +309,27 @@ header {
 }
 
 .modebar-group {
-    display: flex !important;
+  display: flex !important;
 }
 
 .svg-container {
-    @apply max-w-full;
+  @apply max-w-full;
 }
 
 .modebar-container {
-    @apply flex items-center justify-center;
+  @apply flex items-center justify-center;
 }
 
 .js-plotly-plot .plotly .modebar {
-    position: relative !important;
-    top: 25px !important;
-    right: 2px;
+  position: relative !important;
+  top: 25px !important;
+  right: 2px;
+}
+
+.ion-element-success {
+  @apply flex font-bold items-center justify-center h-full w-full text-center text-slate-500 text-3xl;
+}
+
+.ion-element-error {
+  @apply flex items-center justify-center h-full w-full text-center text-red-500 text-sm;
 }

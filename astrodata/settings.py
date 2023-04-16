@@ -13,6 +13,7 @@ import base64
 import os
 from pathlib import Path
 
+import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -107,11 +108,12 @@ if DEBUG:
         },
     }
 else:
+    DB_URI = os.getenv("DB_URI")
+    if DB_URI is None:
+        raise ValueError("DB_URI is required.")
+
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': '/opt/data/database/db.sqlite3',
-        },
+        'default': dj_database_url.parse(os.getenv("DB_URI"), conn_max_age=600),
     }
 
 

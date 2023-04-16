@@ -1,12 +1,19 @@
-{% extends "layouts/base.withheader.html" %}
+{% extends "layouts/interpolate.html" %}
 
 {% block title %}Interpolate Ionization Information{% endblock %}
+
+{% block head_scripts %}
+{% load static %}
+<script src="{% static 'js/utils.js' %}"></script>
+<script src="{% static 'js/plotly.js' %}"></script>
+{% endblock %}
 
 {% block main %}
 <h3 class="sec-title mb-5">Interpolate Emission Data</h3>
 <div class="lined-tabs">
     <nav aria-label="Tabs">
         <a href="?action=ion_frac">Calculate Ion Fraction</a>
+        <a href="?action=plot_ion_frac">Plot Ion Fraction</a>
         <a href="?action=mass_density">Calculate Mean Mass and Number Density</a>
     </nav>
 </div>
@@ -42,6 +49,7 @@
             {% endif %}
         </div>
 
+        {% if form.temperature %}
         <div class="form-item">
             {{ form.temperature.label_tag }}
             {{ form.temperature }}
@@ -49,6 +57,31 @@
             <p class="error-msg"><b>Error: </b>{{ form.temperature.errors.0 }}</p>
             {% endif %}
         </div>
+        {% else %}
+        <div class="form-item">
+            {{ form.temperature_start.label_tag }}
+            {{ form.temperature_start }}
+            {% if form.temperature_start.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.temperature_start.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <div class="form-item">
+            {{ form.temperature_stop.label_tag }}
+            {{ form.temperature_stop }}
+            {% if form.temperature_stop.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.temperature_stop.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <div class="form-item">
+            {{ form.temperature_step.label_tag }}
+            {{ form.temperature_step }}
+            {% if form.temperature_step.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.temperature_step.errors.0 }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
 
         <div class="form-item">
             {{ form.metallicity.label_tag }}
@@ -66,6 +99,7 @@
             {% endif %}
         </div>
 
+        {% if form.mode %}
         <div class="form-item">
             {{ form.mode.label_tag }}
             {{ form.mode }}
@@ -73,6 +107,8 @@
             <p class="error-msg"><b>Error: </b>{{ form.mode.errors.0 }}</p>
             {% endif %}
         </div>
+        {% endif %}
+
         {% if form.species_type %}
         <div class="form-item">
             {{ form.species_type.label_tag }}
@@ -80,6 +116,11 @@
             {% if form.species_type.errors %}
             <p class="error-msg"><b>Error: </b>{{ form.species_type.errors.0 }}</p>
             {% endif %}
+        </div>
+        {% endif %}
+        {% if action != 'mass_density' %}
+        <div class="form-item label-spaced centered">
+            <div id="ion_element" class="ion-element-success"></div>
         </div>
         {% endif %}
     </div>
@@ -121,13 +162,17 @@
         </a>
     </div>
     <div class="border-t border-gray-200">
+        {% if action == 'ion_frac' %}
         <dl class="data-list">
-            {% if action == 'ion_frac' %}
             <div class="bg-gray-50 data-list-row">
                 <dt>Ion Fraction ({{interpolation.ionized_symbol|safe}})</dt>
                 <dd>{{ interpolation.ion_frac }}</dd>
             </div>
-            {% elif action == 'mass_density' %}
+        </dl>
+        {% elif action == 'plot_ion_frac' %}
+        <div id="ion-frac-plt" class="w-full"></div>
+        {% elif action == 'mass_density' %}
+        <dl class="data-list">
             <div class="bg-gray-white data-list-row">
                 <dt>Mean Mass ({{interpolation.mean_mass_symbol|safe}})</dt>
                 <dd>{{ interpolation.mean_mass }}</dd>
@@ -136,8 +181,9 @@
                 <dt>Number Density ({{interpolation.number_density_symbol|safe}})</dt>
                 <dd>{{ interpolation.number_density }}</dd>
             </div>
-            {% endif %}
         </dl>
+
+        {% endif %}
     </div>
 </div>
 {% endif %}
@@ -145,12 +191,110 @@
 
 {% block body_scripts %}
 <script>
-    window.addEventListener('DOMContentLoaded', () => {
-        $(function () {
-            const qParams = location.search;
-            $('.lined-tabs nav a').removeClass('active');
-            $(`.lined-tabs nav a[href*="${qParams}"]`).addClass('active');
+    const action = '{{ action }}'
+</script>
+
+{% if interpolation %}
+
+<script>
+    if ('{{ action }}' == 'plot_ion_frac') {
+        const plotData = JSON.parse('{{ interpolation| safe }}')
+        const config = {
+            displayModeBar: true,
+            modeBarButtonsToAdd: [{
+                name: 'plot-data',
+                title: 'Download Plot Data',
+                icon: Plotly.Icons.disk,
+                click: function (gd) {
+                    const element = parseInt($("#id_element").val())
+                    const ion = parseInt($("#id_ion").val())
+                    let data = `Temperature,Ion Frac (${getElementFromAtm(element)}${intToRoman(ion)}) CIE,Ion Frac (${getElementFromAtm(element)}${intToRoman(ion)}) PIE\n`
+                    for (let i = 0; i < gd.data[0].x.length; i++) {
+                        data += `${gd.data[0].x[i]},${gd.data[0].y[i]},${gd.data[1].y[i]}\n`
+                    }
+                    let blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
+                    let link = document.createElement("a");
+                    let url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", "data.csv");
+                    link.click();
+                }
+            }]
+        }
+
+        Plotly.newPlot('ion-frac-plt', plotData.data, plotData.layout, config);
+    }
+
+</script>
+{% endif %}
+<script>
+    function updateIonElement(element, ion) {
+        if (ion > element + 1) {
+            $("#ion_element").addClass("ion-element-error")
+            $("#ion_element").removeClass("ion-element-success")
+            $("#ion_element").text(`Render Error: Ion count can not exceed the '${element + 1}'`)
+            return
+        }
+
+        if ($("#ion_element").hasClass("ion-element-error")) {
+            $("#ion_element").removeClass("ion-element-error")
+            $("#ion_element").addClass("ion-element-success")
+        }
+
+        ion = intToRoman(ion)
+        element = getElementFromAtm(element)
+        $("#ion_element").text(`${element}${ion}`)
+    }
+
+    $(document).ready(function () {
+        // scroll to plotly
+        if ($(".modebar").length) {
+            $(".modebar-group:nth-last-child(1)").remove()
+            $("html, body").animate({
+                scrollTop: $("#ion-frac-plt").offset().top
+            }, 1500);
+        }
+
+        if ($("dl").length) {
+            $("html, body").animate({
+                scrollTop: $("dl").offset().top
+            }, 1500);
+        }
+
+        // configure active tab
+        const qParams = location.search;
+        $('.lined-tabs nav a').removeClass('active');
+        $(`.lined-tabs nav a[href*="${qParams}"]`).addClass('active');
+
+        // configure max value in ion
+        const element = parseInt($("#id_element").val())
+        if (!Number.isNaN(element)) {
+            $("#id_ion").attr("max", element + 1)
+            updateIonElement(element, parseInt($("#id_ion").val()))
+        }
+
+        $("#id_element").change(function () {
+            const element = parseInt($(this).val())
+            const ion = parseInt($("#id_ion").val())
+            $("#id_ion").attr("max", element + 1)
+            updateIonElement(element, ion)
         })
+
+        $("#id_ion").on("input", function () {
+            const element = parseInt($("#id_element").val())
+            const ion = parseInt($(this).val())
+            updateIonElement(element, ion)
+        })
+
+        switch (action) {
+            case "ion_frac":
+                $("#ion_element").parent().addClass("span-two")
+                break;
+            default:
+                break;
+        }
+
+
     })
 </script>
 {% endblock %}
