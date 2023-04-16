@@ -1,4 +1,4 @@
-# Cloudy Batch Downloader
+# Web Interface of <kbd>[AstroPlasma](https://github.com/dutta-alankar/AstroPlasma)</kbd>
 
 <div align="center">
 
@@ -14,59 +14,48 @@
 
 </div>
 
-This repository is used to download the batch files for astro plasma datasets: Emission spectrum and Ionization.
+This is a web interface for the [AstroPlasma](https://github.com/dutta-alankar/AstroPlasma) repository which allows you to interpolate the plasma properties from the pre-computed dataset from the cloudy.
 
-## Screenshots
+## Features
 
-### Home Page
-
-![](https://i.imgur.com/cjDgnfe.png)
-
-### Plasma Ionization Interpolation
-
-![](https://i.imgur.com/Q3TcxPZ.png)
-
-### Plasma Emission Spectrum
-
-![](https://i.imgur.com/tFIX3Y5.png)
+- [x] Compute Ionization Fraction of the Specific Element and Ion
+- [x] Plot Ion fraction vs temperature graph for both CIE and PIE modes
+- [x] Plot emission spectrum of the elements
+- [x] Interactive graphs
+- [x] Simple file server to download the batch file on demand (used internally in upstream AstroPlasma repository)
 
 ## Setup
 
 1. Clone the repository
 
    ```sh
-   git clone git@github.com:tbhaxor/CloudyPlasmaServer.git
+   https://github.com/tbhaxor/CloudyPlasmaServer.git
    ```
 
-2. Create and source a virtual environment (recommonded, but optional)
+2. Install the packages
 
    ```sh
-   virtualenv .venv
-   source .venv/bin/activate
+   poetry install
    ```
 
-3. Upgrade pip and install dependencies
+   > **Note** This command will automatically set-up virtual environment for you.
 
-   ```sh
-   pip install -U pip
-   pip install -r requirements.txt
-   ```
-
-   > **Note** If you are maintaining or into development of this repository, please consider using [poetry](https://python-poetry.org/).
-
-4. Provide environment file
+3. Provide environment file
 
    ```sh
    cat <<EOF > .env
    IONIZATION_DATASET_DIR='/path/to/directory/containing/ionization-batches'
    EMISSION_DATASET_DIR='/path/to/directory/containing/emission-batches'
+   PY_ENV=dev
    EOF
    ```
 
-5. Migrate the database
+   > **Note** Omit `PY_ENV=dev` if you want to deploy it on the production
+
+4. Migrate the database
 
    ```sh
-   python manage.py migrate
+   poetry run python manage.py migrate
    ```
 
 ## Getting started
@@ -74,48 +63,44 @@ This repository is used to download the batch files for astro plasma datasets: E
 Once you have performed the steps from the **Setup**, you are good to go
 
 ```sh
-python manage.py runserver
+poetry run python manage.py runserver
 ```
 
 This will open the `8000` port by default, but you can change it using the following command
 
 ```sh
-python manage.py runserver 127.0.0.1:<PORT>
+poetry run python manage.py runserver 127.0.0.1:<PORT>
 ```
 
 Replace the placeholder `<PORT>` with the port number of your choice.
 
-### Using Docker Container
+### Using Docker Containers
 
 Get rid of all the hassle of [setup](#setup) and [getting started](#getting-started). You can use the following
 
-**Requirements** Docker runtime installed on your system
+**Requirements** Docker runtime and docker compose installed on your system
 
-1. Pull the image
-   ```sh
-   docker pull ghcr.io/tbhaxor/astro-data:latest
-   ```
-2. Run the docker container with appropriate container. This will iniitally create a container and start it
+1.  Generate docker compose file from the template file
 
-   ```sh
-   docker run -d -p 5000:5000 \
-   -e EMISSION_DATASET_DIR=/data/emission-data -e IONIZATION_DATASET_DIR=/data/ionization-data \
-   -v /path/of/emission/batches:/data/emission-data:ro -v /path/of/ionization/batches:/data/ionization-data:ro \
-   --name astro-data ghcr.io/tbhaxor/astro-data:latest
-   ```
+    ```sh
+    bash deployment/scripts/gen-docker-compose.bash -i /path/to/ionization/dataset -e /path/to/emission/dataset
+    ```
 
-   > **Note** Replace the /path/\* placeholder with the actual path of emission and ionization data on your host system.
+2.  Provide the <kbd>CSRF_TRUSTED_ORIGINS</kbd> configuration the environment of `web_app` service.
 
-   This will start the server on the http://localhost:5000, you can open this url in the browser to interact with the server.
+    Let's suppose I am hosting my webserver on the http://example.com, so it should be
 
-3. Stop and restart the server
+    ```diff
+    DB_URI: postgres://astrodata:astrodata@db/astrodata
+    + CSRF_TRUSTED_ORIGINS: http://example.com
+    ```
 
-   ```sh
-   # stop the container
-   docker stop astro-data
+    > **Note** You can provide multiple origins separated by comma.
 
-   # restart the container
-   docker start astro-data
-   ```
+3.  Run the workload
 
-> **Note** On updates, all you need to do is follow [docker setup](#using-docker-container) from step 1. Make sure you delete the container (`docker rm -f astro-data`) before moving forward.
+    ```sh
+    docker-compose up --pull always
+    ```
+
+    > **Note** You can access the server at port 8000.
