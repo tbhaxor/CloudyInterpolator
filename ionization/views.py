@@ -1,23 +1,22 @@
 import os
 from copy import deepcopy
-from wsgiref.util import FileWrapper
+from pathlib import Path
 
 import numpy as np
 import plotly.graph_objects as pgo
 import roman
 from astro_plasma.core.ionization import Ionization
-from django.http import HttpRequest, StreamingHttpResponse
+from django.http import HttpRequest
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, View
 
+from astrodata.base.responses import download_file_response
 from astrodata.utils import is_server_running, is_test_running
 
 from .forms import MODE_TYPES, PARMANU, InterpolateIonFracTemperatureForm, InterpolateIonFractionForm, InterpolateMDForm
 
 if is_server_running() or is_test_running():
-    dataset_base_path = os.getenv('IONIZATION_DATASET_DIR')
-
-    CHUNK_SIZE = int(os.getenv('DOWNLOAD_CHUNK_SIZE', 1 << 12))
+    dataset_base_path = Path(os.getenv('IONIZATION_DATASET_DIR'))
     FILE_NAME_TEMPLATE = 'ionization.b_{:06d}.h5'
 
 
@@ -57,7 +56,7 @@ class InterpolationView(TemplateView):
             for name, field in form.fields.items():
                 if name in form.errors:
                     field.widget.attrs = {
-                        'class': f"{field.widget.attrs.get('class', '')} is-invalid".strip(),
+                        'class': 'is-invalid',
                         'autofocus': 'true' if is_autofocus else 'false',
                     }
                     is_autofocus = True
@@ -68,7 +67,7 @@ class InterpolationView(TemplateView):
         match action:
             case 'ion_frac':
                 i.interpolate_ion_frac()
-                interpolation_data['ion_frac'] = "{:.4e}".format(10**i.interpolate_ion_frac(**form.cleaned_data))
+                interpolation_data['ion_frac'] = '{:.4e}'.format(10**i.interpolate_ion_frac(**form.cleaned_data))
                 symbol = PARMANU.getElSymbol(form.cleaned_data['element'])
                 roman_ion = roman.toRoman(form.cleaned_data['ion'])
                 interpolation_data['ionized_symbol'] = f'{symbol}{roman_ion}'
@@ -107,7 +106,7 @@ class InterpolationView(TemplateView):
                 symbol = PARMANU.getElSymbol(form.cleaned_data['element'])
                 roman_ion = roman.toRoman(form.cleaned_data['ion'])
 
-                fig.update_xaxes(title_text='Temperature (Kelvin)',  type='log')
+                fig.update_xaxes(title_text='Temperature (Kelvin)', type='log')
                 fig.update_yaxes(title_text=f'Ion Fraction ({symbol}{roman_ion})', type='log')
 
                 fig.update_layout(width=1200,
@@ -122,8 +121,8 @@ class InterpolationView(TemplateView):
                 mean_mass = i.interpolate_mu(**form.cleaned_data)
                 number_density = i.interpolate_num_dens(**form.cleaned_data)
 
-                interpolation_data['mean_mass'] = "{:.4e}".format(mean_mass)
-                interpolation_data['number_density'] = "{:.4e}".format(number_density)
+                interpolation_data['mean_mass'] = '{:.4e}'.format(mean_mass)
+                interpolation_data['number_density'] = '{:.4e}'.format(number_density)
 
                 interpolation_data['mean_mass_symbol'] = '&mu;'
                 interpolation_data['number_density_symbol'] = 'n'
@@ -142,8 +141,4 @@ class InterpolationView(TemplateView):
 class DownloadFileView(View):
     def get(self, request, batch_id: int):
         target_file = dataset_base_path / FILE_NAME_TEMPLATE.format(batch_id)
-        content = FileWrapper(open(target_file, 'rb'), CHUNK_SIZE)
-        response = StreamingHttpResponse(content, content_type='application/x-hdf5')
-        response['Content-Length'] = target_file.stat().st_size
-        response['Content-Disposition'] = f'attachment; filename={target_file.name}'
-        return response
+        return download_file_response(target_file)

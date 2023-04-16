@@ -1,20 +1,20 @@
 import json
 import os
-from wsgiref.util import FileWrapper
+from pathlib import Path
 
 from astro_plasma.core.spectrum import EmissionSpectrum
-from django.http import JsonResponse, StreamingHttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import FormView, View
 from plotly import graph_objs as pgo
 
 from astrodata.base.forms import InterpolateForm
+from astrodata.base.responses import download_file_response
 from astrodata.utils import is_server_running, is_test_running
 
 if is_server_running() or is_test_running():
-    dataset_base_path = os.getenv('EMISSION_DATASET_DIR')
+    dataset_base_path = Path(os.getenv('EMISSION_DATASET_DIR'))
 
-    CHUNK_SIZE = int(os.getenv('DOWNLOAD_CHUNK_SIZE', 1 << 12))
     FILE_NAME_TEMPLATE = 'ionization.b_{:06d}.h5'
 
 
@@ -32,7 +32,7 @@ class InterpolateView(FormView):
         for name, field in form.fields.items():
             if name in form.errors:
                 field.widget.attrs = {
-                    'class': f"{field.widget.attrs.get('class', '')} is-invalid".strip(),
+                    'class': 'is-invalid',
                     'autofocus': 'true' if is_autofocus else 'false',
                 }
                 is_autofocus = True
@@ -46,7 +46,7 @@ class InterpolateView(FormView):
         fig = pgo.Figure(data=[
             pgo.Scatter(x=data_linear[:, 0], y=data_linear[:, 1], mode='lines'),
         ])
-        fig.update_xaxes(title_text=r'Energy (keV)',  type='log')
+        fig.update_xaxes(title_text=r'Energy (keV)', type='log')
         fig.update_yaxes(title_text=r'Emissivity (erg cm<sup>-3</sup> s<sup>-1</sup>)', type='log')
 
         fig.update_layout(width=1200,
@@ -62,15 +62,11 @@ class InterpolateView(FormView):
             }, 'request': form.cleaned_data})
 
         context = {'form': form,
-                   'interpolation':  fig.to_json()}
+                   'interpolation': fig.to_json()}
         return render(self.request, self.template_name, context)
 
 
 class DownloadFileView(View):
     def get(self, request, batch_id: int):
         target_file = dataset_base_path / FILE_NAME_TEMPLATE.format(batch_id)
-        content = FileWrapper(open(target_file, 'rb'), CHUNK_SIZE)
-        response = StreamingHttpResponse(content, content_type='application/x-hdf5')
-        response['Content-Length'] = target_file.stat().st_size
-        response['Content-Disposition'] = f'attachment; filename={target_file.name}'
-        return response
+        return download_file_response(target_file)
