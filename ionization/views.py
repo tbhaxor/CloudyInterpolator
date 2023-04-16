@@ -56,7 +56,7 @@ class InterpolationView(TemplateView):
             for name, field in form.fields.items():
                 if name in form.errors:
                     field.widget.attrs = {
-                        'class': f"{field.widget.attrs.get('class', '')} is-invalid".strip(),
+                        'class': 'is-invalid',
                         'autofocus': 'true' if is_autofocus else 'false',
                     }
                     is_autofocus = True
@@ -67,7 +67,7 @@ class InterpolationView(TemplateView):
         match action:
             case 'ion_frac':
                 i.interpolate_ion_frac()
-                interpolation_data['ion_frac'] = "{:.4e}".format(10**i.interpolate_ion_frac(**form.cleaned_data))
+                interpolation_data['ion_frac'] = '{:.4e}'.format(10**i.interpolate_ion_frac(**form.cleaned_data))
                 symbol = PARMANU.getElSymbol(form.cleaned_data['element'])
                 roman_ion = roman.toRoman(form.cleaned_data['ion'])
                 interpolation_data['ionized_symbol'] = f'{symbol}{roman_ion}'
@@ -121,8 +121,8 @@ class InterpolationView(TemplateView):
                 mean_mass = i.interpolate_mu(**form.cleaned_data)
                 number_density = i.interpolate_num_dens(**form.cleaned_data)
 
-                interpolation_data['mean_mass'] = "{:.4e}".format(mean_mass)
-                interpolation_data['number_density'] = "{:.4e}".format(number_density)
+                interpolation_data['mean_mass'] = '{:.4e}'.format(mean_mass)
+                interpolation_data['number_density'] = '{:.4e}'.format(number_density)
 
                 interpolation_data['mean_mass_symbol'] = '&mu;'
                 interpolation_data['number_density_symbol'] = 'n'

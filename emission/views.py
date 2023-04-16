@@ -32,7 +32,7 @@ class InterpolateView(FormView):
         for name, field in form.fields.items():
             if name in form.errors:
                 field.widget.attrs = {
-                    'class': f"{field.widget.attrs.get('class', '')} is-invalid".strip(),
+                    'class': 'is-invalid',
                     'autofocus': 'true' if is_autofocus else 'false',
                 }
                 is_autofocus = True
