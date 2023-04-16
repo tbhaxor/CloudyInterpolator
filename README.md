@@ -1,4 +1,4 @@
-# Web Interface of <kbd>[AstroPlasma](https://github.com/dutta-alankar/AstroPlasma)</kbd>
+# Web Interface of [`AstroPlasma`](https://github.com/dutta-alankar/AstroPlasma)
 
 <div align="center">
 
@@ -86,7 +86,7 @@ Get rid of all the hassle of [setup](#setup) and [getting started](#getting-star
     bash deployment/scripts/gen-docker-compose.bash -i /path/to/ionization/dataset -e /path/to/emission/dataset
     ```
 
-2.  Provide the <kbd>CSRF_TRUSTED_ORIGINS</kbd> configuration the environment of `web_app` service.
+2.  Provide the **`CSRF_TRUSTED_ORIGINS`** configuration the environment of `web_app` service.
 
     Let's suppose I am hosting my webserver on the http://example.com, so it should be
 
