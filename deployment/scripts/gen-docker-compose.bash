@@ -58,7 +58,4 @@ elif [[ ! -d "$ionization_dir" ]]; then
     exit 1
 fi
 
-cp "$source_config" "$dest_config"
-
-sed "s|SOURCE_IONIZATION_DIR|$ionization_dir|g" "$dest_config" -i
-sed "s|SOURCE_EMISSION_DIR|$emission_dir|g" "$dest_config" -i
+sed "s|SOURCE_IONIZATION_DIR|$ionization_dir|g" "$source_config" | sed "s|SOURCE_EMISSION_DIR|$emission_dir|g" > "$dest_config"
