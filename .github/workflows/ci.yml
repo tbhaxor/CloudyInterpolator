@@ -34,7 +34,7 @@ jobs:
         context: .
         file: deployment/django.dockerfile
         tags: ghcr.io/tbhaxor/astro-data:webapp
-        platforms: linux/amd64,linux/arm64,linux/arm/v7
+        platforms: linux/amd64,linux/arm64
         cache-from: type=local,src=/tmp/.buildx-cache
         cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
     - name: Replace proper cache file
@@ -103,7 +103,7 @@ jobs:
         context: .
         file: deployment/httpd.dockerfile
         tags: ghcr.io/tbhaxor/astro-data:static-serve
-        platforms: linux/amd64,linux/arm64,linux/arm/v7
+        platforms: linux/amd64,linux/arm64
         cache-from: type=local,src=/tmp/.buildx-cache
         cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
     - name: Replace proper cache file
