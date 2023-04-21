@@ -3,7 +3,7 @@ services:
     image: ghcr.io/tbhaxor/astro-data:static-serve
     stop_signal: sigkill
     volumes:
-      - deployment/nginx-static.conf:/etc/nginx/conf.d/default.conf:ro
+    - deployment/nginx-static.conf:/etc/nginx/conf.d/default.conf:ro
 
   web_app:
     image: ghcr.io/tbhaxor/astro-data:webapp
