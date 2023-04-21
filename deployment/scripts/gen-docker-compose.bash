@@ -1,11 +1,11 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 git_base_dir=$(git rev-parse --show-toplevel)
 ionization_dir=""
 emission_dir=""
-source_config="$git_base_dir/docker-compose.example.yml"
+source_config="$git_base_dir/docker-compose.remote.yml"
 dest_config="$git_base_dir/docker-compose.yml"
 
 while [[ $# -gt 0 ]]; do
@@ -20,14 +20,14 @@ while [[ $# -gt 0 ]]; do
         ;;
     -s)
         shift
-        source_config=$(realpath -m "$1")
+        source_config="$1"
         if [[ ! -f "$source_config" ]]; then
             echo "[x] Source config file does not exist" >&2
         fi
         ;;
     -d)
         shift
-        dest_config=$(realpath -m "$1")
+        dest_config="$1"
         ;;
     *)
         echo "usage: $0 -i DIR -e DIR [-s FILE] [-d FILE]"
@@ -58,4 +58,12 @@ elif [[ ! -d "$ionization_dir" ]]; then
     exit 1
 fi
 
-sed "s|SOURCE_IONIZATION_DIR|$ionization_dir|g" "$source_config" | sed "s|SOURCE_EMISSION_DIR|$emission_dir|g" > "$dest_config"
+cp "$source_config" "$dest_config"
+
+sed_args=(-i)
+if [[ $(uname) == "Darwin" ]]; then
+    sed_args+=('')
+fi
+
+sed "${sed_args[@]}" "s|SOURCE_IONIZATION_DIR|$ionization_dir|g" "$dest_config"
+sed "${sed_args[@]}" "s|SOURCE_EMISSION_DIR|$emission_dir|g" "$dest_config"
