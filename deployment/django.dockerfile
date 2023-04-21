@@ -2,7 +2,7 @@ FROM python:3.10-slim-bullseye
 
 # install build dependencies
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends --no-install-suggests libpq-dev postgresql-client postgresql libhdf5-dev libopenmpi-dev openmpi-bin git gcc g++ && \
+    apt-get install -y --no-install-recommends --no-install-suggests libffi-dev libpq-dev postgresql-client postgresql libhdf5-dev libopenmpi-dev openmpi-bin git gcc g++ && \
     pip install --no-cache-dir --root-user-action=ignore -qU pip poetry && \
     poetry config virtualenvs.create false
 
