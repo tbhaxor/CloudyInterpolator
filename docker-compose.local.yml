@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: deployment/httpd.dockerfile
+    volumes:
+      - deployment/nginx-static.conf:/etc/nginx/conf.d/default.conf:ro
 
   web_app:
     build:
