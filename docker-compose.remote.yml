@@ -1,12 +1,12 @@
 services:
   static_serve:
-    image: ghcr.io/AstroPlasmaHQ/CloudyInterpolator:static-serve
+    image: ghcr.io/astroplasmahq/cloudy-interpolator:static-serve
     stop_signal: sigkill
     volumes:
     - ./deployment/nginx-static.conf:/etc/nginx/conf.d/default.conf:ro
 
   web_app:
-    image: ghcr.io/AstroPlasmaHQ/CloudyInterpolator:webapp
+    image: ghcr.io/astroplasmahq/cloudy-interpolator:webapp
     volumes:
     - SOURCE_IONIZATION_DIR:/opt/data/ionization:ro
     - SOURCE_EMISSION_DIR:/opt/data/emission:ro
