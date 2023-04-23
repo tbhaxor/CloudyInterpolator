@@ -18,7 +18,7 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: AstroPlasmaHQ
+        username: astroplasmahq
         password: ${{ github.token }}
     - name: Cache Docker layers
       uses: actions/cache@v3
@@ -33,7 +33,7 @@ jobs:
         push: true
         context: .
         file: deployment/dockerfiles/django.dockerfile
-        tags: ghcr.io/AstroPlasmaHQ/cloudy-interpolator:webapp
+        tags: ghcr.io/astroplasmahq/cloudy-interpolator:webapp
         platforms: linux/amd64,linux/arm64
         cache-from: type=local,src=/tmp/.buildx-cache
         cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
@@ -58,7 +58,7 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: AstroPlasmaHQ
+        username: astroplasmahq
         password: ${{ github.token }}
     - name: Cache Docker layers
       uses: actions/cache@v3
@@ -102,7 +102,7 @@ jobs:
         push: true
         context: .
         file: deployment/dockerfiles/static.dockerfile
-        tags: ghcr.io/AstroPlasmaHQ/cloudy-interpolator:static-serve
+        tags: ghcr.io/astroplasmahq/cloudy-interpolator:static-serve
         platforms: linux/amd64,linux/arm64
         cache-from: type=local,src=/tmp/.buildx-cache
         cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
