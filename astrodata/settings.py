@@ -26,85 +26,83 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # Generic python settings
-PY_ENV = os.getenv('PY_ENV', 'prod').lower()
-IS_PROD = PY_ENV == 'prod'
+PY_ENV = os.getenv("PY_ENV", "prod").lower()
+IS_PROD = PY_ENV == "prod"
 
 # SECURITY WARNING: keep the secret key used in production secret!
 if IS_PROD:
-    RANDOM_KEY = base64.b64encode(os.getrandom(size=32))
-    SECRET_KEY = os.getenv('SECRET_KEY', RANDOM_KEY)
+    RANDOM_KEY = base64.b64encode(os.urandom(32))
+    SECRET_KEY = os.getenv("SECRET_KEY", RANDOM_KEY)
 else:
-    SECRET_KEY = 'django-insecure-1zk=urw+ew0tthsxewll##a-6fj4)yvqw5vdjyw2=+fk4e@lax'
+    SECRET_KEY = "django-insecure-1zk=urw+ew0tthsxewll##a-6fj4)yvqw5vdjyw2=+fk4e@lax"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = not IS_PROD
 
 # Host configuration for origin and CSRF
 if not DEBUG:
-    ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = ["*"]
     CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS")
     if CSRF_TRUSTED_ORIGINS is None:
-        raise ValueError('CSRF_TRUSTED_ORIGINS configuration is required.')
+        raise ValueError("CSRF_TRUSTED_ORIGINS configuration is required.")
     CSRF_TRUSTED_ORIGINS = list(map(lambda x: x.strip(), CSRF_TRUSTED_ORIGINS.split(",")))
 else:
     ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
     # apps
-    'emission',
-    'ionization',
-    'feedback',
-
+    "emission",
+    "ionization",
+    "feedback",
     # deployment related stuff
-    'deployment'
+    "deployment",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'astrodata.urls'
+ROOT_URLCONF = "astrodata.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'astrodata.wsgi.application'
+WSGI_APPLICATION = "astrodata.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 if DEBUG:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         },
     }
 else:
@@ -113,7 +111,7 @@ else:
         raise ValueError("DB_URI is required.")
 
     DATABASES = {
-        'default': dj_database_url.parse(os.getenv("DB_URI"), conn_max_age=600),
+        "default": dj_database_url.parse(os.getenv("DB_URI"), conn_max_age=600),
     }
 
 
@@ -122,16 +120,16 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -139,9 +137,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -151,12 +149,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 if DEBUG:
-    STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'astrodata' / 'staticfiles'
+    STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "astrodata" / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

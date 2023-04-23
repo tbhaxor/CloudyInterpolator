@@ -22,8 +22,8 @@ psycopg2 = "^2.9.6"
 
 
 [tool.poetry.group.dev.dependencies]
-autopep8 = "^2.0.1"
 ruff = "^0.0.261"
+black = "^23.3.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -33,4 +33,6 @@ build-backend = "poetry.core.masonry.api"
 select = ["E", "F"]
 ignore = ["ERA"]
 line-length = 160
-flake8-quotes = { inline-quotes = "single" }
+
+[tool.black]
+line-length = 160

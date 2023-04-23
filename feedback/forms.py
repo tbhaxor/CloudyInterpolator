@@ -6,4 +6,4 @@ from .models import FeedbackModel
 class FeedbackForm(ModelForm):
     class Meta:
         model = FeedbackModel
-        fields = ['email', 'name', 'message']
+        fields = ["email", "name", "message"]

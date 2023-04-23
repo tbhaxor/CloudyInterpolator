@@ -42,9 +42,7 @@ class TestSubmissionForm(TestCase):
         assert form.is_bound, "Form is not bounded to data"
         assert not form.is_valid(), "Invalid field, but form is valid"
         assert form.has_error("email"), '"email" should have error'
-        assert (
-            form.errors.as_data()["email"][0].code == "required"
-        ), "Invalid error code"
+        assert form.errors.as_data()["email"][0].code == "required", "Invalid error code"
 
     def test_empty_message(self):
         form = FeedbackForm(
@@ -57,9 +55,7 @@ class TestSubmissionForm(TestCase):
         assert form.is_bound, "Form is not bounded to data"
         assert not form.is_valid(), "Invalid field, but form is valid"
         assert form.has_error("message"), '"message" should have error'
-        assert (
-            form.errors.as_data()["message"][0].code == "required"
-        ), "Invalid error code"
+        assert form.errors.as_data()["message"][0].code == "required", "Invalid error code"
 
     def test_invalid_email(self):
         form = FeedbackForm(
@@ -122,15 +118,11 @@ class TestSubmissionFormView(TestCase):
         assert location is not None, "Redirection url is not set"
 
         location_parsed = urlparse(location)
-        assert location_parsed.path == reverse_lazy(
-            "feedback:thank-you"
-        ), "Invalid redirection path"
+        assert location_parsed.path == reverse_lazy("feedback:thank-you"), "Invalid redirection path"
 
         parsed_qs = parse_qs(location_parsed.query)
         assert "name" in parsed_qs, '"name" is required in query parameter'
-        assert (
-            parsed_qs["name"][0] == "hello world"
-        ), '"name" should be same as submission'
+        assert parsed_qs["name"][0] == "hello world", '"name" should be same as submission'
 
 
 class TestThankyouView(TestCase):
@@ -139,18 +131,12 @@ class TestThankyouView(TestCase):
         assert response.status_code == 302, "Invalid redirect status"
 
         location = response.get("location")
-        assert location == reverse_lazy(
-            "feedback:submit"
-        ), "Redirection is not to the submit page"
+        assert location == reverse_lazy("feedback:submit"), "Redirection is not to the submit page"
 
     def test_set_name_context(self):
         checks = ["some name", "some%20name", "some+name"]
         for check in checks:
-            response = self.client.get(
-                reverse_lazy("feedback:thank-you") + f"?name={check}"
-            )
+            response = self.client.get(reverse_lazy("feedback:thank-you") + f"?name={check}")
 
             assert "name" in response.context, '"name" field does not exist in context'
-            assert (
-                response.context["name"] == "some name"
-            ), "Invalid name is rendered, it should be unescaped"
+            assert response.context["name"] == "some name", "Invalid name is rendered, it should be unescaped"

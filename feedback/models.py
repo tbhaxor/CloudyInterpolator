@@ -8,15 +8,15 @@ class FeedbackModel(models.Model):
         null=False,
         blank=False,
         default=None,
-        verbose_name='Email Address',
-        help_text='When we release a new edition of the program, this will make it easier for us to contact you.',
+        verbose_name="Email Address",
+        help_text="When we release a new edition of the program, this will make it easier for us to contact you.",
     )
 
     name = models.CharField(
         max_length=128,
         null=False,
         default=None,
-        verbose_name='Full Name',
+        verbose_name="Full Name",
         help_text="We'll refer to you in the communication as such.",
     )
 
@@ -24,14 +24,14 @@ class FeedbackModel(models.Model):
         null=False,
         blank=False,
         default=None,
-        verbose_name='Message',
-        help_text='Give your comments here.',
+        verbose_name="Message",
+        help_text="Give your comments here.",
     )
 
     created_at = models.DateTimeField(
         null=False,
         blank=False,
-        verbose_name='Created At',
+        verbose_name="Created At",
         editable=False,
         auto_now_add=True,
     )
@@ -40,6 +40,6 @@ class FeedbackModel(models.Model):
         return f"{self.name}'s feedback"
 
     class Meta:
-        get_latest_by = '-created_at'
-        verbose_name = 'Feedback Submission'
-        verbose_name_plural = f'{verbose_name}s'
+        get_latest_by = "-created_at"
+        verbose_name = "Feedback Submission"
+        verbose_name_plural = f"{verbose_name}s"
