@@ -31,8 +31,7 @@ COPY --chown=astrodata:astrodata emission/ ./emission
 COPY --chown=astrodata:astrodata feedback/ ./feedback
 COPY --chown=astrodata:astrodata ionization/ ./ionization
 COPY --chown=astrodata:astrodata templates/ ./templates
-COPY --chown=astrodata:astrodata deployment/management ./deployment/management
-COPY --chown=astrodata:astrodata deployment/*.py ./deployment/
+COPY --chown=astrodata:astrodata accounts/ ./accounts
 COPY --chown=astrodata:astrodata deployment/scripts/ ./scripts
 COPY --chown=astrodata:astrodata manage.py ./
 
