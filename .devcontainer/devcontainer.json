@@ -1,0 +1,20 @@
+{
+    "name": "CloudyInterpolator",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "VARIANT": "3",
+            "NODE_VERSION": "19"
+        }
+    },
+    // "image": "mcr.microsoft.com/vscode/devcontainers/python:3.9",
+    "remoteUser": "vscode",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.black-formatter"
+            ]
+        }
+    },
+    "postAttachCommand": "poetry install"
+}

@@ -18,7 +18,7 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: tbhaxor
+        username: AstroPlasmaHQ
         password: ${{ github.token }}
     - name: Cache Docker layers
       uses: actions/cache@v3
@@ -32,8 +32,8 @@ jobs:
       with:
         push: true
         context: .
-        file: deployment/django.dockerfile
-        tags: ghcr.io/tbhaxor/astro-data:webapp
+        file: deployment/dockerfiles/django.dockerfile
+        tags: ghcr.io/AstroPlasmaHQ/CloudyInterpolator:webapp
         platforms: linux/amd64,linux/arm64
         cache-from: type=local,src=/tmp/.buildx-cache
         cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
@@ -48,7 +48,7 @@ jobs:
     steps:
     - run: |
         sudo apt update
-        sudo apt install -y --no-install-recommends libhdf5-dev libopenmpi-dev openmpi-bin git gcc g++
+        sudo apt install -y --no-install-recommends --no-install-suggests libhdf5-dev libopenmpi-dev openmpi-bin git gcc g++
       name: Configure environment
     - uses: actions/checkout@v3
       name: Checkout repository
@@ -58,7 +58,7 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: tbhaxor
+        username: AstroPlasmaHQ
         password: ${{ github.token }}
     - name: Cache Docker layers
       uses: actions/cache@v3
@@ -101,8 +101,8 @@ jobs:
       with:
         push: true
         context: .
-        file: deployment/httpd.dockerfile
-        tags: ghcr.io/tbhaxor/astro-data:static-serve
+        file: deployment/dockerfiles/static.dockerfile
+        tags: ghcr.io/AstroPlasmaHQ/CloudyInterpolator:static-serve
         platforms: linux/amd64,linux/arm64
         cache-from: type=local,src=/tmp/.buildx-cache
         cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max

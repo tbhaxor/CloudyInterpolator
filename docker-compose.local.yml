@@ -2,14 +2,14 @@ services:
   static_serve:
     build:
       context: .
-      dockerfile: deployment/httpd.dockerfile
+      dockerfile: deployment/dockerfiles/httpd.dockerfile
     volumes:
     - ./deployment/nginx-static.conf:/etc/nginx/conf.d/default.conf:ro
 
   web_app:
     build:
       context: .
-      dockerfile: deployment/django.dockerfile
+      dockerfile: deployment/dockerfiles/django.dockerfile
     volumes:
     - SOURCE_IONIZATION_DIR:/opt/data/ionization:ro
     - SOURCE_EMISSION_DIR:/opt/data/emission:ro
