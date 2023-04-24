@@ -9,7 +9,7 @@ on:
 jobs:
   test_application:
     name: Run unit tests
-    runs-on: self-hosted
+    runs-on: [self-hosted, aphq-sarkari]
     steps:
     - uses: actions/checkout@v3
       name: Checkout repository
