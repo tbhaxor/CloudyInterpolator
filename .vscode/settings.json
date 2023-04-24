@@ -21,7 +21,10 @@
         "editor.suggest.insertMode": "replace",
         "editor.defaultFormatter": "vscode.html-language-features"
     },
-    "editor.formatOnSave": true,
+    "[yaml]": {
+        "editor.tabSize": 2,
+        "editor.formatOnSave": false,
+    },
     "python.analysis.typeCheckingMode": "off",
     "css.lint.unknownAtRules": "ignore"
 }
