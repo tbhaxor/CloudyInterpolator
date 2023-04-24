@@ -12,5 +12,5 @@ if [[ ! -L "/usr/local/lib/python3.10/site-packages/astro_plasma/data/ionization
 fi
 
 ./manage.py migrate --no-input
-./manage.py createmanager --username="${ADMIN_USERNAME:-astrodata}" --silent
+./manage.py createmanager --username="${ADMIN_USERNAME:-astrodata}" --no-error
 gunicorn astrodata.wsgi:application -b "0.0.0.0:5000" --error-logfile - --access-logfile -
