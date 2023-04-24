@@ -2,27 +2,17 @@ name: Unit Testing
 
 on:
   pull_request:
+    types:
+      - opened
+      - synchronize
 
 jobs:
   test_application:
     name: Run unit tests
-    runs-on: ubuntu-latest
-    if: false
+    runs-on: self-hosted
     steps:
-    - run: |
-        sudo apt update
-        sudo apt install -y --no-install-recommends libhdf5-dev libopenmpi-dev openmpi-bin git gcc g++ nfs-common
-      name: Configure test environment
     - uses: actions/checkout@v3
       name: Checkout repository
-    - uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    - name: Install poetry
-      uses: snok/install-poetry@v1.3.3
-      with:
-        virtualenvs-create: true
-        virtualenvs-in-project: true
     - name: Load cached venv
       id: cached-poetry-dependencies
       uses: actions/cache@v2
@@ -32,12 +22,13 @@ jobs:
     - run: poetry install
       name: Install dependencies
     - run: |
-        sudo mkdir -p /mnt/AstroData
-        sudo mount -t nfs ${{ secrets.NAS_HOST }}:/volume1/AstroPlasma /mnt/AstroData
-      name: Mount NAS share
+        site_packages=$(find $(poetry env info -p) -name site-packages -type d)
+        echo "Site packages: $site_packages"
+        find $site_packages/astro_plasma/data -type l -exec rm "{}" \;
+        ln -s /media/AstroPlasma/ionization  "$site_packages/astro_plasma/data/"
+        ln -s /media/AstroPlasma/emission  "$site_packages/astro_plasma/data/"
+      name: Mount datasets in local cache
     - run: poetry run ./manage.py test
       name: Run unit test
       env:
         PY_ENV: testing
-        IONIZATION_DATASET_DIR: /mnt/AstroData/ionization
-        EMISSION_DATASET_DIR: /mnt/AstroData/emission
