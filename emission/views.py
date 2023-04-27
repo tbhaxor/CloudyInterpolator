@@ -1,16 +1,17 @@
-import json
 import os
 from pathlib import Path
+from typing import Any, Dict
 
 from astro_plasma.core.spectrum import EmissionSpectrum
-from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import FormView, View
 from plotly import graph_objs as pgo
 
-from astrodata.base.forms import InterpolateForm
 from astrodata.base.responses import download_file_response
+from astrodata.constants import MODE_TYPES
 from astrodata.utils import is_server_running, is_test_running
+
+from .forms import InterpolateForm
 
 if is_server_running() or is_test_running():
     dataset_base_path = Path(os.getenv("EMISSION_DATASET_DIR"))
@@ -22,12 +23,16 @@ class InterpolateView(FormView):
     form_class = InterpolateForm
     template_name = "emission/interpolation.html"
 
-    def form_invalid(self, form: InterpolateForm):
-        if self.request.GET.get("format") == "json":
-            errors = json.loads(form.errors.as_json())
-            errors = {"errors": errors}
-            return JsonResponse(data=errors, status=400)
+    def get_form_kwargs(self):
+        initial_values: Dict[str, Any] = self.request.session.get(self.form_class.SESSION_KEY)
+        if initial_values:
+            for k, v in initial_values.items():
+                if type(v) != str:
+                    initial_values[k] = "{:.2e}".format(v)
+            return {**super().get_form_kwargs(), "data": initial_values}
+        return super().get_form_kwargs()
 
+    def form_invalid(self, form: InterpolateForm):
         is_autofocus = False
         for name, field in form.fields.items():
             if name in form.errors:
@@ -40,12 +45,18 @@ class InterpolateView(FormView):
         return super().form_invalid(form)
 
     def form_valid(self, form: InterpolateForm):
+        self.request.session[form.SESSION_KEY] = self.request.session.get(form.SESSION_KEY, {})
+        for field, value in form.cleaned_data.items():
+            self.request.session[form.SESSION_KEY][field] = value
+
         emission = EmissionSpectrum(dataset_base_path)
-        data_linear = emission.interpolate_spectrum(**form.cleaned_data)
+        data_0 = emission.interpolate_spectrum(**{**form.cleaned_data, "mode": MODE_TYPES[0][0]})
+        data_1 = emission.interpolate_spectrum(**{**form.cleaned_data, "mode": MODE_TYPES[1][0]})
 
         fig = pgo.Figure(
             data=[
-                pgo.Scatter(x=data_linear[:, 0], y=data_linear[:, 1], mode="lines"),
+                pgo.Scatter(x=data_0[:, 0], y=data_0[:, 1], mode="lines", name=f"{MODE_TYPES[0][1]} ({MODE_TYPES[0][0]})"),
+                pgo.Scatter(x=data_1[:, 0], y=data_1[:, 1], mode="lines", name=f"{MODE_TYPES[1][1]} ({MODE_TYPES[1][0]})"),
             ]
         )
         fig.update_xaxes(title_text=r"Energy (keV)", type="log")
@@ -53,21 +64,7 @@ class InterpolateView(FormView):
 
         fig.update_layout(width=1200, height=900, legend={"x": 0, "y": 1, "bgcolor": "rgba(0,0,0,0)"})
 
-        # with StringIO() as file:
-
-        if self.request.GET.get("format") == "json":
-            return JsonResponse(
-                data={
-                    "data": {
-                        "energy": data_linear[:, 0],
-                        "emissivity_linear": data_linear[:, 1],
-                    },
-                    "request": form.cleaned_data,
-                }
-            )
-
-        context = {"form": form, "interpolation": fig.to_json()}
-        return render(self.request, self.template_name, context)
+        return render(self.request, self.template_name, {"form": form, "interpolation": fig.to_json()})
 
 
 class DownloadFileView(View):
