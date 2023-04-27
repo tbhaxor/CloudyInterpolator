@@ -8,7 +8,7 @@
 {% block title %}Interpolate Emission Data{% endblock %}
 
 {% block main %}
-<h3 class="sec-title  mb-5">Interpolate Emission Data</h3>
+<h3 class="sec-title mb-5">Interpolate Emission Data</h3>
 
 <form method="post" class="needs-validation">
     {% csrf_token %}
@@ -24,16 +24,14 @@
             {{ form.temperature.label_tag }}
             {{ form.temperature }}
             {% if form.temperature.errors %}
-            <p class="error-msg" id="email-error"><b>Error: </b>{{ form.temperature.errors.0
-                }}</p>
+            <p class="error-msg" id="email-error"><b>Error: </b>{{ form.temperature.errors.0 }}</p>
             {% endif %}
         </div>
         <div class="form-item">
             {{ form.metallicity.label_tag }}
             {{ form.metallicity }}
             {% if form.metallicity.errors %}
-            <p class="error-msg" id="email-error"><b>Error: </b>{{ form.metallicity.errors.0
-                }}</p>
+            <p class="error-msg" id="email-error"><b>Error: </b>{{ form.metallicity.errors.0 }}</p>
             {% endif %}
         </div>
         <div class="form-item">
