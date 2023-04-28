@@ -100,9 +100,9 @@
             title: 'Download Plot Data',
             icon: Plotly.Icons.disk,
             click: function (gd) {
-                let data = `Energy,Emissivity\n`
+                let data = `Energy,Emissivity (CIE),Emissivity (PIE)\n`
                 for (let i = 0; i < gd.data[0].x.length; i++) {
-                    data += `${gd.data[0].x[i]},${gd.data[0].y[i]}\n`
+                    data += `${gd.data[0].x[i]},${gd.data[0].y[i]},${gd.data[1].y[i]}\n`
                 }
                 let blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
                 let link = document.createElement("a");
