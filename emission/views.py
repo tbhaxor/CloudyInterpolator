@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Any, Dict
 
 from astro_plasma.core.spectrum import EmissionSpectrum
 from django.shortcuts import render
@@ -23,13 +24,14 @@ class InterpolateView(FormView):
     template_name = "emission/interpolation.html"
 
     def get_form_kwargs(self):
-        initial_values = self.request.session.get(SESSION_FORM_DATA)
-
+        initial_values: Dict[str, Any] = self.request.session.get(SESSION_FORM_DATA)
         kwargs = {**super().get_form_kwargs(), "data": {}}
 
         for field in self.form_class():
-            v = initial_values[field.name] if field.name in initial_values else field.initial
-            kwargs["data"][field.name] = "{:.2e}".format(v) if type(v) != str else v
+            v = initial_values.get(field.name, field.initial)
+            v = v[0] if type(v) == tuple else v
+            v = "{:.1e}".format(v) if type(v) == float else v
+            kwargs["data"][field.name] = v
         return kwargs
 
     def form_invalid(self, form: InterpolateForm):
