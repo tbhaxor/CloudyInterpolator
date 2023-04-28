@@ -24,12 +24,13 @@ class InterpolateView(FormView):
 
     def get_form_kwargs(self):
         initial_values = self.request.session.get(SESSION_FORM_DATA)
-        if initial_values:
-            for k, v in initial_values.items():
-                if type(v) != str:
-                    initial_values[k] = "{:.2e}".format(v)
-            return {**super().get_form_kwargs(), "data": initial_values}
-        return super().get_form_kwargs()
+
+        kwargs = {**super().get_form_kwargs(), "data": {}}
+
+        for field in self.form_class():
+            v = initial_values[field.name] if field.name in initial_values else field.initial
+            kwargs["data"][field.name] = "{:.2e}".format(v) if type(v) != str else v
+        return kwargs
 
     def form_invalid(self, form: InterpolateForm):
         is_autofocus = False
