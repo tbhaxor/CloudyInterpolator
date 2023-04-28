@@ -75,10 +75,10 @@
         </div>
 
         <div class="form-item">
-            {{ form.temperature_step.label_tag }}
-            {{ form.temperature_step }}
-            {% if form.temperature_step.errors %}
-            <p class="error-msg"><b>Error: </b>{{ form.temperature_step.errors.0 }}</p>
+            {{ form.temperature_bins.label_tag }}
+            {{ form.temperature_bins }}
+            {% if form.temperature_bins.errors %}
+            <p class="error-msg"><b>Error: </b>{{ form.temperature_bins.errors.0 }}</p>
             {% endif %}
         </div>
         {% endif %}
@@ -194,39 +194,36 @@
     const action = '{{ action }}'
 </script>
 
-{% if interpolation %}
-
+{% if interpolation and action == 'plot_ion_frac' %}
 <script>
-    if ('{{ action }}' == 'plot_ion_frac') {
-        const plotData = JSON.parse('{{ interpolation| safe }}')
-        const config = {
-            displayModeBar: true,
-            modeBarButtonsToAdd: [{
-                name: 'plot-data',
-                title: 'Download Plot Data',
-                icon: Plotly.Icons.disk,
-                click: function (gd) {
-                    const element = parseInt($("#id_element").val())
-                    const ion = parseInt($("#id_ion").val())
-                    let data = `Temperature,Ion Frac (${getElementFromAtm(element)}${intToRoman(ion)}) CIE,Ion Frac (${getElementFromAtm(element)}${intToRoman(ion)}) PIE\n`
-                    for (let i = 0; i < gd.data[0].x.length; i++) {
-                        data += `${gd.data[0].x[i]},${gd.data[0].y[i]},${gd.data[1].y[i]}\n`
-                    }
-                    let blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
-                    let link = document.createElement("a");
-                    let url = URL.createObjectURL(blob);
-                    link.setAttribute("href", url);
-                    link.setAttribute("download", "data.csv");
-                    link.click();
+    const plotData = {{interpolation|safe}}
+    const config = {
+        displayModeBar: true,
+        modeBarButtonsToAdd: [{
+            name: 'plot-data',
+            title: 'Download Plot Data',
+            icon: Plotly.Icons.disk,
+            click: function (gd) {
+                const element = parseInt($("#id_element").val())
+                const ion = parseInt($("#id_ion").val())
+                let data = `Temperature,Ion Frac (${getElementFromAtm(element)}${intToRoman(ion)}) CIE,Ion Frac (${getElementFromAtm(element)}${intToRoman(ion)}) PIE\n`
+                for (let i = 0; i < gd.data[0].x.length; i++) {
+                    data += `${gd.data[0].x[i]},${gd.data[0].y[i]},${gd.data[1].y[i]}\n`
                 }
-            }]
-        }
-
-        Plotly.newPlot('ion-frac-plt', plotData.data, plotData.layout, config);
+                let blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
+                let link = document.createElement("a");
+                let url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", "data.csv");
+                link.click();
+            }
+        }]
     }
 
+    Plotly.newPlot('ion-frac-plt', plotData.data, plotData.layout, config);
 </script>
 {% endif %}
+
 <script>
     function updateIonElement(element, ion) {
         if (ion > element + 1) {
