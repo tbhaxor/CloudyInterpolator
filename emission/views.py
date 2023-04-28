@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-from typing import Any, Dict
 
 from astro_plasma.core.spectrum import EmissionSpectrum
 from django.shortcuts import render
@@ -24,7 +23,7 @@ class InterpolateView(FormView):
     template_name = "emission/interpolation.html"
 
     def get_form_kwargs(self):
-        initial_values: Dict[str, Any] = self.request.session.get(SESSION_FORM_DATA)
+        initial_values = self.request.session.get(SESSION_FORM_DATA)
         if initial_values:
             for k, v in initial_values.items():
                 if type(v) != str:
