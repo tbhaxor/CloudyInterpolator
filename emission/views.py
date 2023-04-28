@@ -8,7 +8,7 @@ from django.views.generic import FormView, View
 from plotly import graph_objs as pgo
 
 from astrodata.base.responses import download_file_response
-from astrodata.constants import MODE_TYPES
+from astrodata.constants import MODE_TYPES, SESSION_FORM_DATA
 from astrodata.utils import is_server_running, is_test_running
 
 from .forms import InterpolateForm
@@ -24,7 +24,7 @@ class InterpolateView(FormView):
     template_name = "emission/interpolation.html"
 
     def get_form_kwargs(self):
-        initial_values: Dict[str, Any] = self.request.session.get(self.form_class.SESSION_KEY)
+        initial_values: Dict[str, Any] = self.request.session.get(SESSION_FORM_DATA)
         if initial_values:
             for k, v in initial_values.items():
                 if type(v) != str:
@@ -45,9 +45,9 @@ class InterpolateView(FormView):
         return super().form_invalid(form)
 
     def form_valid(self, form: InterpolateForm):
-        self.request.session[form.SESSION_KEY] = self.request.session.get(form.SESSION_KEY, {})
+        self.request.session[SESSION_FORM_DATA] = self.request.session.get(SESSION_FORM_DATA, {})
         for field, value in form.cleaned_data.items():
-            self.request.session[form.SESSION_KEY][field] = value
+            self.request.session[SESSION_FORM_DATA][field] = value
 
         emission = EmissionSpectrum(dataset_base_path)
         data_0 = emission.interpolate_spectrum(**{**form.cleaned_data, "mode": MODE_TYPES[0][0]})

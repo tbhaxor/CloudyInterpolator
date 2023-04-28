@@ -4,8 +4,6 @@ from astrodata.constants import METALLICITY_LABEL, NH_LABEL, REDSHIFT_LABEL, TEM
 
 
 class InterpolateForm(Form):
-    SESSION_KEY = "emission_iform"
-
     nH = FloatField(required=True, label=NH_LABEL)
     temperature = FloatField(required=True, label=TEMPERATURE_LABEL)
     metallicity = FloatField(required=True, label=METALLICITY_LABEL)
