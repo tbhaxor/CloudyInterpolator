@@ -9,7 +9,7 @@ CHUNK_SIZE = int(os.getenv("DOWNLOAD_CHUNK_SIZE", 1 << 12))
 
 def download_file_response(target_file: Path) -> StreamingHttpResponse:
     if not target_file.exists():
-        raise HttpResponseNotFound(f"Unable to find {target_file.name} file.")
+        return HttpResponseNotFound(f"Unable to find {target_file.name} file.")
 
     content = FileWrapper(target_file.open("rb"), CHUNK_SIZE)
     return StreamingHttpResponse(

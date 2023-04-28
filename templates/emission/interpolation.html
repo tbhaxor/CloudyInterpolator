@@ -8,7 +8,7 @@
 {% block title %}Interpolate Emission Data{% endblock %}
 
 {% block main %}
-<h3 class="sec-title  mb-5">Interpolate Emission Data</h3>
+<h3 class="sec-title mb-5">Interpolate Emission Data</h3>
 
 <form method="post" class="needs-validation">
     {% csrf_token %}
@@ -24,16 +24,14 @@
             {{ form.temperature.label_tag }}
             {{ form.temperature }}
             {% if form.temperature.errors %}
-            <p class="error-msg" id="email-error"><b>Error: </b>{{ form.temperature.errors.0
-                }}</p>
+            <p class="error-msg" id="email-error"><b>Error: </b>{{ form.temperature.errors.0 }}</p>
             {% endif %}
         </div>
         <div class="form-item">
             {{ form.metallicity.label_tag }}
             {{ form.metallicity }}
             {% if form.metallicity.errors %}
-            <p class="error-msg" id="email-error"><b>Error: </b>{{ form.metallicity.errors.0
-                }}</p>
+            <p class="error-msg" id="email-error"><b>Error: </b>{{ form.metallicity.errors.0 }}</p>
             {% endif %}
         </div>
         <div class="form-item">
@@ -42,13 +40,6 @@
             {% if form.redshift.errors %}
             <p class="error-msg" id="email-error"><b>Error: </b>{{ form.redshift.errors.0 }}
             </p>
-            {% endif %}
-        </div>
-        <div class="form-item">
-            {{ form.mode.label_tag }}
-            {{ form.mode }}
-            {% if form.mode.errors %}
-            <p class="error-msg" id="email-error"><b>Error: </b>{{ form.mode.errors.0 }}</p>
             {% endif %}
         </div>
     </div>
@@ -109,9 +100,9 @@
             title: 'Download Plot Data',
             icon: Plotly.Icons.disk,
             click: function (gd) {
-                let data = `Energy,Emissivity\n`
+                let data = `Energy,Emissivity (CIE),Emissivity (PIE)\n`
                 for (let i = 0; i < gd.data[0].x.length; i++) {
-                    data += `${gd.data[0].x[i]},${gd.data[0].y[i]}\n`
+                    data += `${gd.data[0].x[i]},${gd.data[0].y[i]},${gd.data[1].y[i]}\n`
                 }
                 let blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
                 let link = document.createElement("a");

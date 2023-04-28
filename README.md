@@ -8,7 +8,7 @@
 <img src="https://img.shields.io/tokei/lines/github.com/tbhaxor/CloudyPlasmaServer?style=for-the-badge"/>
 <img src="https://img.shields.io/github/last-commit/tbhaxor/CloudyPlasmaServer/main?style=for-the-badge"/>
 <br>
-<img src="https://results.pre-commit.ci/badge/github/tbhaxor/CloudyPlasmaServer/main.svg?style=for-the-badge" />
+<img src="https://results.pre-commit.ci/badge/github/astroplasmahq/CloudyInterpolator/main.svg?style=for-the-badge" />
 <img src="https://github.com/tbhaxor/CloudyPlasmaServer/actions/workflows/ci.yml/badge.svg?branch=main&style=for-the-badge" />
 </p>
 
@@ -29,7 +29,7 @@ This is a web interface for the [AstroPlasma](https://github.com/dutta-alankar/A
 1. Clone the repository
 
    ```sh
-   https://github.com/tbhaxor/CloudyPlasmaServer.git
+   https://github.com/astroplasmahq/CloudyInterpolator.git
    ```
 
 2. Install the packages

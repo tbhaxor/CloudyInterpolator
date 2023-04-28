@@ -1,38 +1,32 @@
 from django.core.exceptions import ValidationError
 from django.forms import FloatField, Form, IntegerField, TypedChoiceField
-from django.utils.html import format_html
-from PyAstronomy.pyasl.asl.atomicNo import AtomicNo
 
-from astrodata.base.forms import InterpolateForm
-
-MODE_TYPES = (
-    ("CIE", "Collisional Ionisation Equilibrium (CIE)"),
-    ("PIE", "Photoionization Equilibrium (PIE)"),
+from astrodata.constants import (
+    ELEMENT_LABEL,
+    ION_LABEL,
+    METALLICITY_LABEL,
+    NH_LABEL,
+    REDSHIFT_LABEL,
+    SPECIES_TYPES,
+    SPECIES_TYPES_LABEL,
+    TATVAS,
+    TEMPERATURE_LABEL,
+    TEMPERATURE_RANGE_BINS_LABEL,
+    TEMPERATURE_RANGE_END_LABEL,
+    TEMPERATURE_RANGE_START_LABEL,
 )
 
-SPECIES_TYPES = (
-    ("all", "All"),
-    ("electron", "Electron"),
-    ("ion", "ION"),
-)
 
-PARMANU = AtomicNo()
-
-TATVAS = []
-for atn in range(1, 31):
-    TATVAS.append((atn, f"{PARMANU.getElementName(atn)} ({PARMANU.getElSymbol(atn)})"))
+class BaseIonizationForm(Form):
+    nH = FloatField(required=True, label=NH_LABEL)
+    metallicity = FloatField(required=True, label=METALLICITY_LABEL)
+    redshift = FloatField(required=True, label=REDSHIFT_LABEL)
+    element = TypedChoiceField(required=True, coerce=int, label=ELEMENT_LABEL, choices=TATVAS, initial=TATVAS[0])
+    ion = IntegerField(required=True, label=ION_LABEL, min_value=1, initial=1)
 
 
-class InterpolateIonFractionForm(InterpolateForm):
-    element = TypedChoiceField(
-        required=True,
-        coerce=int,
-        label="Select Element",
-        choices=TATVAS,
-        initial=TATVAS[0],
-    )
-
-    ion = IntegerField(required=True, label="Ion Count", min_value=1, initial=1)
+class InterpolateIonFracForm(BaseIonizationForm):
+    temperature = FloatField(required=True, label=TEMPERATURE_LABEL)
 
     def clean_ion(self):
         ion = self.cleaned_data["ion"]
@@ -44,46 +38,10 @@ class InterpolateIonFractionForm(InterpolateForm):
         return ion
 
 
-class InterpolateIonFracTemperatureForm(Form):
-    element = TypedChoiceField(
-        required=True,
-        coerce=int,
-        label="Select Element",
-        choices=TATVAS,
-        initial=TATVAS[0],
-    )
-
-    ion = IntegerField(required=True, label="Ion Count", min_value=1, initial=1)
-
-    nH = FloatField(
-        required=True,
-        label=format_html("Number Density of Hydrogen (cm<sup>-3</sup>)"),
-    )
-
-    temperature_start = FloatField(
-        required=True,
-        label=format_html("log<sub>10</sub>(Temperature Start Range) (in Kelvins)"),
-    )
-
-    temperature_stop = FloatField(
-        required=True,
-        label=format_html("log<sub>10</sub>(Temperature Start Range) (in Kelvins)"),
-    )
-
-    temperature_step = FloatField(
-        required=True,
-        label="Temperature Range Step Sizes",
-    )
-
-    metallicity = FloatField(
-        required=True,
-        label=format_html("Metallicity (Z<sub>&#8857;</sub>)"),
-    )
-
-    redshift = FloatField(
-        required=True,
-        label="Cosmical Redshift",
-    )
+class InterpolateIonFracTemperatureForm(BaseIonizationForm):
+    temperature_start = FloatField(required=True, label=TEMPERATURE_RANGE_START_LABEL)
+    temperature_stop = FloatField(required=True, label=TEMPERATURE_RANGE_END_LABEL)
+    temperature_bins = IntegerField(required=True, label=TEMPERATURE_RANGE_BINS_LABEL)
 
     def clean_ion(self):
         ion = self.cleaned_data["ion"]
@@ -97,10 +55,6 @@ class InterpolateIonFracTemperatureForm(Form):
     pass
 
 
-class InterpolateMDForm(InterpolateForm):
-    species_type = TypedChoiceField(
-        required=True,
-        choices=SPECIES_TYPES,
-        initial=SPECIES_TYPES[1],
-        label="Select Species Type",
-    )
+class InterpolateMDForm(BaseIonizationForm):
+    temperature = FloatField(required=True, label=TEMPERATURE_LABEL)
+    species_type = TypedChoiceField(required=True, choices=SPECIES_TYPES, initial=SPECIES_TYPES[1], label=SPECIES_TYPES_LABEL)

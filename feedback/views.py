@@ -1,6 +1,6 @@
-from django.shortcuts import redirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView
 
 from .forms import FeedbackForm
 
@@ -24,15 +24,5 @@ class FeedbackSubmitView(CreateView):
         return super().form_invalid(form)
 
     def form_valid(self, form: FeedbackForm):
-        self.success_url += f"?name={form.cleaned_data.get('name')}"
-        return super().form_valid(form)
-
-
-class FeedbackThankYouView(TemplateView):
-    template_name = "feedback/thank-you.html"
-
-    def get(self, request, *args, **kwargs):
-        kwargs["name"] = request.GET.get("name")
-        if kwargs["name"] is None:
-            return redirect(reverse_lazy("feedback:submit"))
-        return super().get(request, *args, **kwargs)
+        form.save()
+        return render(self.request, self.template_name, {"name": form.cleaned_data["name"]})

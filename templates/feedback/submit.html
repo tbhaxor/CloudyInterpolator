@@ -3,8 +3,10 @@
 {% block title %} Submit Feedback {% endblock %}
 
 {% block main %}
+{% if form %}
 <h3 class="sec-title mb-5">Feedback Form</h3>
 <form method="post">
+    {{ name }}
     {% csrf_token %}
     <div class="form-grid form-grid-two">
         <div class="form-item">
@@ -39,7 +41,19 @@
     <div class="mt-6 flex items-streach justify-center gap-x-6">
         <button type="submit" class="btn-filled">Submit</button>
     </div>
-
 </form>
+{% else %}
+<div class="thankyou-card">
+    <div class="mx-auto max-w-md">
+        <h1>Thank You!</h1>
+        <p>Thank you {{ name }} for you time. We will address your feedback shortly.</p>
+        <div class="mt-10 flex items-center justify-start gap-x-6">
+            <a href="{% url 'landing' %}" class="btn-filled">Go back home</a>
+            <a href="https://github.com/tbhaxor/CloudyPlasmaServer" target="_blank"
+                class="text-sm font-semibold text-gray-900">Want to Contribute?</a>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 {% endblock %}

@@ -1,19 +1,22 @@
 import os
 from copy import deepcopy
 from pathlib import Path
+from typing import Any, Dict
 
 import numpy as np
 import plotly.graph_objects as pgo
 import roman
 from astro_plasma.core.ionization import Ionization
+from django.forms import BaseForm
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, View
 
 from astrodata.base.responses import download_file_response
+from astrodata.constants import MODE_TYPES, PARMANU, SESSION_FORM_DATA
 from astrodata.utils import is_server_running, is_test_running
 
-from .forms import MODE_TYPES, PARMANU, InterpolateIonFracTemperatureForm, InterpolateIonFractionForm, InterpolateMDForm
+from .forms import InterpolateIonFracForm, InterpolateIonFracTemperatureForm, InterpolateMDForm
 
 if is_server_running() or is_test_running():
     dataset_base_path = Path(os.getenv("IONIZATION_DATASET_DIR"))
@@ -29,27 +32,37 @@ class InterpolationView(TemplateView):
         kwargs["action"] = request.GET.get("action")
         return super().get(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        match kwargs.get("action"):
+    def get_form_class(self, action: str):
+        match action:
             case "ion_frac":
-                kwargs["form"] = InterpolateIonFractionForm()
+                return InterpolateIonFracForm
             case "plot_ion_frac":
-                kwargs["form"] = InterpolateIonFracTemperatureForm()
+                return InterpolateIonFracTemperatureForm
             case "mass_density":
-                kwargs["form"] = InterpolateMDForm()
+                return InterpolateMDForm
+
+    def get_form_initials(self, action: str) -> Dict[str, Any]:
+        initial_values: Dict[str, Any] = self.request.session.get(SESSION_FORM_DATA)
+        data = {}
+
+        form: BaseForm = self.get_form_class(action)()
+        for field in form:
+            v = initial_values.get(field.name, field.initial)
+            v = v[0] if type(v) == tuple else "{:.1e}".format(v) if type(v) == float else v
+            data[field.name] = v
+
+        return data
+
+    def get_form(self, action: str) -> BaseForm:
+        return self.get_form_class(action)(data=self.get_form_initials(action))
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        kwargs["form"] = self.get_form(kwargs["action"])
         return super().get_context_data(**kwargs)
 
     def post(self, request: HttpRequest):
         action = request.GET.get("action")
-        match action:
-            case "ion_frac":
-                form = InterpolateIonFractionForm(request.POST)
-            case "plot_ion_frac":
-                form = InterpolateIonFracTemperatureForm(request.POST)
-            case "mass_density":
-                form = InterpolateMDForm(request.POST)
-            case _:
-                return redirect(request.path + "?action=ion_frac")
+        form = self.get_form_class(action)(request.POST)
 
         if not form.is_valid():
             is_autofocus = False
@@ -62,6 +75,10 @@ class InterpolationView(TemplateView):
                     is_autofocus = True
             return render(request, self.template_name, {"form": form, "action": action})
 
+        self.request.session[SESSION_FORM_DATA] = self.request.session.get(SESSION_FORM_DATA, {})
+        for k, v in form.cleaned_data.items():
+            self.request.session[SESSION_FORM_DATA][k] = v
+
         interpolation_data = {}
         i = Ionization(dataset_base_path)
         match action:
@@ -72,28 +89,28 @@ class InterpolationView(TemplateView):
                 roman_ion = roman.toRoman(form.cleaned_data["ion"])
                 interpolation_data["ionized_symbol"] = f"{symbol}{roman_ion}"
             case "plot_ion_frac":
-                temp_range = form.cleaned_data["temperature_stop"] - form.cleaned_data["temperature_start"]
-                space_num = round(temp_range / form.cleaned_data["temperature_step"] + 1)
-
-                temp_array = np.logspace(form.cleaned_data["temperature_start"], form.cleaned_data["temperature_stop"], space_num)
+                temp_array = np.linspace(
+                    start=form.cleaned_data["temperature_start"],
+                    stop=form.cleaned_data["temperature_stop"],
+                    num=form.cleaned_data["temperature_bins"],
+                )
 
                 fIon_input = deepcopy(form.cleaned_data)
                 del fIon_input["temperature_start"]
                 del fIon_input["temperature_stop"]
-                del fIon_input["temperature_step"]
+                del fIon_input["temperature_bins"]
 
-                fIon_input_PIE = deepcopy({**fIon_input, "mode": "PIE"})
-                fIon_input_CIE = deepcopy({**fIon_input, "mode": "CIE"})
-
+                fIon_input_0 = deepcopy({**fIon_input, "mode": MODE_TYPES[0][0]})
+                fIon_input_1 = deepcopy({**fIon_input, "mode": MODE_TYPES[1][0]})
                 fIon_output_PIE = []
                 fIon_output_CIE = []
 
                 for temp in temp_array:
-                    fIon_input_PIE["temperature"] = temp
-                    fIon_input_CIE["temperature"] = temp
+                    fIon_input_0["temperature"] = temp
+                    fIon_input_1["temperature"] = temp
 
-                    fIon_output_PIE.append(10 ** i.interpolate_ion_frac(**fIon_input_PIE))
-                    fIon_output_CIE.append(10 ** i.interpolate_ion_frac(**fIon_input_CIE))
+                    fIon_output_PIE.append(10 ** i.interpolate_ion_frac(**fIon_input_0))
+                    fIon_output_CIE.append(10 ** i.interpolate_ion_frac(**fIon_input_1))
 
                 fig = pgo.Figure(
                     data=[
