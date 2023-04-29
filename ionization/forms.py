@@ -21,11 +21,15 @@ class BaseIonizationForm(Form):
     nH = FloatField(required=True, label=NH_LABEL)
     metallicity = FloatField(required=True, label=METALLICITY_LABEL)
     redshift = FloatField(required=True, label=REDSHIFT_LABEL)
+
+
+class BaseElementIonForm(Form):
     element = TypedChoiceField(required=True, coerce=int, label=ELEMENT_LABEL, choices=TATVAS, initial=TATVAS[0])
     ion = IntegerField(required=True, label=ION_LABEL, min_value=1, initial=1)
+    pass
 
 
-class InterpolateIonFracForm(BaseIonizationForm):
+class InterpolateIonFracForm(BaseIonizationForm, BaseElementIonForm):
     temperature = FloatField(required=True, label=TEMPERATURE_LABEL)
 
     def clean_ion(self):
@@ -38,7 +42,7 @@ class InterpolateIonFracForm(BaseIonizationForm):
         return ion
 
 
-class InterpolateIonFracTemperatureForm(BaseIonizationForm):
+class InterpolateIonFracTemperatureForm(BaseIonizationForm, BaseElementIonForm):
     temperature_start = FloatField(required=True, label=TEMPERATURE_RANGE_START_LABEL)
     temperature_stop = FloatField(required=True, label=TEMPERATURE_RANGE_END_LABEL)
     temperature_bins = IntegerField(required=True, label=TEMPERATURE_RANGE_BINS_LABEL)
