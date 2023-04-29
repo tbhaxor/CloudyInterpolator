@@ -16,7 +16,7 @@ from .forms import InterpolateForm
 if is_server_running() or is_test_running():
     dataset_base_path = Path(os.getenv("EMISSION_DATASET_DIR"))
 
-    FILE_NAME_TEMPLATE = "ionization.b_{:06d}.h5"
+    FILE_NAME_TEMPLATE = "emission.b_{:06d}.h5"
 
 
 class InterpolateView(FormView):
