@@ -24,12 +24,21 @@ This is a web interface for the [AstroPlasma](https://github.com/dutta-alankar/A
 - [x] Interactive graphs
 - [x] Simple file server to download the batch file on demand (used internally in upstream AstroPlasma repository)
 
+## Requirements
+
+1. Docker engine
+2. Poetry
+3. Python 3.9+
+4. Git CLI
+5. Dataset mounted using nfs (Contact me or @dutta-alankar)
+
 ## Setup
 
 1. Clone the repository
 
    ```sh
-   https://github.com/astroplasmahq/CloudyInterpolator.git
+   git clone https://github.com/astroplasmahq/CloudyInterpolator.git
+   cd CloudyInterpolator
    ```
 
 2. Install the packages
@@ -74,7 +83,7 @@ poetry run python manage.py runserver 127.0.0.1:<PORT>
 
 Replace the placeholder `<PORT>` with the port number of your choice.
 
-### Using Docker Containers
+## Using Docker Containers
 
 Get rid of all the hassle of [setup](#setup) and [getting started](#getting-started). You can use the following
 
@@ -83,24 +92,15 @@ Get rid of all the hassle of [setup](#setup) and [getting started](#getting-star
 1.  Generate docker compose file from the template file
 
     ```sh
-    bash deployment/scripts/gen-docker-compose.bash -i /path/to/ionization/dataset -e /path/to/emission/dataset
+    bash deployment/scripts/gen-docker-compose.bash -c http://example.com -i /path/to/ionization/dataset -e /path/to/emission/dataset
     ```
 
-2.  Provide the **`CSRF_TRUSTED_ORIGINS`** configuration the environment of `web_app` service.
+    **Note**  Let's suppose I am hosting my webserver on the http://example.com, so it should be the value of `-c` argument. You can provide multiple origins separated by comma and without any spaces.
 
-    Let's suppose I am hosting my webserver on the http://example.com, so it should be
-
-    ```diff
-    DB_URI: postgres://astrodata:astrodata@db/astrodata
-    + CSRF_TRUSTED_ORIGINS: http://example.com
-    ```
-
-    > **Note** You can provide multiple origins separated by comma.
-
-3.  Run the workload
+2.  Run the workload
 
     ```sh
     docker-compose up --pull always
     ```
 
-    > **Note** You can access the server at port 8000.
+    > **Note** You can access the server at port http://localhost:8000.

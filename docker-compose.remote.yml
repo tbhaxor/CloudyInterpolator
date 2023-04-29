@@ -8,14 +8,15 @@ services:
   web_app:
     image: ghcr.io/astroplasmahq/cloudy-interpolator:webapp
     volumes:
-    - SOURCE_IONIZATION_DIR:/opt/data/ionization:ro
-    - SOURCE_EMISSION_DIR:/opt/data/emission:ro
+    - SOURCE_IONIZATION_DIR_PLACEHOLDER:/opt/data/ionization:ro
+    - SOURCE_EMISSION_DIR_PLACEHOLDER:/opt/data/emission:ro
     - db:/opt/data/database
     environment:
       DB_URI: postgres://astrodata:astrodata@db/astrodata
       PY_ENV: prod
       IONIZATION_DATASET_DIR: /opt/data/ionization
       EMISSION_DATASET_DIR: /opt/data/emission
+      CSRF_TRUSTED_ORIGINS: CSRF_TRUSTED_ORIGINS_PLACEHOLDER
     stop_signal: sigkill
 
   db:
