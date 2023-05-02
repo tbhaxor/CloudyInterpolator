@@ -3,13 +3,13 @@
 <div align="center">
 
 <p>
-<img src="https://img.shields.io/github/repo-size/tbhaxor/CloudyPlasmaServer?style=for-the-badge"/>
-<img src="https://img.shields.io/github/directory-file-count/tbhaxor/CloudyPlasmaServer?style=for-the-badge&logo=files&logoColor=white"/>
-<img src="https://img.shields.io/tokei/lines/github.com/tbhaxor/CloudyPlasmaServer?style=for-the-badge"/>
-<img src="https://img.shields.io/github/last-commit/tbhaxor/CloudyPlasmaServer/main?style=for-the-badge"/>
+<img src="https://img.shields.io/github/repo-size/tbhaxor/CloudyInterpolator?style=for-the-badge"/>
+<img src="https://img.shields.io/github/directory-file-count/tbhaxor/CloudyInterpolator?style=for-the-badge&logo=files&logoColor=white"/>
+<img src="https://img.shields.io/tokei/lines/github.com/tbhaxor/CloudyInterpolator?style=for-the-badge"/>
+<img src="https://img.shields.io/github/last-commit/tbhaxor/CloudyInterpolator/main?style=for-the-badge"/>
 <br>
-<img src="https://results.pre-commit.ci/badge/github/astroplasmahq/CloudyInterpolator/main.svg?style=for-the-badge" />
-<img src="https://github.com/tbhaxor/CloudyPlasmaServer/actions/workflows/ci.yml/badge.svg?branch=main&style=for-the-badge" />
+<img src="https://results.pre-commit.ci/badge/github/tbhaxor/CloudyInterpolator/main.svg?style=for-the-badge" />
+<img src="https://github.com/tbhaxor/CloudyInterpolator/actions/workflows/ci.yml/badge.svg?branch=main&style=for-the-badge" />
 </p>
 
 </div>
@@ -37,7 +37,7 @@ This is a web interface for the [AstroPlasma](https://github.com/dutta-alankar/A
 1. Clone the repository
 
    ```sh
-   git clone https://github.com/astroplasmahq/CloudyInterpolator.git
+   git clone https://github.com/tbhaxor/CloudyInterpolator.git
    cd CloudyInterpolator
    ```
 
