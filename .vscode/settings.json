@@ -16,7 +16,9 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
         "**/__pycache__": true,
-        "**/.venv": true
+        "**/.venv": true,
+        "**/.ruff_cache": true,
+        "**/db.sqlite3": true,
     },
     "[html]": {
         "editor.suggest.insertMode": "replace",
