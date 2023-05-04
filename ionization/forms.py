@@ -1,3 +1,5 @@
+from typing import Any, Dict
+
 from django.core.exceptions import ValidationError
 from django.forms import FloatField, Form, IntegerField, TypedChoiceField
 
@@ -59,6 +61,37 @@ class InterpolateIonFracTemperatureForm(BaseIonizationForm, BaseElementIonForm):
     pass
 
 
-class InterpolateMDForm(BaseIonizationForm):
+class InterpolateMDForm(BaseIonizationForm, BaseElementIonForm):
     temperature = FloatField(required=True, label=TEMPERATURE_LABEL)
     species_type = TypedChoiceField(required=True, choices=SPECIES_TYPES, initial=SPECIES_TYPES[1], label=SPECIES_TYPES_LABEL)
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+
+        self.fields["element"].required = False
+        self.fields["element"].choices = [(0, "None")] + TATVAS
+        self.fields["element"].initial = None
+
+        self.fields["ion"].required = False
+        self.fields["ion"].initial = None
+
+    def clean(self) -> Dict[str, Any]:
+        data: Dict[str, Any] = self.cleaned_data
+
+        try:
+            element = int(data.get("element", 0))
+        except ValueError:
+            element = 0
+
+        try:
+            ion = data.get("ion", 1)
+        except ValueError:
+            ion = 1
+
+        data["element"] = None if element == 0 else element
+        data["ion"] = None if data["element"] is None else ion
+
+        if data["element"] is not None and ion > element + 1:
+            self.add_error("ion", ValidationError(f"Cannot exceed the element+1 count (here, {element+1}).", code="gt_element"))
+
+        return data
