@@ -118,11 +118,10 @@
             {% endif %}
         </div>
         {% endif %}
-        {% if action != 'mass_density' %}
+
         <div class="form-item label-spaced centered">
             <div id="ion_element" class="ion-element-success"></div>
         </div>
-        {% endif %}
     </div>
 
     <div class="alert mt-10">
@@ -226,6 +225,20 @@
 
 <script>
     function updateIonElement(element, ion) {
+        if (element == 0) {
+            $("#ion_element").parent().hide()
+            $("#id_ion").parent().hide()  // hides ion input box
+            return
+        }
+
+        $("#id_ion").parent().show() // shows the ion input box
+        $("#ion_element").parent().show()
+
+        if (ion == 0 || Number.isNaN(ion)) {
+            $("#id_ion").val(1)
+            return updateIonElement(element, 1)
+        }
+
         if (ion > element + 1) {
             $("#ion_element").addClass("ion-element-error")
             $("#ion_element").removeClass("ion-element-success")

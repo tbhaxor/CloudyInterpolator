@@ -34,3 +34,4 @@ ION_LABEL = format_html("Ion Count")
 
 # Session keys
 SESSION_FORM_DATA = "form_data"
+SESSION_INTERPOLATE_MD_MISC_DATA = "interpolate_md_misc_data"

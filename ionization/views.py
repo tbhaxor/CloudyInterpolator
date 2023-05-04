@@ -13,7 +13,7 @@ from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, View
 
 from astrodata.base.responses import download_file_response
-from astrodata.constants import MODE_TYPES, PARMANU, SESSION_FORM_DATA
+from astrodata.constants import MODE_TYPES, PARMANU, SESSION_FORM_DATA, SESSION_INTERPOLATE_MD_MISC_DATA
 from astrodata.utils import is_server_running, is_test_running
 
 from .forms import InterpolateIonFracForm, InterpolateIonFracTemperatureForm, InterpolateMDForm
@@ -42,12 +42,16 @@ class InterpolationView(TemplateView):
                 return InterpolateMDForm
 
     def get_form_initials(self, action: str) -> Dict[str, Any]:
-        initial_values: Dict[str, Any] = self.request.session.get(SESSION_FORM_DATA)
+        initial_values: Dict[str, Any] = self.request.session.get(SESSION_FORM_DATA, {})
+        md_form_ini_vals: Dict[str, Any] = self.request.session.get(SESSION_INTERPOLATE_MD_MISC_DATA, {})
         data = {}
 
         form: BaseForm = self.get_form_class(action)()
         for field in form:
-            v = initial_values.get(field.name, field.initial)
+            if field.name in md_form_ini_vals:
+                v = md_form_ini_vals.get(field.name, field.initial)
+            else:
+                v = initial_values.get(field.name, field.initial)
             v = v[0] if type(v) == tuple else "{:.1e}".format(v) if type(v) == float else v
             data[field.name] = v
 
@@ -76,7 +80,10 @@ class InterpolationView(TemplateView):
             return render(request, self.template_name, {"form": form, "action": action})
 
         self.request.session[SESSION_FORM_DATA] = self.request.session.get(SESSION_FORM_DATA, {})
+        self.request.session[SESSION_INTERPOLATE_MD_MISC_DATA] = self.request.session.get(SESSION_INTERPOLATE_MD_MISC_DATA, {})
         for k, v in form.cleaned_data.items():
+            if v is None and action == "mass_density":
+                self.request.session[SESSION_INTERPOLATE_MD_MISC_DATA][k] = v
             self.request.session[SESSION_FORM_DATA][k] = v
 
         interpolation_data = {}
@@ -132,8 +139,19 @@ class InterpolationView(TemplateView):
                 form.cleaned_data["part_type"] = form.cleaned_data["species_type"]
                 del form.cleaned_data["species_type"]
 
-                mean_mass = i.interpolate_mu(**form.cleaned_data)
-                number_density = i.interpolate_num_dens(**form.cleaned_data)
+                mu_mass_input = deepcopy(form.cleaned_data)
+                del mu_mass_input["element"]
+                del mu_mass_input["ion"]
+
+                num_density_input = deepcopy(form.cleaned_data)
+                if num_density_input["element"] is not None:
+                    del num_density_input["part_type"]
+                else:
+                    del num_density_input["element"]
+                    del num_density_input["ion"]
+
+                mean_mass = i.interpolate_mu(**mu_mass_input)
+                number_density = i.interpolate_num_dens(**num_density_input)
 
                 interpolation_data["mean_mass"] = "{:.4e}".format(mean_mass)
                 interpolation_data["number_density"] = "{:.4e}".format(number_density)
