@@ -92,8 +92,9 @@ jobs:
     - run: yarn build:prod
       name: Build production assets
     - run: |
-        file ./manage.py
-        poetry run ./manage.py collectstatic -c --no-input
+        source "$(poetry env info --path)"/bin/activate
+        echo "::debug::Using python interpreter from $(which python)"
+        python manage.py collectstatic -c --no-input
       name: Collect static files
       env:
         PY_ENV: dev
