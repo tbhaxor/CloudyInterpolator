@@ -92,6 +92,7 @@ jobs:
     - run: yarn build:prod
       name: Build production assets
     - run: |
+        file ./manage.py
         poetry run ./manage.py collectstatic -c --no-input
       name: Collect static files
       env:
