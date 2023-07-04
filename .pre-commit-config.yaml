@@ -13,8 +13,8 @@ repos:
     exclude: ^(templates|static)/.*|\S+\.js$
   - id: check-toml
 
-- repo: https://github.com/charliermarsh/ruff-pre-commit
-  rev: v0.0.261
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.0.276
   hooks:
   - id: ruff
     args: [--fix]
@@ -26,7 +26,7 @@ repos:
     language_version: python3.10
 
 - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-  rev: v2.8.0
+  rev: v2.9.0
   hooks:
   - id: pretty-format-yaml
     args: [--autofix, --indent, '2']
