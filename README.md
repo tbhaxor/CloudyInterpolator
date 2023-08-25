@@ -36,14 +36,14 @@ This is a web interface for the [AstroPlasma](https://github.com/dutta-alankar/A
 
 1. Clone the repository
 
-   ```sh
+   ```console
    git clone https://github.com/tbhaxor/CloudyInterpolator.git
    cd CloudyInterpolator
    ```
 
 2. Install the packages
 
-   ```sh
+   ```console
    poetry install
    ```
 
@@ -51,7 +51,7 @@ This is a web interface for the [AstroPlasma](https://github.com/dutta-alankar/A
 
 3. Provide environment file
 
-   ```sh
+   ```console
    cat <<EOF > .env
    IONIZATION_DATASET_DIR='/path/to/directory/containing/ionization-batches'
    EMISSION_DATASET_DIR='/path/to/directory/containing/emission-batches'
@@ -63,7 +63,7 @@ This is a web interface for the [AstroPlasma](https://github.com/dutta-alankar/A
 
 4. Migrate the database
 
-   ```sh
+   ```console
    poetry run python manage.py migrate
    ```
 
@@ -71,13 +71,13 @@ This is a web interface for the [AstroPlasma](https://github.com/dutta-alankar/A
 
 Once you have performed the steps from the **Setup**, you are good to go
 
-```sh
+```console
 poetry run python manage.py runserver
 ```
 
 This will open the `8000` port by default, but you can change it using the following command
 
-```sh
+```console
 poetry run python manage.py runserver 127.0.0.1:<PORT>
 ```
 
@@ -91,7 +91,7 @@ Get rid of all the hassle of [setup](#setup) and [getting started](#getting-star
 
 1.  Generate docker compose file from the template file
 
-    ```sh
+    ```console
     bash deployment/scripts/gen-docker-compose.bash -c http://example.com -i /path/to/ionization/dataset -e /path/to/emission/dataset
     ```
 
@@ -99,8 +99,38 @@ Get rid of all the hassle of [setup](#setup) and [getting started](#getting-star
 
 2.  Run the workload
 
-    ```sh
+    ```console
     docker-compose up --pull always
     ```
 
     > **Note** You can access the server at port http://localhost:8000.
+
+### Using local configuration \[\[RECOMMENDED\]\]
+
+The configuration template named as `docker-compose.local.yml` is now a recommended version as code is not frequently built.
+
+1.  Generate docker compose file from the template file
+
+   ```console
+   bash deployment/scripts/gen-docker-compose.bash -s docker-compose.local.yml -c http://example.com -i /path/to/ionization/dataset -e /path/to/emission/dataset
+   ```
+
+2. Install the dependencies
+
+   ```console
+   poetry install
+   ```
+
+3. Generate static files
+
+   ```console
+   poetry run ./manage.py collectstatic --noinput  --skip-checks
+   ```
+
+4. Run the server
+
+   ```console
+   docker-compose up --pull always
+   ```
+
+   > **Note** You can access the server at port http://localhost:8000.
