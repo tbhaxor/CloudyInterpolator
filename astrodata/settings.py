@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import base64
 import os
-from pathlib import Path
+import sys
 
+from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
 
@@ -37,7 +38,7 @@ else:
     SECRET_KEY = "django-insecure-1zk=urw+ew0tthsxewll##a-6fj4)yvqw5vdjyw2=+fk4e@lax"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = not IS_PROD
+DEBUG = not IS_PROD or "collectstatic" in sys.argv
 
 # Host configuration for origin and CSRF
 if not DEBUG:

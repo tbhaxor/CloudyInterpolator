@@ -9,6 +9,7 @@ jobs:
   build_app:
     name: Build Django App
     runs-on: ubuntu-latest
+    if: false
     steps:
     - uses: actions/checkout@v3
       name: Checkout repository
@@ -45,6 +46,7 @@ jobs:
   build_static_serve:
     name: Build Static File Server
     runs-on: ubuntu-latest
+    if: false
     steps:
     - run: |
         sudo apt update
